@@ -12,6 +12,7 @@ package modelo;
 public class Persona {
     private String nombre;
     private String cedula;
+    private String direccion;
     ///tests
 
     public String getNombre() {
