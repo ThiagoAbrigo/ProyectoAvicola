@@ -11,6 +11,7 @@ package modelo;
  */
 public class Persona {
     private String nombre;
+    private String cedula;
     ///tests
 
     public String getNombre() {
