@@ -67,5 +67,11 @@ public class Vacuna implements Serializable{
     public void setTwovacuna(Date twovacuna) {
         this.twovacuna = twovacuna;
     }
+
+    @Override
+    public String toString() {
+        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }
