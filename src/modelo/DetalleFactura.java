@@ -15,6 +15,7 @@ public class DetalleFactura {
     private String descripcionProducto;
     private int cantidad;
     private double precioTotal;
+    private double peso;
     
     public Long getId() {
         return Id;
@@ -46,5 +47,12 @@ public class DetalleFactura {
 
     public void setPrecioTotal(double precioTotal) {
         this.precioTotal = precioTotal;
+    }
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 }
