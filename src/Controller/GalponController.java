@@ -17,7 +17,8 @@ import modelo.Galpon;
  *
  * @author Home
  */
-public class GalponController implements CRUD{
+public class GalponController implements CRUD {
+
     private final String CARPETA = "datos" + File.separatorChar + Galpon.class.getSimpleName() + ".obj";
     private Lista<Galpon> galpones = new Lista();
     private Galpon galpon;
@@ -40,7 +41,7 @@ public class GalponController implements CRUD{
     public void setGalpon(Galpon galpon) {
         this.galpon = galpon;
     }
-    
+
     @Override
     public boolean Save() {
         Lista<Galpon> aux = listar();
@@ -58,14 +59,30 @@ public class GalponController implements CRUD{
     }
 
     @Override
-    public void Update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean Update() {
+        Lista<Galpon> aux = listar();
+        try {
+            for (int i = 0; i < aux.tamanio(); i++) {
+                if (aux.consultarDatoPosicion(i).getId().intValue() == galpon.getId().intValue()) {
+                    aux.modificarPorPos(galpon, i);
+                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CARPETA));
+                    oos.writeObject(aux);
+                    oos.close();
+                    break;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+            //e.printStackTrace();
+        }
     }
 
     @Override
     public void Delete() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     public Lista<Galpon> listar() {
         Lista<Galpon> lista = new Lista();
         try {
@@ -76,5 +93,4 @@ public class GalponController implements CRUD{
         }
         return lista;
     }
-    
 }

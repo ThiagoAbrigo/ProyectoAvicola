@@ -13,10 +13,10 @@ import java.io.Serializable;
  */
 public class Galpon implements Serializable{
     private Long id;
-    private int numPollo;
+    private String numPollo;
     private String raza;
-    private Double peso;
-    private Double muestra;
+    private String peso;
+    private String muestra;
 
     public Long getId() {
         return id;
@@ -26,11 +26,11 @@ public class Galpon implements Serializable{
         this.id = id;
     }
 
-    public int getNumPollo() {
+    public String getNumPollo() {
         return numPollo;
     }
 
-    public void setNumPollo(int numPollo) {
+    public void setNumPollo(String numPollo) {
         this.numPollo = numPollo;
     }
 
@@ -42,19 +42,19 @@ public class Galpon implements Serializable{
         this.raza = raza;
     }
 
-    public Double getPeso() {
+    public String getPeso() {
         return peso;
     }
 
-    public void setPeso(Double peso) {
+    public void setPeso(String peso) {
         this.peso = peso;
     }
 
-    public Double getMuestra() {
+    public String getMuestra() {
         return muestra;
     }
 
-    public void setMuestra(Double muestra) {
+    public void setMuestra(String muestra) {
         this.muestra = muestra;
     }
     

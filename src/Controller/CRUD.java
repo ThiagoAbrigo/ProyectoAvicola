@@ -11,6 +11,6 @@ package Controller;
  */
 public interface CRUD {
     public boolean Save();
-    public void Update();
+    public boolean Update();
     public void Delete();
 }

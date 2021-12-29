@@ -58,7 +58,7 @@ public class VacunaController implements CRUD{
     }
 
     @Override
-    public void Update() {
+    public boolean Update() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
