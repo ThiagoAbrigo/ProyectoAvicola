@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 public class Frm_Farm extends javax.swing.JDialog {
     fondoPaneles paneles = new fondoPaneles();
     Frm_Galpon galpon = new Frm_Galpon();
-
+//inicio
     /**
      * Creates new form Frm_Farm
      */
