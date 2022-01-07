@@ -170,12 +170,13 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 204, 0));
         jPanel5.setLayout(null);
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Lucida Bright", 1, 18)); // NOI18N
         jLabel6.setText("LISTA DE GALPONES");
         jPanel5.add(jLabel6);
-        jLabel6.setBounds(130, 20, 210, 16);
+        jLabel6.setBounds(100, 20, 210, 16);
 
         tablegalpones.setBackground(new java.awt.Color(255, 255, 204));
+        tablegalpones.setFont(new java.awt.Font("Lucida Bright", 0, 12)); // NOI18N
         tablegalpones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -190,9 +191,9 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tablegalpones);
 
         jPanel5.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 50, 450, 270);
+        jScrollPane1.setBounds(10, 50, 380, 240);
 
-        jButton6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jButton6.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/enviar.png"))); // NOI18N
         jButton6.setText("Enviar");
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -203,7 +204,7 @@ public class Frm_Galpon extends javax.swing.JFrame {
             }
         });
         jPanel5.add(jButton6);
-        jButton6.setBounds(300, 330, 70, 60);
+        jButton6.setBounds(300, 300, 80, 70);
 
         jDialog1.getContentPane().add(jPanel5);
         jPanel5.setBounds(0, 0, 470, 420);
@@ -212,50 +213,57 @@ public class Frm_Galpon extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setLayout(null);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setForeground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Bright", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("REGISTRO DE GALPONES");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(100, 6, 240, 20);
+        jLabel1.setBounds(130, 0, 240, 30);
 
         jPanel2.add(jPanel1);
-        jPanel1.setBounds(10, 10, 430, 30);
+        jPanel1.setBounds(20, 10, 500, 30);
 
         jPanel3.setBackground(new java.awt.Color(255, 204, 51));
         jPanel3.setLayout(null);
 
+        jLabel2.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel2.setText("Muestra");
         jPanel3.add(jLabel2);
-        jLabel2.setBounds(340, 10, 50, 16);
+        jLabel2.setBounds(440, 10, 60, 15);
 
-        jLabel3.setText("Numero de Pollos");
+        jLabel3.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
+        jLabel3.setText("Número de Pollos");
         jPanel3.add(jLabel3);
-        jLabel3.setBounds(10, 10, 110, 16);
+        jLabel3.setBounds(10, 10, 130, 15);
 
+        jLabel4.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel4.setText("Raza");
         jPanel3.add(jLabel4);
-        jLabel4.setBounds(140, 10, 40, 16);
+        jLabel4.setBounds(200, 10, 40, 15);
 
+        jLabel5.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel5.setText("Peso");
         jPanel3.add(jLabel5);
-        jLabel5.setBounds(250, 10, 40, 16);
+        jLabel5.setBounds(320, 10, 40, 14);
         jPanel3.add(txtnumeropollo);
-        txtnumeropollo.setBounds(20, 30, 60, 30);
+        txtnumeropollo.setBounds(30, 30, 90, 30);
         jPanel3.add(txtmuestra);
-        txtmuestra.setBounds(330, 30, 70, 30);
+        txtmuestra.setBounds(430, 30, 70, 30);
         jPanel3.add(txtpeso);
-        txtpeso.setBounds(230, 30, 60, 30);
+        txtpeso.setBounds(310, 30, 60, 30);
         jPanel3.add(txtraza);
-        txtraza.setBounds(120, 30, 74, 30);
+        txtraza.setBounds(180, 30, 74, 30);
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel4.setLayout(null);
 
+        jButton1.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/acualizar.png"))); // NOI18N
         jButton1.setText("Actualizar");
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -266,15 +274,17 @@ public class Frm_Galpon extends javax.swing.JFrame {
             }
         });
         jPanel4.add(jButton1);
-        jButton1.setBounds(200, 10, 80, 70);
+        jButton1.setBounds(230, 10, 100, 80);
 
+        jButton2.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/eliminar.png"))); // NOI18N
         jButton2.setText("Eliminar");
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jPanel4.add(jButton2);
-        jButton2.setBounds(307, 10, 70, 70);
+        jButton2.setBounds(340, 10, 90, 80);
 
+        jButton3.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/guardar.png"))); // NOI18N
         jButton3.setText("Guardar");
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -285,8 +295,9 @@ public class Frm_Galpon extends javax.swing.JFrame {
             }
         });
         jPanel4.add(jButton3);
-        jButton3.setBounds(110, 10, 70, 70);
+        jButton3.setBounds(130, 10, 90, 80);
 
+        jButton4.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/Tabla.png"))); // NOI18N
         jButton4.setText("Registros");
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -297,18 +308,18 @@ public class Frm_Galpon extends javax.swing.JFrame {
             }
         });
         jPanel4.add(jButton4);
-        jButton4.setBounds(10, 10, 80, 70);
+        jButton4.setBounds(20, 10, 100, 80);
 
         jPanel3.add(jPanel4);
-        jPanel4.setBounds(10, 80, 400, 90);
+        jPanel4.setBounds(30, 80, 450, 100);
 
         jPanel2.add(jPanel3);
-        jPanel3.setBounds(10, 50, 430, 190);
+        jPanel3.setBounds(10, 50, 520, 200);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 0, 450, 250);
+        jPanel2.setBounds(0, 0, 540, 270);
 
-        setSize(new java.awt.Dimension(462, 287));
+        setSize(new java.awt.Dimension(555, 307));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

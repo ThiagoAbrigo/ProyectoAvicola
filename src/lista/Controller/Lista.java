@@ -138,4 +138,21 @@ public class Lista <T> implements Serializable{
         }
         return false;
     }
+    public boolean eliminar(T dato, int pos){
+    if(!estaVacia() && pos <= tamanio()-1 && pos >= 0){
+            Nodo iterador = cabecera;
+            for (int i = 0; i < pos; i++) {
+                iterador = iterador.getNodoSiguiente();
+                if (iterador == null) {
+                    break;
+                }
+            }
+            if (iterador != null) {
+                iterador.setDato(dato);
+                return true;
+            }
+        }
+        return false;
+    
+    }
 }

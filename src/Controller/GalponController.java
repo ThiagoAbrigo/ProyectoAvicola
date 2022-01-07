@@ -80,8 +80,23 @@ public class GalponController implements CRUD {
 
     @Override
     public void Delete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        Lista<Galpon> aux = listar();
+        try {
+            for (int i = 0; i < aux.tamanio(); i++) {
+                if (aux.consultarDatoPosicion(i).getId().intValue() == galpon.getId().intValue()) {
+                    aux.eliminar(galpon, i);
+                    
+                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CARPETA));
+                    oos.writeObject(aux);
+                    oos.close();
+                    break;
+                }
+            }
+            
+        } catch (Exception e) {
+            
+            //e.printStackTrace();
+        }    }
 
     public Lista<Galpon> listar() {
         Lista<Galpon> lista = new Lista();
