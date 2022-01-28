@@ -20,8 +20,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
-        //this.FondoJlabel(this.logo, "src/Image/chiken.jpg");
-        //this.FondoJlabel(this.city, "src/Image/fondoLogin.jpg");
     }
     private void validacion(){
         ConexionBaseDatos conexion = new ConexionBaseDatos();
