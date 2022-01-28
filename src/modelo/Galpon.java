@@ -12,17 +12,20 @@ import java.io.Serializable;
  * @author Home
  */
 public class Galpon implements Serializable{
-    private Long id;
+    private int id;
     private String numPollo;
     private String raza;
     private String peso;
     private String muestra;
+    private int ctdSuministrada;
+    private String tbalanceado;
+    private int fDiarioAlimentacion;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,5 +60,30 @@ public class Galpon implements Serializable{
     public void setMuestra(String muestra) {
         this.muestra = muestra;
     }
+
+    public int getCtdSuministrada() {
+        return ctdSuministrada;
+    }
+
+    public void setCtdSuministrada(int ctdSuministrada) {
+        this.ctdSuministrada = ctdSuministrada;
+    }
+
+    public String getTbalanceado() {
+        return tbalanceado;
+    }
+
+    public void setTbalanceado(String tbalanceado) {
+        this.tbalanceado = tbalanceado;
+    }
+
+    public int getfDiarioAlimentacion() {
+        return fDiarioAlimentacion;
+    }
+
+    public void setfDiarioAlimentacion(int fDiarioAlimentacion) {
+        this.fDiarioAlimentacion = fDiarioAlimentacion;
+    }
+    
     
 }

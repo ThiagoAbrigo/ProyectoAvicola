@@ -5,7 +5,9 @@
  */
 package View;
 
+import Controller.ConexionBaseDatos;
 import Controller.GalponController;
+import PaqueteDAO.GalponDAO;
 import View.Table.TableGalpon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,9 +21,10 @@ import javax.swing.JPopupMenu;
  * @author Home
  */
 public class Frm_Galpon extends javax.swing.JFrame {
-
     public GalponController galponController = new GalponController();
+    private GalponDAO galponDAO = new GalponDAO();
     private TableGalpon modelo = new TableGalpon();
+    //DefaultTableModel modelo;
 
     /**
      * Creates new form Frm_Galpon
@@ -30,8 +33,8 @@ public class Frm_Galpon extends javax.swing.JFrame {
         super("Registro de Galpones");
         setResizable(false);
         initComponents();
+        txtid.setVisible(false);
         setLocationRelativeTo(null);
-        limpiardatos();
         poputTable();
         cargarTable();
     }
@@ -40,27 +43,42 @@ public class Frm_Galpon extends javax.swing.JFrame {
         modelo.setLista(galponController.listar());
         tablegalpones.setModel(modelo);
         tablegalpones.updateUI();
+//        DefaultTableModel modelo = (DefaultTableModel) tablegalpones.getModel();
+//        modelo.setRowCount(0);
+//        int columnas;
+//        int [] anchos = {10,100,100};
+//        for (int i = 0; i < tablegalpones.getColumnCount(); i++) {
+//            tablegalpones.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//        }
+//        try {
+//            c = con.conectar();
+//            ps = (PreparedStatement) c.prepareStatement("SELECT id_galpon, pollos, raza FROM galpones");
+//            rs = ps.executeQuery();
+//            rsmd = (ResultSetMetaData) rs.getMetaData();
+//            columnas = rsmd.getColumnCount();
+//            while (rs.next()) {                
+//                Object[] fila = new Object[columnas];
+//                for (int i = 0; i < columnas; i++) {
+//                    fila[i] = rs.getObject(i+1);
+//                }
+//                modelo.addRow(fila);
+//            }
+//            
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
     }
-
     private void seleccionar() {
-        int fila = tablegalpones.getSelectedRow();
         try {
-            String id, numpollo, raza, peso, muestra;
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione un dato de la tabla", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            } else {
-                numpollo = tablegalpones.getValueAt(fila, 1).toString();
-                raza = tablegalpones.getValueAt(fila, 2).toString();
-                peso = tablegalpones.getValueAt(fila, 3).toString();
-                muestra = tablegalpones.getValueAt(fila, 4).toString();
-                txtnumeropollo.setText(numpollo);
-                txtraza.setText(raza);
-                txtpeso.setText(peso);
-                txtmuestra.setText(muestra);
-            }
+            this.txtid.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 0).toString());
+            this.txtnumeropollo.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 1).toString());
+            this.txtraza.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 2).toString());
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    private void buscar() {
     }
 
     public void poputTable() {
@@ -69,11 +87,11 @@ public class Frm_Galpon extends javax.swing.JFrame {
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Frm_Vacunas vacunas = new Frm_Vacunas();
-                int fila = tablegalpones.getSelectedRow();
-                vacunas.setVisible(true);
-                dispose();
-                Frm_Vacunas.txtnum.setText(tablegalpones.getValueAt(fila, 0).toString());
+//                Frm_Vacunas vacunas = new Frm_Vacunas();
+//                int fila = tablegalpones.getSelectedRow();
+//                vacunas.setVisible(true);
+//                Frm_Vacunas.txtnum.setText(tablegalpones.getValueAt(fila, 0).toString());
+//                dispose();
             }
         });
         popuMenu.add(menuItem1);
@@ -81,51 +99,53 @@ public class Frm_Galpon extends javax.swing.JFrame {
     }
 
     private void limpiardatos() {
-        txtnumeropollo.setText("");
-        txtraza.setText("");
-        txtpeso.setText("");
-        txtmuestra.setText("");
         galponController.setGalpon(null);
-        cargarTable();
+        txtraza.setText("");
+        txtnumeropollo.setText("");
+        txtid.setText("");
     }
     private void guardar() {
-        if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()
-                || txtpeso.getText().trim().isEmpty() || txtmuestra.getText().trim().isEmpty()) {
+        if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            galponController.getGalpon().setNumPollo(txtnumeropollo.getText());
-            galponController.getGalpon().setRaza(txtraza.getText());
-            galponController.getGalpon().setPeso(txtpeso.getText());
-            galponController.getGalpon().setMuestra(txtmuestra.getText());
-            if (galponController.getGalpon().getId() == null) {
-                if (galponController.Save()) {
-                    JOptionPane.showMessageDialog(null, "Se guardo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                    limpiardatos();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            galponDAO.getGalpones().setNumPollo(txtnumeropollo.getText());
+            galponDAO.getGalpones().setRaza(txtraza.getText());
+            if (galponDAO.guardar()) {
+                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                limpiardatos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            //ciudadController.getCiudad().setId(new Long(ciudadController.listar().tamanio() + 1));
+            cargarTable();
         }
     }
-    private void Updategalpon(){
-//        if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()
-//                || txtpeso.getText().trim().isEmpty() || txtmuestra.getText().trim().isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-//        } else {
-            galponController.getGalpon().setNumPollo(txtnumeropollo.getText());
-            galponController.getGalpon().setRaza(txtraza.getText());
-            galponController.getGalpon().setPeso(txtpeso.getText());
-            galponController.getGalpon().setMuestra(txtmuestra.getText());
-            if (galponController.getGalpon().getId() == null) {
-                if (galponController.Update()) {
-                    JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                    limpiardatos();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            //}
-            //ciudadController.getCiudad().setId(new Long(ciudadController.listar().tamanio() + 1));
+
+    private void Updategalpon() {
+        galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
+        galponController.getGalpon().setNumPollo(txtnumeropollo.getText());
+        galponController.getGalpon().setRaza(txtraza.getText());
+        if (galponController.Update()) {
+            JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+            limpiardatos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        cargarTable();
+    }
+
+    private void delete() {
+        int seleccionar = tablegalpones.getSelectedRow();
+        if (seleccionar == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
+            if (galponController.Delete()) {
+                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
+                limpiardatos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar");
+            }
+            cargarTable();
         }
     }
 
@@ -141,26 +161,22 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         tablegalpones = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         txtnumeropollo = new javax.swing.JTextField();
-        txtmuestra = new javax.swing.JTextField();
-        txtpeso = new javax.swing.JTextField();
-        txtraza = new javax.swing.JTextField();
+        txtid = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        txtraza = new javax.swing.JTextField();
 
         jDialog1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jDialog1.setFont(new java.awt.Font("Agency FB", 0, 12)); // NOI18N
@@ -173,38 +189,40 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Lucida Bright", 1, 18)); // NOI18N
         jLabel6.setText("LISTA DE GALPONES");
         jPanel5.add(jLabel6);
-        jLabel6.setBounds(100, 20, 210, 16);
+        jLabel6.setBounds(90, 20, 210, 16);
 
-        tablegalpones.setBackground(new java.awt.Color(255, 255, 204));
-        tablegalpones.setFont(new java.awt.Font("Lucida Bright", 0, 12)); // NOI18N
         tablegalpones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Num_Pollos", "Raza"
             }
-        ));
-        jScrollPane1.setViewportView(tablegalpones);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-        jPanel5.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 50, 380, 240);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        jButton6.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/enviar.png"))); // NOI18N
-        jButton6.setText("Enviar");
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jPanel5.add(jButton6);
-        jButton6.setBounds(300, 300, 80, 70);
+        tablegalpones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablegalponesMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tablegalpones);
+
+        jPanel5.add(jScrollPane2);
+        jScrollPane2.setBounds(20, 60, 360, 230);
 
         jDialog1.getContentPane().add(jPanel5);
         jPanel5.setBounds(0, 0, 470, 420);
@@ -232,33 +250,19 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 204, 51));
         jPanel3.setLayout(null);
 
-        jLabel2.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
-        jLabel2.setText("Muestra");
-        jPanel3.add(jLabel2);
-        jLabel2.setBounds(440, 10, 60, 15);
-
         jLabel3.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel3.setText("Número de Pollos");
         jPanel3.add(jLabel3);
-        jLabel3.setBounds(10, 10, 130, 15);
+        jLabel3.setBounds(100, 10, 130, 15);
 
         jLabel4.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel4.setText("Raza");
         jPanel3.add(jLabel4);
-        jLabel4.setBounds(200, 10, 40, 15);
-
-        jLabel5.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
-        jLabel5.setText("Peso");
-        jPanel3.add(jLabel5);
-        jLabel5.setBounds(320, 10, 40, 14);
+        jLabel4.setBounds(320, 10, 40, 15);
         jPanel3.add(txtnumeropollo);
-        txtnumeropollo.setBounds(30, 30, 90, 30);
-        jPanel3.add(txtmuestra);
-        txtmuestra.setBounds(430, 30, 70, 30);
-        jPanel3.add(txtpeso);
-        txtpeso.setBounds(310, 30, 60, 30);
-        jPanel3.add(txtraza);
-        txtraza.setBounds(180, 30, 74, 30);
+        txtnumeropollo.setBounds(100, 30, 90, 30);
+        jPanel3.add(txtid);
+        txtid.setBounds(430, 40, 74, 30);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel4.setLayout(null);
@@ -281,6 +285,11 @@ public class Frm_Galpon extends javax.swing.JFrame {
         jButton2.setText("Eliminar");
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton2);
         jButton2.setBounds(340, 10, 90, 80);
 
@@ -312,6 +321,8 @@ public class Frm_Galpon extends javax.swing.JFrame {
 
         jPanel3.add(jPanel4);
         jPanel4.setBounds(30, 80, 450, 100);
+        jPanel3.add(txtraza);
+        txtraza.setBounds(310, 30, 74, 30);
 
         jPanel2.add(jPanel3);
         jPanel3.setBounds(10, 50, 520, 200);
@@ -336,9 +347,13 @@ public class Frm_Galpon extends javax.swing.JFrame {
         Updategalpon();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        delete();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tablegalponesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablegalponesMouseClicked
         seleccionar();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_tablegalponesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -380,24 +395,20 @@ public class Frm_Galpon extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tablegalpones;
-    private javax.swing.JTextField txtmuestra;
+    private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnumeropollo;
-    private javax.swing.JTextField txtpeso;
     private javax.swing.JTextField txtraza;
     // End of variables declaration//GEN-END:variables
 }

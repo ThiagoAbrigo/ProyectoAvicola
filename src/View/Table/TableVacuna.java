@@ -31,17 +31,20 @@ public class TableVacuna extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 7;
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
         Vacuna dato = lista.consultarDatoPosicion(i);
         switch (i1) {
-            case 0: return dato.getNombre();
-            case 1: return dato.getFarmaco();
-            case 2: return dato.getOnevacuna();
-            case 3: return dato.getTwovacuna();
+            case 0: return (dato.getId_vacuna());
+            case 1: return dato.getNombre();
+            case 2: return dato.getFarmaco();
+            case 3: return dato.getJustificacion();
+            case 4: return dato.getDosis();
+            case 5: return dato.getOnevacuna();
+            case 6: return dato.getTwovacuna();
             default: return null;             
         }            
     }
@@ -50,12 +53,18 @@ public class TableVacuna extends AbstractTableModel{
     public String getColumnName(int i) {
         switch (i) {
             case 0:
-                return "NOMBRE";
+                return "ID";
             case 1:
-                return "FARMACO";
+                return "NOMBRE";
             case 2:
-                return "1 VACUNA";
+                return "FARMACO";
             case 3:
+                return "JUSTIFICACION";
+            case 4:
+                return "DOSIS";
+            case 5:
+                return "1 VACUNA";
+            case 6:
                 return "2 VACUNA";
                 default:return null;
 

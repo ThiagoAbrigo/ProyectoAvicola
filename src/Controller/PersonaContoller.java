@@ -80,11 +80,6 @@ public class PersonaContoller implements CRUD {
         }
     }
 
-    @Override
-    public void Delete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public Lista<Persona> listar() {
         Lista<Persona> lista = new Lista();
         try {
@@ -94,6 +89,11 @@ public class PersonaContoller implements CRUD {
         } catch (Exception e) {
         }
         return lista;
+    }
+
+    @Override
+    public boolean Delete() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

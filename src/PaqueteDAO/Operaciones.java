@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package PaqueteDAO;
 
 import lista.Controller.Lista;
 
@@ -11,9 +11,8 @@ import lista.Controller.Lista;
  *
  * @author Home
  */
-public interface CRUD<T>{
-    public boolean Save();
-    public boolean Update();
-    public boolean Delete();
+public interface Operaciones<T> {
+    public boolean guardar(T dato);
+    public boolean modificar(Object object);
     public Lista<T> listar();
 }

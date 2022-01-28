@@ -5,11 +5,13 @@
  */
 package Controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import lista.Controller.Lista;
 import modelo.Vacuna;
 
@@ -17,10 +19,14 @@ import modelo.Vacuna;
  *
  * @author Home
  */
-public class VacunaController implements CRUD{
-    private final String CARPETA = "HistorialVacunas" + File.separatorChar + Vacuna.class.getSimpleName() + ".obj";
+public class VacunaController<T> implements CRUD{
     private Lista<Vacuna> vacunas = new Lista();
     private Vacuna vacuna;
+    private Lista<T> lista = new Lista();
+    SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
+    ConexionBaseDatos c = new ConexionBaseDatos();
+    Statement st;
+    ResultSet rs;
 
     public Lista<Vacuna> getVacunas() {
         return vacunas;
@@ -43,36 +49,82 @@ public class VacunaController implements CRUD{
     
     @Override
     public boolean Save() {
-        Lista<Vacuna> aux = listar();
+        Connection con = c.conectar();
+        String sql = "INSERT INTO vacunas(id_vacuna,nombre,farmaco, justificacion, dosis, primeraVacuna, segundaVacuna) VALUE(?,?,?,?,?,?,?)";
         try {
-            vacuna.setId(Long.valueOf(aux.tamanio() + 1));
-            aux.insertarNodo(vacuna);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CARPETA));
-            oos.writeObject(aux);
-            oos.close();
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+            ps.setInt(1, vacuna.getId_vacuna());
+            ps.setString(2, vacuna.getNombre());
+            ps.setString(3, vacuna.getFarmaco());
+            ps.setString(4, vacuna.getJustificacion());
+            ps.setDouble(5, vacuna.getDosis());
+            ps.setString(6, std.format(vacuna.getOnevacuna()));
+            ps.setString(7, std.format(vacuna.getTwovacuna()));
+            ps.executeUpdate();
+            ps.close();
             return true;
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (SQLException ex) {
+            System.out.println(ex);
             return false;
         }
     }
 
     @Override
     public boolean Update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement pst;
+        Connection con = c.conectar();
+        String sql = ("UPDATE vacunas SET nombre =?, farmaco =?, justificacion =?, dosis =?, primeraVacuna =?, segundaVacuna =? WHERE id_vacuna =?");
+        try {
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setString(1, vacuna.getNombre());
+            pst.setString(2, vacuna.getFarmaco());
+            pst.setString(3, vacuna.getJustificacion());
+            pst.setDouble(4, vacuna.getDosis());
+            pst.setString(5, std.format(vacuna.getOnevacuna()));
+            pst.setString(6, std.format(vacuna.getTwovacuna()));
+            pst.setInt(7, vacuna.getId_vacuna());
+            pst.executeUpdate();
+            pst.close();
+            return true;
+//            if (filas < 0) {
+//                con.close();
+//                return true;
+//            } else {
+//                con.close();
+//                return false;
+//            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override
-    public void Delete() {
+    public boolean Delete() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    public Lista<Vacuna> listar() {
-        Lista<Vacuna> lista = new Lista();
+    public Lista<T> listar() {
+        st = null;
+        rs = null;
+        lista = new Lista();
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CARPETA));
-            lista = (Lista<Vacuna>) ois.readObject();
-            ois.close();
+            Connection con = c.conectar();
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery("SELECT * FROM vacunas");
+            while (rs.next()) {
+                Vacuna vacuna = new Vacuna();
+                vacuna.setId_vacuna(rs.getInt("id_vacuna"));
+                vacuna.setNombre(rs.getString("nombre"));
+                vacuna.setFarmaco(rs.getString("farmaco"));
+                vacuna.setJustificacion(rs.getString("justificacion"));
+                vacuna.setDosis(rs.getDouble("dosis"));
+                vacuna.setOnevacuna(rs.getDate("primeraVacuna"));
+                vacuna.setTwovacuna(rs.getDate("segundaVacuna"));
+                lista.insertarNodo((T) vacuna);
+            }
+
         } catch (Exception e) {
+            System.out.println(e);
         }
         return lista;
     }

@@ -13,21 +13,32 @@ import java.util.Date;
  * @author Home
  */
 public class Vacuna implements Serializable{
-    private Long id;
+    private int id_vacuna;
+    private int id_galpon;
     private String nombre;
     private String farmaco;
-    private String Vitamina;
+    private String justificacion;
+    private Double dosis;
     private Date onevacuna;
     private Date twovacuna;
 
-    public Long getId() {
-        return id;
+    public int getId_vacuna() {
+        return id_vacuna;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_vacuna(int id_vacuna) {
+        this.id_vacuna = id_vacuna;
     }
 
+    public int getId_galpon() {
+        return id_galpon;
+    }
+
+    public void setId_galpon(int id_galpon) {
+        this.id_galpon = id_galpon;
+    }
+    
+    
     public String getNombre() {
         return nombre;
     }
@@ -42,14 +53,6 @@ public class Vacuna implements Serializable{
 
     public void setFarmaco(String farmaco) {
         this.farmaco = farmaco;
-    }
-
-    public String getVitamina() {
-        return Vitamina;
-    }
-
-    public void setVitamina(String Vitamina) {
-        this.Vitamina = Vitamina;
     }
 
     public Date getOnevacuna() {
@@ -68,9 +71,20 @@ public class Vacuna implements Serializable{
         this.twovacuna = twovacuna;
     }
 
-    @Override
-    public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
+    public Double getDosis() {
+        return dosis;
+    }
+
+    public void setDosis(Double dosis) {
+        this.dosis = dosis;
     }
     
     

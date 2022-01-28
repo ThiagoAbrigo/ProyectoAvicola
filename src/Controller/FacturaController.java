@@ -75,7 +75,7 @@ public class FacturaController implements CRUD {
     }
 
     @Override
-    public void Delete() {
+    public boolean Delete() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

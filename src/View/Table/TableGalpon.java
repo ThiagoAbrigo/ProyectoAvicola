@@ -31,18 +31,19 @@ public class TableGalpon extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
         Galpon dato = lista.consultarDatoPosicion(i);
         switch (i1) {
-            case 0: return (i+1);
+            case 0: return (dato.getId());
             case 1: return dato.getNumPollo();
             case 2: return dato.getRaza();
-            case 3: return dato.getPeso();
-            case 4: return dato.getMuestra();
+            case 3: return dato.getCtdSuministrada();
+            case 4: return dato.getTbalanceado();
+            case 5: return dato.getfDiarioAlimentacion();
             default: return null;             
         }            
     }
@@ -57,9 +58,11 @@ public class TableGalpon extends AbstractTableModel{
             case 2:
                 return "RAZA";
             case 3:
-                return "PESO";
+                return "CANTIDAD";
             case 4:
-                return "MUESTRA";
+                return "TIPO";
+            case 5:
+                return "ALIMENTACION";
                 default:return null;
 
         }

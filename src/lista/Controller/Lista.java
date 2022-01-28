@@ -17,6 +17,14 @@ public class Lista <T> implements Serializable{
     private Nodo cabecera;
     private Class clazz;
 
+    public Nodo getCabecera() {
+        return cabecera;
+    }
+
+    public void setCabecera(Nodo cabecera) {
+        this.cabecera = cabecera;
+    }
+
     public void setClazz(Class clazz) {
         this.clazz = clazz;
     }
@@ -138,21 +146,23 @@ public class Lista <T> implements Serializable{
         }
         return false;
     }
-    public boolean eliminar(T dato, int pos){
-    if(!estaVacia() && pos <= tamanio()-1 && pos >= 0){
-            Nodo iterador = cabecera;
-            for (int i = 0; i < pos; i++) {
-                iterador = iterador.getNodoSiguiente();
-                if (iterador == null) {
-                    break;
+     public void borrar(int posicion){
+        if (!estaVacia() && (posicion >= 0 && posicion <= tamanio()-1)) {
+            if (posicion == 0) {
+                setCabecera(getCabecera().getNodoSiguiente());
+            }else{
+                Nodo aux = getCabecera();
+                Nodo nodoAux = null;
+                for (int i = 0; i < tamanio(); i++) {
+                    if (posicion!=i) {
+                        Nodo nodo = new Nodo(aux.getDato(), nodoAux);
+                        nodoAux = nodo;
+                    }
+                    aux = aux.getNodoSiguiente();
+                    if (aux == null)break;
                 }
-            }
-            if (iterador != null) {
-                iterador.setDato(dato);
-                return true;
+                this.setCabecera(nodoAux);
             }
         }
-        return false;
-    
     }
 }

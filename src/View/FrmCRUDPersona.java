@@ -79,21 +79,21 @@ public class FrmCRUDPersona extends javax.swing.JFrame {
     }
 
     private void editar() {
-        rol.setCargo(txtRol.getText());
-        pc.getPersona().setNombre(txtNombre.getText());
-        pc.getPersona().setCedula(txtCadula.getText());
-        pc.getPersona().setCelular(txtCelular.getText());
-        pc.getPersona().setCorreo(txtCorreo.getText());
-        pc.getPersona().setDireccion(txtDirecion.getText());
-        pc.getPersona().setRol(rol);
-        if (pc.getPersona().getId() == null) {
-            if (pc.Update()) {
-                JOptionPane.showMessageDialog(null, "Se guardo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                limpiar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+//        rol.setCargo(txtRol.getText());
+//        pc.getPersona().setNombre(txtNombre.getText());
+//        pc.getPersona().setCedula(txtCadula.getText());
+//        pc.getPersona().setCelular(txtCelular.getText());
+//        pc.getPersona().setCorreo(txtCorreo.getText());
+//        pc.getPersona().setDireccion(txtDirecion.getText());
+//        pc.getPersona().setRol(rol);
+//        if (pc.getPersona().getId() == null) {
+//            if (pc.Update()) {
+//                JOptionPane.showMessageDialog(null, "Se guardo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+//                limpiar();
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
     }
     
     public void eliminar(){
