@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package View;
-//
+///
 import Controller.GalponController;
 import Controller.VacunaController;
 import View.Table.TableGalpon;
