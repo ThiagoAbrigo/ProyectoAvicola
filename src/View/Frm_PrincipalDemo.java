@@ -4,9 +4,12 @@
  */
 package View;
 ///
+
+import java.awt.Frame.*;
 import Controller.GalponController;
 import Controller.VacunaController;
 import View.Table.TableGalpon;
+import View.Table.TableGalpon_Mortalidad;
 import View.Table.TableVacuna;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -32,14 +35,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.text.Position;
-import javax.swing.text.Segment;
+import lista.Controller.Lista;
 
 /**
  *
@@ -55,9 +52,11 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     int xmouse, ymouse;
     public GalponController galponController = new GalponController();
     private TableGalpon modeloG = new TableGalpon();
+    private TableGalpon_Mortalidad modeloGM = new TableGalpon_Mortalidad();
+    private SimpleDateFormat st = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
-     * Creates new form Seguimiento
+     * Se crea la ventana principal
      */
     public Frm_PrincipalDemo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -66,7 +65,9 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         poputTable();
         cargarTableGalpon();
         cargarTableVacuna();
+        cargarTableMortalidad();
         txtidvacuna.setVisible(false);
+
     }
 
     /**
@@ -89,9 +90,13 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         registroGalpontxt = new javax.swing.JLabel();
         JPVacuna = new javax.swing.JPanel();
         vacunatxt = new javax.swing.JLabel();
+        JPCerrarSesion = new javax.swing.JPanel();
+        cerrarSesiontxt = new javax.swing.JLabel();
+        JPRegMortalidad = new javax.swing.JPanel();
+        mortalidadtxt = new javax.swing.JLabel();
         Fondo2 = new javax.swing.JPanel();
         jPanelSlider1 = new diu.swe.habib.JPanelSlider.JPanelSlider();
-        jPanel3 = new fondoPaneles();
+        JPFondo = new fondoPaneles();
         rSLabelHora1 = new rojeru_san.RSLabelHora();
         jLabel11 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -118,6 +123,17 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         cbFDAlimentacion = new javax.swing.JComboBox<>();
         jLabel17 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jDateFInicio = new com.toedter.calendar.JDateChooser();
+        jDatefFin = new com.toedter.calendar.JDateChooser();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        BusquedaDesde = new com.toedter.calendar.JDateChooser();
+        BusquedaHasta = new com.toedter.calendar.JDateChooser();
+        btnBusquedaG = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtid = new javax.swing.JTextField();
         JPRegistroVacuna = new javax.swing.JPanel();
@@ -127,8 +143,8 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jDate2 = new com.toedter.calendar.JDateChooser();
         jSeparator6 = new javax.swing.JSeparator();
         jLabel18 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnGuardarVacuna = new javax.swing.JButton();
+        btnAbrirPdf = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         cbTipoFarmaco = new javax.swing.JComboBox<>();
@@ -147,9 +163,23 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jLabel29 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablevacuna = new javax.swing.JTable();
-        jButton8 = new javax.swing.JButton();
+        btnActualizarVacuna = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         txtidvacuna = new javax.swing.JTextField();
+        JPMortalidad = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        txfGalponSeleccionado1 = new javax.swing.JTextField();
+        txtCtdPollosActual = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        txtPollosFallecidos = new javax.swing.JTextField();
+        jSeparator4 = new javax.swing.JSeparator();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblMortalidad = new javax.swing.JTable();
+        btnRegistrarMortalidad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -203,12 +233,12 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         headerLayout.setHorizontalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
-                .addGap(0, 1056, Short.MAX_VALUE)
+                .addContainerGap(1056, Short.MAX_VALUE)
                 .addComponent(Cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addComponent(Cerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -224,7 +254,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Control de Galpón");
+        jLabel1.setText("Panel de Control");
 
         javax.swing.GroupLayout TitleLayout = new javax.swing.GroupLayout(Title);
         Title.setLayout(TitleLayout);
@@ -313,13 +343,81 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
         Navegador.add(JPVacuna, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 190, 40));
 
+        JPCerrarSesion.setBackground(new java.awt.Color(102, 102, 255));
+        JPCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPCerrarSesionMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPCerrarSesionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPCerrarSesionMouseExited(evt);
+            }
+        });
+
+        cerrarSesiontxt.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
+        cerrarSesiontxt.setForeground(new java.awt.Color(255, 255, 255));
+        cerrarSesiontxt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cerrarSesiontxt.setText("Cerrar Sesión");
+
+        javax.swing.GroupLayout JPCerrarSesionLayout = new javax.swing.GroupLayout(JPCerrarSesion);
+        JPCerrarSesion.setLayout(JPCerrarSesionLayout);
+        JPCerrarSesionLayout.setHorizontalGroup(
+            JPCerrarSesionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPCerrarSesionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cerrarSesiontxt, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
+        );
+        JPCerrarSesionLayout.setVerticalGroup(
+            JPCerrarSesionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(cerrarSesiontxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        Navegador.add(JPCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 190, 40));
+
+        JPRegMortalidad.setBackground(new java.awt.Color(102, 102, 255));
+        JPRegMortalidad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JPRegMortalidadMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                JPRegMortalidadMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                JPRegMortalidadMouseExited(evt);
+            }
+        });
+
+        mortalidadtxt.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
+        mortalidadtxt.setForeground(new java.awt.Color(255, 255, 255));
+        mortalidadtxt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mortalidadtxt.setText("Registro Mortalidad");
+
+        javax.swing.GroupLayout JPRegMortalidadLayout = new javax.swing.GroupLayout(JPRegMortalidad);
+        JPRegMortalidad.setLayout(JPRegMortalidadLayout);
+        JPRegMortalidadLayout.setHorizontalGroup(
+            JPRegMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPRegMortalidadLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(mortalidadtxt, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        JPRegMortalidadLayout.setVerticalGroup(
+            JPRegMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mortalidadtxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        Navegador.add(JPRegMortalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 190, 40));
+
         Fondo1.add(Navegador, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 210, 520));
 
         Fondo2.setLayout(null);
 
         jPanelSlider1.setBorder(null);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        JPFondo.setBackground(new java.awt.Color(255, 255, 255));
 
         rSLabelHora1.setForeground(new java.awt.Color(0, 0, 0));
         rSLabelHora1.setFont(new java.awt.Font("MS UI Gothic", 1, 48)); // NOI18N
@@ -333,33 +431,33 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel21.setText("Correo Electrónico: granjaavicola_sanatonio@hotmail.com");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout JPFondoLayout = new javax.swing.GroupLayout(JPFondo);
+        JPFondo.setLayout(JPFondoLayout);
+        JPFondoLayout.setHorizontalGroup(
+            JPFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPFondoLayout.createSequentialGroup()
                 .addContainerGap(182, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(JPFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPFondoLayout.createSequentialGroup()
                         .addComponent(rSLabelHora1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(JLogotipo, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPFondoLayout.createSequentialGroup()
+                        .addGroup(JPFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(23, 23, 23))))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+        JPFondoLayout.setVerticalGroup(
+            JPFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPFondoLayout.createSequentialGroup()
+                .addGroup(JPFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPFondoLayout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addComponent(JLogotipo, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(JPFondoLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(rSLabelHora1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
@@ -371,7 +469,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
                 .addGap(19, 19, 19))
         );
 
-        jPanelSlider1.add(jPanel3, "card3");
+        jPanelSlider1.add(JPFondo, "card3");
 
         JPRegistroGalpones.setBackground(new java.awt.Color(255, 255, 255));
         JPRegistroGalpones.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -388,7 +486,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel6.setText("veces");
         jPanel4.add(jLabel6);
-        jLabel6.setBounds(710, 20, 40, 15);
+        jLabel6.setBounds(710, 20, 40, 16);
 
         txtnumeropollo.setBorder(null);
         jPanel4.add(txtnumeropollo);
@@ -420,7 +518,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
             }
         });
         jPanel4.add(btnGuardar);
-        btnGuardar.setBounds(560, 420, 130, 40);
+        btnGuardar.setBounds(540, 430, 130, 30);
 
         btnActualizar.setBackground(new java.awt.Color(255, 255, 255));
         btnActualizar.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
@@ -440,7 +538,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
             }
         });
         jPanel4.add(btnActualizar);
-        btnActualizar.setBounds(340, 420, 110, 40);
+        btnActualizar.setBounds(330, 430, 110, 30);
 
         btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         btnEliminar.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
@@ -460,7 +558,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
             }
         });
         jPanel4.add(btnEliminar);
-        btnEliminar.setBounds(70, 420, 140, 40);
+        btnEliminar.setBounds(80, 430, 130, 30);
 
         tablegalpones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -481,7 +579,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jScrollPane2.setViewportView(tablegalpones);
 
         jPanel4.add(jScrollPane2);
-        jScrollPane2.setBounds(20, 270, 800, 120);
+        jScrollPane2.setBounds(20, 290, 800, 120);
 
         jLabel8.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel8.setText("Tipo de Balanceado:");
@@ -515,9 +613,93 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         cbFDAlimentacion.setBounds(660, 10, 40, 30);
 
         jLabel17.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
-        jLabel17.setText("Raza");
+        jLabel17.setText("Hasta:");
         jPanel4.add(jLabel17);
-        jLabel17.setBounds(20, 210, 40, 15);
+        jLabel17.setBounds(390, 250, 40, 16);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Periodo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
+        jLabel7.setText("Fecha Inicio:");
+
+        jLabel10.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
+        jLabel10.setText("Fecha Fin:");
+
+        jDateFInicio.setDateFormatString("yyyy-MM-dd");
+
+        jDatefFin.setDateFormatString("yyyy-MM-dd");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jDateFInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jDatefFin, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jDateFInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addGap(38, 38, 38))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jDatefFin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(30, Short.MAX_VALUE))))
+        );
+
+        jPanel4.add(jPanel1);
+        jPanel1.setBounds(450, 70, 310, 150);
+
+        jLabel22.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
+        jLabel22.setText("Raza");
+        jPanel4.add(jLabel22);
+        jLabel22.setBounds(20, 210, 40, 16);
+
+        jLabel30.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
+        jLabel30.setText("Búsqueda de Galpón");
+        jPanel4.add(jLabel30);
+        jLabel30.setBounds(20, 250, 120, 16);
+
+        jLabel31.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
+        jLabel31.setText("Desde:");
+        jPanel4.add(jLabel31);
+        jLabel31.setBounds(170, 250, 50, 16);
+
+        BusquedaDesde.setDateFormatString("yyyy-MM-dd");
+        jPanel4.add(BusquedaDesde);
+        BusquedaDesde.setBounds(220, 240, 150, 30);
+
+        BusquedaHasta.setDateFormatString("yyyy-MM-dd");
+        jPanel4.add(BusquedaHasta);
+        BusquedaHasta.setBounds(450, 240, 180, 30);
+
+        btnBusquedaG.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnBusquedaG.setText("Ir");
+        btnBusquedaG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBusquedaGActionPerformed(evt);
+            }
+        });
+        jPanel4.add(btnBusquedaG);
+        btnBusquedaG.setBounds(660, 240, 73, 30);
 
         JPRegistroGalpones.add(jPanel4);
         jPanel4.setBounds(10, 40, 840, 470);
@@ -528,7 +710,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         JPRegistroGalpones.add(jLabel3);
         jLabel3.setBounds(300, 0, 240, 30);
         JPRegistroGalpones.add(txtid);
-        txtid.setBounds(30, 10, 15, 24);
+        txtid.setBounds(30, 10, 50, 20);
 
         jPanelSlider1.add(JPRegistroGalpones, "card2");
 
@@ -553,29 +735,29 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jPanel2.add(jLabel18);
         jLabel18.setBounds(10, 90, 100, 15);
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton5.setText("Guardar");
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarVacuna.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnGuardarVacuna.setText("Guardar");
+        btnGuardarVacuna.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardarVacuna.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGuardarVacuna.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnGuardarVacunaActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton5);
-        jButton5.setBounds(140, 250, 100, 40);
+        jPanel2.add(btnGuardarVacuna);
+        btnGuardarVacuna.setBounds(140, 250, 100, 40);
 
-        jButton7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton7.setText("Abrir PDF");
-        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnAbrirPdf.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAbrirPdf.setText("Abrir PDF");
+        btnAbrirPdf.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbrirPdf.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbrirPdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnAbrirPdfActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton7);
-        jButton7.setBounds(410, 250, 110, 40);
+        jPanel2.add(btnAbrirPdf);
+        btnAbrirPdf.setBounds(410, 250, 110, 40);
 
         jLabel19.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel19.setText("Galpón Seleccionado:");
@@ -611,7 +793,6 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jPanel2.add(jScrollPane1);
         jScrollPane1.setBounds(140, 130, 260, 100);
 
-        txfDosis.setBackground(new java.awt.Color(255, 255, 255));
         txfDosis.setBorder(null);
         jPanel2.add(txfDosis);
         txfDosis.setBounds(620, 30, 60, 30);
@@ -668,17 +849,17 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         jPanel2.add(jScrollPane3);
         jScrollPane3.setBounds(20, 310, 820, 150);
 
-        jButton8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton8.setText("Actualizar");
-        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizarVacuna.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnActualizarVacuna.setText("Actualizar");
+        btnActualizarVacuna.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnActualizarVacuna.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnActualizarVacuna.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                btnActualizarVacunaActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton8);
-        jButton8.setBounds(270, 250, 110, 40);
+        jPanel2.add(btnActualizarVacuna);
+        btnActualizarVacuna.setBounds(270, 250, 110, 40);
 
         jLabel16.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -711,6 +892,127 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
         jPanelSlider1.add(JPRegistroVacuna, "card4");
 
+        JPMortalidad.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel32.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel32.setText("REGISTRO DE MORTALIDAD DE POLLOS");
+
+        jLabel33.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
+        jLabel33.setText("Id Galpón:");
+
+        jLabel34.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
+        jLabel34.setText("Cantidad de Pollos:");
+
+        jLabel35.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
+        jLabel35.setText("Pollos Fallecidos:");
+
+        txfGalponSeleccionado1.setEditable(false);
+        txfGalponSeleccionado1.setBackground(new java.awt.Color(255, 255, 255));
+        txfGalponSeleccionado1.setBorder(null);
+
+        txtCtdPollosActual.setBorder(null);
+
+        txtPollosFallecidos.setBorder(null);
+
+        tblMortalidad.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(tblMortalidad);
+
+        btnRegistrarMortalidad.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnRegistrarMortalidad.setText("Registrar");
+        btnRegistrarMortalidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarMortalidadActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout JPMortalidadLayout = new javax.swing.GroupLayout(JPMortalidad);
+        JPMortalidad.setLayout(JPMortalidadLayout);
+        JPMortalidadLayout.setHorizontalGroup(
+            JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(215, 215, 215)
+                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(txfGalponSeleccionado1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtCtdPollosActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtPollosFallecidos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(600, 600, 600)
+                .addComponent(btnRegistrarMortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        JPMortalidadLayout.setVerticalGroup(
+            JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel33))
+                    .addComponent(txfGalponSeleccionado1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel34))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addComponent(txtCtdPollosActual, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
+                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel35))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addComponent(txtPollosFallecidos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(50, 50, 50)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnRegistrarMortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanelSlider1.add(JPMortalidad, "card5");
+
         Fondo2.add(jPanelSlider1);
         jPanelSlider1.setBounds(0, 0, 870, 520);
 
@@ -730,7 +1032,9 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         setSize(new java.awt.Dimension(1101, 574));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /*
+        Botones y eventos 
+     */
     private void headerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMousePressed
         // TODO add your handling code here:
         xmouse = evt.getX();
@@ -777,7 +1081,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     }//GEN-LAST:event_BtnRegistroGalponMouseExited
 
     private void BtnRegistroGalponMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnRegistroGalponMouseClicked
-        jPanelSlider1.nextPanel(4, 0, JPRegistroGalpones, jPanelSlider1.right);
+        jPanelSlider1.nextPanel(2, 0, JPRegistroGalpones, jPanelSlider1.right);
     }//GEN-LAST:event_BtnRegistroGalponMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -791,7 +1095,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
     private void JPVacunaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPVacunaMouseClicked
         // TODO add your handling code here:
-        jPanelSlider1.nextPanel(4, 0, JPRegistroVacuna, jPanelSlider1.right);
+        jPanelSlider1.nextPanel(2, 0, JPRegistroVacuna, jPanelSlider1.right);
     }//GEN-LAST:event_JPVacunaMouseClicked
 
     private void JPVacunaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPVacunaMouseEntered
@@ -833,7 +1137,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         btnEliminar.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_btnEliminarMouseExited
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnGuardarVacunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarVacunaActionPerformed
         try {
             guardarVacuna();
             generarPDF();
@@ -843,7 +1147,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         } catch (DocumentException ex) {
             Logger.getLogger(Frm_PrincipalDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnGuardarVacunaActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         deleteGalpon();
@@ -853,17 +1157,70 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         seleccionar();
     }//GEN-LAST:event_tablegalponesMouseClicked
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void btnActualizarVacunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarVacunaActionPerformed
         updateVacuna();
-    }//GEN-LAST:event_jButton8ActionPerformed
+
+    }//GEN-LAST:event_btnActualizarVacunaActionPerformed
 
     private void tablevacunaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablevacunaMouseClicked
         seleccionarVacuna();
     }//GEN-LAST:event_tablevacunaMouseClicked
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnAbrirPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirPdfActionPerformed
         abrirpdf();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnAbrirPdfActionPerformed
+
+    private void btnBusquedaGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaGActionPerformed
+        // TODO add your handling code here:
+//        listarporfecha();
+
+    }//GEN-LAST:event_btnBusquedaGActionPerformed
+
+    private void JPCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPCerrarSesionMouseClicked
+        // TODO add your handling code here:
+        int opcion = JOptionPane.showConfirmDialog(null, "Esta Seguro de Cerrar Sesión", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opcion == JOptionPane.YES_OPTION) {
+            this.dispose();
+            Login log = new Login();
+            log.setVisible(true);
+        } else if (opcion == JOptionPane.NO_OPTION) {
+        }
+        
+    }//GEN-LAST:event_JPCerrarSesionMouseClicked
+
+    private void JPCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPCerrarSesionMouseEntered
+        // TODO add your handling code here:
+        JPCerrarSesion.setBackground(new Color(153, 153, 255));
+        cerrarSesiontxt.setForeground(Color.WHITE);
+    }//GEN-LAST:event_JPCerrarSesionMouseEntered
+
+    private void JPCerrarSesionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPCerrarSesionMouseExited
+        // TODO add your handling code here:
+        JPCerrarSesion.setBackground(new Color(102, 102, 255));
+        cerrarSesiontxt.setForeground(Color.WHITE);
+    }//GEN-LAST:event_JPCerrarSesionMouseExited
+
+    private void JPRegMortalidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPRegMortalidadMouseClicked
+        // TODO add your handling code here:
+        jPanelSlider1.nextPanel(2, 0, JPMortalidad, jPanelSlider1.left);
+    }//GEN-LAST:event_JPRegMortalidadMouseClicked
+
+    private void JPRegMortalidadMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPRegMortalidadMouseEntered
+        // TODO add your handling code here:
+        JPRegMortalidad.setBackground(new Color(153, 153, 255));
+        mortalidadtxt.setForeground(Color.WHITE);
+    }//GEN-LAST:event_JPRegMortalidadMouseEntered
+
+    private void JPRegMortalidadMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPRegMortalidadMouseExited
+        // TODO add your handling code here:
+        JPRegMortalidad.setBackground(new Color(102, 102, 255));
+        mortalidadtxt.setForeground(Color.WHITE);
+    }//GEN-LAST:event_JPRegMortalidadMouseExited
+
+    private void btnRegistrarMortalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMortalidadActionPerformed
+        // TODO add your handling code here:
+        guardarMortalidadPollo();
+    }//GEN-LAST:event_btnRegistrarMortalidadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -907,6 +1264,9 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         });
     }
 
+    /*
+        Carga la tabla de galpones con los nombres de las columnas centradas
+     */
     private void cargarTableGalpon() {
         modeloG.setLista(galponController.listar());
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -920,7 +1280,11 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
     }
 
-    private void generarPDF() throws FileNotFoundException, DocumentException{
+    /*
+        Genera un Documento PDF con la información obtenida de los campos de la vista al seleccionar
+        alguna fila de la tabla
+     */
+    private void generarPDF() throws FileNotFoundException, DocumentException {
         if (!(txfGalponSeleccionado.getText().trim().isEmpty()
                 || txtnombreProducto.getText().trim().isEmpty()
                 || JtaJustificacion.getText().trim().isEmpty()
@@ -934,22 +1298,26 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
             Paragraph paragraph = new Paragraph("Registro de Vacuna");
             paragraph.setAlignment(1);
             document.add(paragraph);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
             document.add(new Paragraph("Galpón: " + txfGalponSeleccionado.getText().trim()));
             document.add(new Paragraph("Nombre del Producto: " + txtnombreProducto.getText().trim()));
             document.add(new Paragraph("Tipo de Producto: " + String.valueOf(cbTipoFarmaco.getSelectedItem())));
             document.add(new Paragraph("Dosis: " + txfDosis.getText().trim() + String.valueOf(cbMedidaDosis.getSelectedItem())));
             document.add(new Paragraph("Justificación: " + JtaJustificacion.getText().trim()));
-            document.add(new Paragraph("Primera Inyección: " + sdf.format(jDate1.getDate())));
-            document.add(new Paragraph("Próxima Inyección: " + sdf.format(jDate2.getDate())));
+            document.add(new Paragraph("Primera Inyección: " + st.format(jDate1.getDate())));
+            document.add(new Paragraph("Próxima Inyección: " + st.format(jDate2.getDate())));
             document.close();
             //JOptionPane.showMessageDialog(null, "Archivo PDF creado correctamente", "Informacion", 1);
-            
+
         } else {
             //JOptionPane.showMessageDialog(null, "Debe tener llenos todos los campos", "Atencion", 2);
         }
     }
-    private void abrirpdf(){
+
+    /*
+        Abre el archivo PDF correspondiente al galpón seleccionado en la tabla
+     */
+    private void abrirpdf() {
         String galpon = txfGalponSeleccionado.getText().trim();
         try {
             File path = new File("Registro_Vacuna_Galpon_" + galpon + ".pdf");
@@ -960,6 +1328,9 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
     }
 
+    /*
+        Carga la tabla de vacunas con los nombres de las columnas centradas
+     */
     private void cargarTableVacuna() {
         modelov.setLista(vacunaController.listar());
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -971,21 +1342,49 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         tablevacuna.updateUI();
     }
 
+    /*
+        Carga la tabla de mortalidad de pollos
+     */
+    private void cargarTableMortalidad() {
+        modeloGM.setLista(galponController.listarMortalidad());
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tblMortalidad.getColumnCount(); i++) {
+            tblMortalidad.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
+            tblMortalidad.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            tblMortalidad.setModel(modeloGM);
+        }
+        tblMortalidad.updateUI();
+    }
+
+    /*
+        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
+     */
     private void seleccionar() {
+        String fechaIni = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 6).toString();
+        Date fechaIn = null;
+        String fechaFin = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 7).toString();
+        Date fechaF = null;
         try {
+            fechaIn = st.parse(fechaIni);
+            fechaF = st.parse(fechaFin);
             this.txtid.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 0).toString());
             this.txtnumeropollo.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 1).toString());
             this.txtraza.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 2).toString());
             this.txtCtdBalanceadoSuministrada.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 3).toString());
             this.cbTipoBalanceado.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 4).toString());
             this.cbFDAlimentacion.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 5).toString());
+            this.jDateFInicio.setDate(fechaIn);
+            this.jDatefFin.setDate(fechaF);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
+    /*
+        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
+     */
     private void seleccionarVacuna() {
-        SimpleDateFormat st = new SimpleDateFormat("yyyy-MM-dd");
+
         String primeraVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 5).toString();
         Date fechaprimera = null;
         String segundaVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 6).toString();
@@ -1008,6 +1407,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     public void poputTable() {
         JPopupMenu popuMenu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem("Aplicar Vacuna", new ImageIcon(getClass().getResource("/Image/vacuna.png")));
+        JMenuItem menuItem2 = new JMenuItem("Registro de Muerte");
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1018,18 +1418,50 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
             }
         });
+        menuItem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                jPanelSlider1.nextPanel(4, 0, JPMortalidad, jPanelSlider1.right);
+                int fila = tablegalpones.getSelectedRow();
+                JPMortalidad.setVisible(true);
+                txfGalponSeleccionado1.setText(tablegalpones.getValueAt(fila, 0).toString());
+                txtCtdPollosActual.setText(tablegalpones.getValueAt(fila, 1).toString());
+            }
+        });
         popuMenu.add(menuItem1);
+        popuMenu.add(menuItem2);
         tablegalpones.setComponentPopupMenu(popuMenu);
     }
 
+    /*
+        Limpia los campos de la vista
+     */
     private void limpiardatosGalpon() {
         txtCtdBalanceadoSuministrada.setText("");
         txtnumeropollo.setText("");
         txtraza.setText("");
+        jDateFInicio.setDate(new Date());
+        jDatefFin.setDate(new Date());
+        BusquedaDesde.setDate(new Date());
+        BusquedaHasta.setDate(new Date());
         galponController.setGalpon(null);
         //cargarTableGalpon();
     }
 
+    /*
+        Limpia los campos de la tabla Mortalidad
+     */
+    private void limpiardatosMortalidad() {
+        txfGalponSeleccionado1.setText("");
+        txtCtdPollosActual.setText("");
+        txtPollosFallecidos.setText("");
+        galponController.setGalpon(null);
+
+    }
+
+    /*
+        Limpia los campos de la vista
+     */
     private void limpiardatosVacuna() {
         txtnombreProducto.setText(" ");
         JtaJustificacion.setText(" ");
@@ -1043,11 +1475,13 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            galponController.getGalpon().setNumPollo(txtnumeropollo.getText());
+            galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
             galponController.getGalpon().setRaza(txtraza.getText());
             galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
             galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
-            galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(String.valueOf(cbFDAlimentacion.getSelectedItem())));
+            galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(cbFDAlimentacion.getSelectedItem().toString()));
+            galponController.getGalpon().setfIncio(jDateFInicio.getDate());
+            galponController.getGalpon().setfFin(jDatefFin.getDate());
             if (galponController.Save()) {
                 JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 limpiardatosGalpon();
@@ -1058,7 +1492,36 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         }
     }
 
-    private void guardarVacuna(){
+    private void guardarMortalidadPollo() {
+        if (txtPollosFallecidos.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Rellene el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Integer ctActual = Integer.parseInt(txtCtdPollosActual.getText().trim());
+            Integer ctFallecidos = Integer.parseInt(txtPollosFallecidos.getText().trim());
+            galponController.getGalpon().setId(Integer.parseInt(txfGalponSeleccionado1.getText()));
+            galponController.getGalpon().setNumPollo(ctActual);
+            galponController.getGalpon().setPollosMuertos(ctFallecidos);
+            galponController.getGalpon().setExistencias((ctActual - ctFallecidos));
+
+            if (galponController.SaveMortalidad()) {
+                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                cargarTableMortalidad();
+                galponController.getGalpon().setNumPollo(galponController.getGalpon().getExistencias());
+                if (galponController.Updategalpon()) {
+                    JOptionPane.showMessageDialog(null, "Informacion del galpon actualizada", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                }
+                cargarTableGalpon();
+                limpiardatosMortalidad();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            cargarTableMortalidad();
+        }
+
+    }
+
+    private void guardarVacuna() {
         if (txtnombreProducto.getText().trim().isEmpty() || txfDosis.getText().trim().isEmpty()
                 || cbTipoFarmaco.getSelectedItem() == null || JtaJustificacion.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1097,7 +1560,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
     private void Updategalpon() {
         galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
-        galponController.getGalpon().setNumPollo(txtnumeropollo.getText());
+        galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
         galponController.getGalpon().setRaza(txtraza.getText());
         galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
         galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
@@ -1158,31 +1621,43 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BtnRegistroGalpon;
+    private com.toedter.calendar.JDateChooser BusquedaDesde;
+    private com.toedter.calendar.JDateChooser BusquedaHasta;
     private javax.swing.JPanel Cerrar;
     private javax.swing.JPanel Fondo1;
     private javax.swing.JPanel Fondo2;
     private javax.swing.JLabel JLogotipo;
+    private javax.swing.JPanel JPCerrarSesion;
+    private javax.swing.JPanel JPFondo;
+    private javax.swing.JPanel JPMortalidad;
+    private javax.swing.JPanel JPRegMortalidad;
     private javax.swing.JPanel JPRegistroGalpones;
     private javax.swing.JPanel JPRegistroVacuna;
     private javax.swing.JPanel JPVacuna;
     private javax.swing.JTextArea JtaJustificacion;
     private javax.swing.JPanel Navegador;
     private javax.swing.JPanel Title;
+    private javax.swing.JButton btnAbrirPdf;
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnActualizarVacuna;
+    private javax.swing.JButton btnBusquedaG;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardarVacuna;
+    private javax.swing.JButton btnRegistrarMortalidad;
     private javax.swing.JComboBox<String> cbFDAlimentacion;
     private javax.swing.JComboBox<String> cbMedidaDosis;
     private javax.swing.JComboBox<String> cbTipoBalanceado;
     private javax.swing.JComboBox<String> cbTipoFarmaco;
+    private javax.swing.JLabel cerrarSesiontxt;
     private javax.swing.JLabel closetext;
     private javax.swing.JPanel header;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private com.toedter.calendar.JDateChooser jDate1;
     private com.toedter.calendar.JDateChooser jDate2;
+    private com.toedter.calendar.JDateChooser jDateFInicio;
+    private com.toedter.calendar.JDateChooser jDatefFin;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1191,6 +1666,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
@@ -1199,30 +1675,46 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private diu.swe.habib.JPanelSlider.JPanelSlider jPanelSlider1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JLabel mortalidadtxt;
     private rojeru_san.RSLabelHora rSLabelHora1;
     private javax.swing.JLabel registroGalpontxt;
     private javax.swing.JTable tablegalpones;
     private javax.swing.JTable tablevacuna;
+    private javax.swing.JTable tblMortalidad;
     private javax.swing.JTextField txfDosis;
     private javax.swing.JTextField txfGalponSeleccionado;
+    private javax.swing.JTextField txfGalponSeleccionado1;
     private javax.swing.JTextField txtCtdBalanceadoSuministrada;
+    private javax.swing.JTextField txtCtdPollosActual;
+    private javax.swing.JTextField txtPollosFallecidos;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtidvacuna;
     private javax.swing.JTextField txtnombreProducto;

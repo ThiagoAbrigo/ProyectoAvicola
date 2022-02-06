@@ -6,6 +6,7 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -13,13 +14,50 @@ import java.io.Serializable;
  */
 public class Galpon implements Serializable{
     private int id;
-    private String numPollo;
+    private Integer numPollo;
+    private Integer pollosMuertos;
+    private Integer existencias;
     private String raza;
     private String peso;
     private String muestra;
     private int ctdSuministrada;
     private String tbalanceado;
     private int fDiarioAlimentacion;
+    private Date fIncio;
+
+    public Integer getExistencias() {
+        return existencias;
+    }
+
+    public void setExistencias(Integer existencias) {
+        this.existencias = existencias;
+    }
+
+    public Integer getPollosMuertos() {
+        return pollosMuertos;
+    }
+
+    public void setPollosMuertos(Integer pollosMuertos) {
+        this.pollosMuertos = pollosMuertos;
+    }
+    
+
+    public Date getfIncio() {
+        return fIncio;
+    }
+
+    public void setfIncio(Date fIncio) {
+        this.fIncio = fIncio;
+    }
+
+    public Date getfFin() {
+        return fFin;
+    }
+
+    public void setfFin(Date fFin) {
+        this.fFin = fFin;
+    }
+    private Date fFin;
 
     public int getId() {
         return id;
@@ -29,11 +67,11 @@ public class Galpon implements Serializable{
         this.id = id;
     }
 
-    public String getNumPollo() {
+    public Integer getNumPollo() {
         return numPollo;
     }
 
-    public void setNumPollo(String numPollo) {
+    public void setNumPollo(Integer numPollo) {
         this.numPollo = numPollo;
     }
 

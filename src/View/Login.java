@@ -3,6 +3,8 @@ package View;
 import Controller.ConexionBaseDatos;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -12,41 +14,44 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
+
     private ImageIcon fondo;
     private Icon icono;
-    
+
     int xMouse, yMouse;
-    
+
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    private void validacion(){
+
+    private void validacion() {
         ConexionBaseDatos conexion = new ConexionBaseDatos();
         Connection con = conexion.conectar();
         int resultado = 0;
         try {
             String usuario = userTxt.getText();
             String pass = String.valueOf(passTxt.getPassword());
-            String sql = "select * from usuarios where usuario='" +usuario+ "' and password='"+pass+"' ";
+            String sql = "select * from usuarios where usuario='" + usuario + "' and password='" + pass + "' ";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 resultado = 1;
-                if(resultado==1){
-                    JOptionPane.showMessageDialog(null, "Bienvenido "+ userTxt.getText());
+                if (resultado == 1) {
+                    JOptionPane.showMessageDialog(null, "Bienvenido " + userTxt.getText());
+                    this.dispose();
                     Frm_PrincipalDemo farm = new Frm_PrincipalDemo(null, true);
                     farm.setVisible(true);
-                    dispose();
+
                 }
-            }else{
-                JOptionPane.showMessageDialog(null, "No esta Registrado", "ERROr", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No esta Registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -86,11 +91,10 @@ public class Login extends javax.swing.JFrame {
 
         logoname.setBackground(new java.awt.Color(255, 255, 255));
         logoname.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
-        logoname.setForeground(new java.awt.Color(0, 0, 0));
         logoname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         logoname.setText("Produccion Avicola");
         bg.add(logoname);
-        logoname.setBounds(10, 320, 290, 20);
+        logoname.setBounds(0, 250, 290, 20);
 
         city.setBackground(new java.awt.Color(0, 134, 190));
         city.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/fondoLogin.jpg"))); // NOI18N
@@ -113,7 +117,7 @@ public class Login extends javax.swing.JFrame {
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 770, Short.MAX_VALUE)
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,7 +125,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         bg.add(header);
-        header.setBounds(630, 20, 50, 40);
+        header.setBounds(-10, -10, 770, 40);
 
         favicon.setFont(new java.awt.Font("Roboto Black", 1, 24)); // NOI18N
         favicon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/logo.png"))); // NOI18N
@@ -153,7 +157,7 @@ public class Login extends javax.swing.JFrame {
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         bg.add(jSeparator1);
-        jSeparator1.setBounds(470, 280, 310, 20);
+        jSeparator1.setBounds(470, 260, 310, 10);
 
         passLabel.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         passLabel.setText("CONTRASEÑA");
@@ -168,12 +172,17 @@ public class Login extends javax.swing.JFrame {
                 passTxtMousePressed(evt);
             }
         });
+        passTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passTxtKeyReleased(evt);
+            }
+        });
         bg.add(passTxt);
         passTxt.setBounds(470, 320, 310, 30);
 
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
         bg.add(jSeparator2);
-        jSeparator2.setBounds(470, 370, 310, 20);
+        jSeparator2.setBounds(470, 350, 310, 20);
 
         exitBtn.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -215,7 +224,6 @@ public class Login extends javax.swing.JFrame {
         JpanelEntrar.setBackground(new java.awt.Color(255, 255, 0));
 
         loginentrar.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
-        loginentrar.setForeground(new java.awt.Color(0, 0, 0));
         loginentrar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginentrar.setText("ENTRAR");
         loginentrar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -251,7 +259,6 @@ public class Login extends javax.swing.JFrame {
         jPanelRegistrarse.setBackground(new java.awt.Color(255, 255, 0));
 
         loginregistrarse.setFont(new java.awt.Font("Roboto Condensed", 1, 14)); // NOI18N
-        loginregistrarse.setForeground(new java.awt.Color(0, 0, 0));
         loginregistrarse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginregistrarse.setText("REGISTRARSE");
         loginregistrarse.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -315,7 +322,12 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_headerMouseDragged
 
     private void exitTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitTxtMouseClicked
-        System.exit(0);
+
+        int opcion = JOptionPane.showConfirmDialog(null, "¿Esta Seguro de Cerrar?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opcion == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else if (opcion == JOptionPane.NO_OPTION) {
+        }
     }//GEN-LAST:event_exitTxtMouseClicked
 
     private void exitTxtMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitTxtMouseEntered
@@ -333,7 +345,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginregistrarseMouseEntered
 
     private void loginregistrarseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginregistrarseMouseExited
-        jPanelRegistrarse.setBackground(new Color(0,134,190));
+        jPanelRegistrarse.setBackground(new Color(0, 134, 190));
     }//GEN-LAST:event_loginregistrarseMouseExited
 
     private void userTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMousePressed
@@ -361,8 +373,7 @@ public class Login extends javax.swing.JFrame {
     private void loginregistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginregistrarseMouseClicked
         Frm_RegistroUsuarios usuarios = new Frm_RegistroUsuarios();
         usuarios.setVisible(true);
-        dispose();
-        
+
     }//GEN-LAST:event_loginregistrarseMouseClicked
 
     private void loginentrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginentrarMouseClicked
@@ -374,20 +385,28 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginentrarMouseEntered
 
     private void loginentrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginentrarMouseExited
-        JpanelEntrar.setBackground(new Color(0,134,190));
+        JpanelEntrar.setBackground(new Color(0, 134, 190));
     }//GEN-LAST:event_loginentrarMouseExited
-    private void FondoJlabel(JLabel lbl, String ruta){
+
+    private void passTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passTxtKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == '\n') {
+            validacion();
+        }
+    }//GEN-LAST:event_passTxtKeyReleased
+    private void FondoJlabel(JLabel lbl, String ruta) {
         this.fondo = new ImageIcon(ruta);
         this.icono = new ImageIcon(
                 this.fondo.getImage().getScaledInstance(
-                lbl.getWidth(), 
-                lbl.getHeight(), 
-                Image.SCALE_DEFAULT
+                        lbl.getWidth(),
+                        lbl.getHeight(),
+                        Image.SCALE_DEFAULT
                 )
         );
         lbl.setIcon(this.icono);
         this.repaint();
     }
+
     /**
      * @param args the command line arguments
      */

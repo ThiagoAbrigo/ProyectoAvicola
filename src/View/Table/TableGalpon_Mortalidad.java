@@ -5,6 +5,9 @@
  */
 package View.Table;
 
+import View.Frm_PrincipalDemo;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 import lista.Controller.Lista;
 import modelo.Galpon;
@@ -13,9 +16,10 @@ import modelo.Galpon;
  *
  * @author Home
  */
-public class TableGalpon extends AbstractTableModel{
+public class TableGalpon_Mortalidad extends AbstractTableModel{
     private Lista<Galpon> lista = new Lista();
-
+    SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
+   private Date fechamod = new Date();
     public Lista<Galpon> getLista() {
         return lista;
     }
@@ -31,21 +35,18 @@ public class TableGalpon extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 8;
+        return 4;
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
+        
         Galpon dato = lista.consultarDatoPosicion(i);
         switch (i1) {
-            case 0: return (dato.getId());
+            case 0: return dato.getId();
             case 1: return dato.getNumPollo();
-            case 2: return dato.getRaza();
-            case 3: return dato.getCtdSuministrada();
-            case 4: return dato.getTbalanceado();
-            case 5: return dato.getfDiarioAlimentacion();
-            case 6: return dato.getfIncio();
-            case 7: return dato.getfFin();
+            case 2: return dato.getPollosMuertos();
+            case 3: return dato.getExistencias();
             default: return null;             
         }            
     }
@@ -56,17 +57,12 @@ public class TableGalpon extends AbstractTableModel{
             case 0:
                 return "ID";
             case 1:
-                return "Nro POLLOS";
+                return "Nro. Pollos actual";
             case 2:
-                return "RAZA";
+                return "Nro. Pollos Fallecidos";
             case 3:
-                return "CANTIDAD";
-            case 4:
-                return "TIPO";
-            case 5:
-                return "ALIMENTACION";
-            case 6: return "Creado";
-            case 7: return "Finaliza";
+                 return "Total";
+               
                 default:return null;
 
         }

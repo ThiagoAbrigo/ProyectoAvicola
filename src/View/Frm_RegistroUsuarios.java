@@ -6,6 +6,7 @@
 package View;
 
 import PaqueteDAO.RegistroDAO;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,12 +15,14 @@ import javax.swing.JOptionPane;
  */
 public class Frm_RegistroUsuarios extends javax.swing.JFrame {
 
+    int xmouse, ymouse;
     private RegistroDAO registroDAO = new RegistroDAO();
 
     /**
      * Creates new form Frm_RegistroUsuarios
      */
     public Frm_RegistroUsuarios() {
+        super.setTitle("Registro de Usuarios");
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -50,66 +53,179 @@ public class Frm_RegistroUsuarios extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtusuario = new javax.swing.JTextField();
         password = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btnRegistroUsuario = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        header = new javax.swing.JPanel();
+        Cerrar = new javax.swing.JPanel();
+        closetext = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel2.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel2.setLayout(null);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/user.png"))); // NOI18N
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(130, 10, 120, 120);
+        jLabel1.setBounds(110, 40, 100, 110);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("CONTRASEÑA:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(40, 220, 90, 16);
+        jLabel2.setBounds(20, 200, 90, 16);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("USUARIO:");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(40, 150, 70, 16);
-        jPanel1.add(txtusuario);
-        txtusuario.setBounds(150, 150, 120, 30);
-        jPanel1.add(password);
-        password.setBounds(150, 210, 120, 30);
+        jLabel3.setBounds(30, 150, 70, 16);
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("REGISTRAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtusuario.setBorder(null);
+        jPanel1.add(txtusuario);
+        txtusuario.setBounds(120, 140, 160, 30);
+
+        password.setBorder(null);
+        jPanel1.add(password);
+        password.setBounds(120, 190, 160, 30);
+
+        btnRegistroUsuario.setBackground(new java.awt.Color(0, 0, 0));
+        btnRegistroUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistroUsuario.setText("REGISTRAR");
+        btnRegistroUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegistroUsuarioActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(150, 260, 100, 30);
+        jPanel1.add(btnRegistroUsuario);
+        btnRegistroUsuario.setBounds(100, 260, 100, 30);
+        jPanel1.add(jSeparator1);
+        jSeparator1.setBounds(120, 220, 160, 10);
+        jPanel1.add(jSeparator2);
+        jSeparator2.setBounds(120, 170, 160, 10);
+
+        jPanel2.add(jPanel1);
+        jPanel1.setBounds(50, 28, 330, 320);
+
+        header.setBackground(new java.awt.Color(255, 255, 255));
+        header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                headerMouseDragged(evt);
+            }
+        });
+        header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                headerMousePressed(evt);
+            }
+        });
+
+        closetext.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        closetext.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        closetext.setText("X");
+        closetext.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closetextMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closetextMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closetextMouseExited(evt);
+            }
+        });
+
+        javax.swing.GroupLayout CerrarLayout = new javax.swing.GroupLayout(Cerrar);
+        Cerrar.setLayout(CerrarLayout);
+        CerrarLayout.setHorizontalGroup(
+            CerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(closetext, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+        );
+        CerrarLayout.setVerticalGroup(
+            CerrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CerrarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(closetext, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
+        header.setLayout(headerLayout);
+        headerLayout.setHorizontalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addContainerGap(286, Short.MAX_VALUE)
+                .addComponent(Cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        headerLayout.setVerticalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addComponent(Cerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.add(header);
+        header.setBounds(50, 0, 330, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(348, 348, 348))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(371, 347));
+        setSize(new java.awt.Dimension(388, 345));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnRegistroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroUsuarioActionPerformed
         guardarregistro();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnRegistroUsuarioActionPerformed
+
+    private void closetextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closetextMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_closetextMouseClicked
+
+    private void closetextMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closetextMouseEntered
+        // TODO add your handling code here:
+        closetext.setForeground(Color.black);
+        Cerrar.setBackground(Color.red);
+        closetext.setForeground(Color.WHITE);
+    }//GEN-LAST:event_closetextMouseEntered
+
+    private void closetextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closetextMouseExited
+        // TODO add your handling code here:
+        Cerrar.setBackground(Color.white);
+        closetext.setForeground(Color.black);
+    }//GEN-LAST:event_closetextMouseExited
+
+    private void headerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - xmouse, y - ymouse);
+    }//GEN-LAST:event_headerMouseDragged
+
+    private void headerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMousePressed
+        // TODO add your handling code here:
+        xmouse = evt.getX();
+        ymouse = evt.getY();
+    }//GEN-LAST:event_headerMousePressed
 
     /**
      * @param args the command line arguments
@@ -147,11 +263,17 @@ public class Frm_RegistroUsuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel Cerrar;
+    private javax.swing.JButton btnRegistroUsuario;
+    private javax.swing.JLabel closetext;
+    private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPasswordField password;
     private javax.swing.JTextField txtusuario;
     // End of variables declaration//GEN-END:variables
