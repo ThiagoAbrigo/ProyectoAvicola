@@ -13,27 +13,35 @@ import java.io.Serializable;
  */
 public class Persona implements Serializable{
     private Rol rol;
-    private Long id;
+    private int id;
     private String nombre;
+    private String apellido;
     private String cedula;
     private String celular;
     private String correo;
     private String direccion;
+    private String password;
 
-    public Persona(Rol rol, Long id, String nombre, String cedula, String celular, String correo, String direccion) {
+    public Persona(Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
         this.rol = rol;
         this.id = id;
         this.nombre = nombre;
+        this.apellido = apellido;
         this.cedula = cedula;
         this.celular = celular;
         this.correo = correo;
         this.direccion = direccion;
+        this.password = password;
     }
 
     public Persona() {
+        
     }
 
     public Rol getRol() {
+        if (rol==null) {
+            rol= new Rol();
+        }
         return rol;
     }
 
@@ -41,11 +49,11 @@ public class Persona implements Serializable{
         this.rol = rol;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,6 +63,14 @@ public class Persona implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getCedula() {
@@ -88,7 +104,15 @@ public class Persona implements Serializable{
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-    
-    
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    
+    
 }
