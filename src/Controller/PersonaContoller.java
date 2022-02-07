@@ -5,11 +5,17 @@
  */
 package Controller;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.System.Logger;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import lista.Controller.Lista;
 import modelo.Persona;
 
@@ -17,11 +23,16 @@ import modelo.Persona;
  *
  * @author usuario
  */
-public class PersonaContoller implements CRUD {
+public class PersonaContoller<T> implements CRUD {
 
-    private final String CARPETA = "datos" + File.separatorChar + Persona.class.getSimpleName() + ".obj";
+    // private final String CARPETA = "datos" + File.separatorChar + Persona.class.getSimpleName() + ".obj";
     private Lista<Persona> lisPers = new Lista();
     private Persona persona;
+    private Lista<T> lista = new Lista();
+
+    ConexionBaseDatos c = new ConexionBaseDatos();
+    Statement st;
+    ResultSet rs;
 
     public Lista<Persona> getLisPers() {
         return lisPers;
@@ -44,17 +55,26 @@ public class PersonaContoller implements CRUD {
 
     @Override
     public boolean Save() {
-        Lista<Persona> aux = listar();
+        Connection con = c.conectar();
+        String sql = "INSERT INTO usuario(id_usuario, nombre, apellido, cedula, celular, correo, direccion, password, cargo, autorizacion, descripcion) VALUE(?,?,?,?,?,?,?,?,?,?,?)";
         try {
-            persona.setId(Long.valueOf(aux.tamanio() + 1));
-            aux.insertarNodo(persona);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CARPETA));
-            oos.writeObject(aux);
-            oos.close();
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
+            ps.setInt(1, persona.getId());
+            ps.setString(2, persona.getNombre());
+            ps.setString(3, persona.getApellido());
+            ps.setString(4, persona.getCedula());
+            ps.setString(5, persona.getCelular());
+            ps.setString(6, persona.getCorreo());
+            ps.setString(7, persona.getDireccion());
+            ps.setString(8, persona.getPassword());
+            ps.setString(9, persona.getRol().getCargo());
+            ps.setBoolean(10, persona.getRol().isAutorizacion());
+            ps.setString(11, persona.getRol().getDescripcion());
+            ps.executeUpdate();
+            ps.close();
             return true;
-
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (SQLException ex) {
+            System.out.println("Error en guar en Base de datos "+ex);
             return false;
         }
 
@@ -62,38 +82,106 @@ public class PersonaContoller implements CRUD {
 
     @Override
     public boolean Update() {
-        Lista<Persona> aux = listar();
+        PreparedStatement pst;
+        Connection con = c.conectar();
+        String sql = ("UPDATE usuario SET nombre =?, apellido =?, cedula =?, celular =?, correo =?, direccion =?, password =? , cargo =?, autorizacion =?, descripcion =? WHERE id_usuario =?");
         try {
-            for (int i = 0; i < aux.tamanio(); i++) {
-                if (aux.consultarDatoPosicion(i).getId().intValue()==persona.getId().intValue()) {
-                    aux.modificarPorPos(persona, i);
-                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CARPETA));
-                    oos.writeObject(aux);
-                    oos.close();
-                    break;
-                }
-            }
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setString(1, persona.getNombre());
+            pst.setString(2, persona.getApellido());
+            pst.setString(3, persona.getCedula());
+            pst.setString(4, persona.getCelular());
+            pst.setString(5, persona.getCorreo());
+            pst.setString(6, persona.getDireccion());
+            pst.setString(7, persona.getPassword());
+            pst.setString(8, persona.getRol().getCargo());
+            pst.setBoolean(9, persona.getRol().isAutorizacion());
+            pst.setString(10, persona.getRol().getDescripcion());
+            pst.setInt(11, persona.getId());
+            pst.executeUpdate();
+            pst.close();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
             return false;
         }
     }
 
-    public Lista<Persona> listar() {
-        Lista<Persona> lista = new Lista();
+    @Override
+    public boolean Delete() {
+        PreparedStatement ps = null;
+        Connection con = c.conectar();
+        String sql = ("DELETE FROM usuario WHERE id_usuario = ?");
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CARPETA));
-            lista = (Lista<Persona>) ois.readObject();
-            ois.close();
-        } catch (Exception e) {
+            ps = (PreparedStatement) con.prepareStatement(sql);
+            ps.setInt(1, persona.getId());
+            ps.executeUpdate();
+            con.close();
+            return true;
+        } catch (SQLException e) {
+             System.out.println("Erro al eliminar "+ e);
+            return false;
         }
-        return lista;
+    }
+    
+    public boolean iniciarSesion(Persona user){
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        Connection con = c.conectar();
+        
+        String sql = "SELECT id_usuario, correo, password, nombre ,cargo, autorizacion  From usuario where usuario =?";
+        try {
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setString(1, persona.getCorreo());
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                if (persona.getPassword().equals(rs.getString(3))) {
+                    persona.setId(rs.getInt(1));
+                    persona.setNombre(rs.getString(4));
+                    persona.getRol().setCargo(rs.getString(5));
+                    persona.getRol().setAutorizacion(rs.getBoolean(6));
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Error de conttraseña "+e);
+            return false;
+        }
+    
     }
 
     @Override
-    public boolean Delete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Lista<T> listar() {
+        st = null;
+        rs = null;
+        lista = new Lista();
+        try {
+            Connection con = c.conectar();
+            st = (Statement) con.createStatement();
+            rs = st.executeQuery("SELECT * FROM usuario");
+            while (rs.next()) {
+                Persona usuario = new Persona();
+                usuario.setId(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setCedula(rs.getString("cedula"));
+                usuario.setCelular(rs.getString("celular"));
+                usuario.setCorreo(rs.getString("correo"));
+                usuario.setDireccion(rs.getString("direccion"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.getRol().setCargo(rs.getString("cargo"));
+                usuario.getRol().setAutorizacion(rs.getBoolean("autorizacion"));
+                usuario.getRol().setDescripcion(rs.getString("descripcion")); 
+                lista.insertarNodo((T) usuario);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error en listar Usuario"+e);
+        }
+        return lista;
     }
 
 }
