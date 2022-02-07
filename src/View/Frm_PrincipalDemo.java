@@ -1048,8 +1048,11 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
     }//GEN-LAST:event_headerMouseDragged
 
     private void closetextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closetextMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
+        int opcion = JOptionPane.showConfirmDialog(null, "¿Esta Seguro de Cerrar?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opcion == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else if (opcion == JOptionPane.NO_OPTION) {
+        }
     }//GEN-LAST:event_closetextMouseClicked
 
     private void closetextMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closetextMouseEntered
@@ -1185,7 +1188,7 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
             log.setVisible(true);
         } else if (opcion == JOptionPane.NO_OPTION) {
         }
-        
+
     }//GEN-LAST:event_JPCerrarSesionMouseClicked
 
     private void JPCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JPCerrarSesionMouseEntered
@@ -1565,6 +1568,8 @@ public class Frm_PrincipalDemo extends javax.swing.JDialog {
         galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
         galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
         galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(String.valueOf(cbFDAlimentacion.getSelectedItem())));
+        galponController.getGalpon().setfIncio(jDateFInicio.getDate());
+        galponController.getGalpon().setfFin(jDatefFin.getDate());
         if (galponController.Update()) {
             JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
             limpiardatosGalpon();

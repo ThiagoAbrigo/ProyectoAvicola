@@ -42,7 +42,7 @@ public class AdaptadorGalponDao<T> implements Operaciones<T> {
         try {
             PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
             //ps.setInt(1, galpon.getId());
-            ps.setString(1, galpon.getNumPollo());
+            //ps.setString(1, galpon.getNumPollo());
             ps.setString(2, galpon.getRaza());
             ps.executeUpdate();
             ps.close();
@@ -61,7 +61,7 @@ public class AdaptadorGalponDao<T> implements Operaciones<T> {
         String sql = ("UPDATE galpones SET pollos =?, raza=? WHERE id_galpon =?");
         try {
             pst = (PreparedStatement) con.prepareStatement(sql);
-            pst.setString(1, galpon.getNumPollo());
+            //pst.setString(1, galpon.getNumPollo());
             System.out.println(galpon.getNumPollo());
             pst.setString(2, galpon.getRaza());
             System.out.println(galpon.getRaza());
@@ -93,7 +93,7 @@ public class AdaptadorGalponDao<T> implements Operaciones<T> {
             while (rs.next()) {
                 Galpon galpon = new Galpon();
                 galpon.setId(rs.getInt("id_galpon"));
-                galpon.setNumPollo(rs.getString("pollos"));
+                //galpon.setNumPollo(rs.getString("pollos"));
                 galpon.setRaza(rs.getString("raza"));
                 lista.insertarNodo((T) galpon);
             }
