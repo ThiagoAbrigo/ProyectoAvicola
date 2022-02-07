@@ -19,8 +19,8 @@ public class Empleado extends Persona{
     private Date fechaSalida;
     private String infoActividad;
 
-    public Empleado(Persona persona, int hrsLaborada, int seguroSocial, Date fechaContratacion, Date fechaSalida, String infoActividad, Rol rol, Long id, String nombre, String cedula, String celular, String correo, String direccion) {
-        super(rol, id, nombre, cedula, celular, correo, direccion);
+    public Empleado(Persona persona, int hrsLaborada, int seguroSocial, Date fechaContratacion, Date fechaSalida, String infoActividad, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
+        super(rol, id, nombre, apellido, cedula, celular, correo, direccion, password);
         this.persona = persona;
         this.hrsLaborada = hrsLaborada;
         this.seguroSocial = seguroSocial;
@@ -28,6 +28,17 @@ public class Empleado extends Persona{
         this.fechaSalida = fechaSalida;
         this.infoActividad = infoActividad;
     }
+
+    public Empleado(Persona persona, int hrsLaborada, int seguroSocial, Date fechaContratacion, Date fechaSalida, String infoActividad) {
+        this.persona = persona;
+        this.hrsLaborada = hrsLaborada;
+        this.seguroSocial = seguroSocial;
+        this.fechaContratacion = fechaContratacion;
+        this.fechaSalida = fechaSalida;
+        this.infoActividad = infoActividad;
+    }
+
+    
 
     public Persona getPersona() {
         return persona;

@@ -5,7 +5,7 @@
  */
 package View.Table;
 
-import View.Frm_PrincipalDemo;
+import View.Frm_PrincipalMenu;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.table.AbstractTableModel;

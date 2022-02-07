@@ -32,7 +32,7 @@ public class Login extends javax.swing.JFrame {
         try {
             String usuario = userTxt.getText();
             String pass = String.valueOf(passTxt.getPassword());
-            String sql = "select * from usuarios where usuario='" + usuario + "' and password='" + pass + "' ";
+            String sql = "select * from usuario where correo='" + usuario + "' and password='" + pass + "' ";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
             if (rs.next()) {
@@ -40,7 +40,7 @@ public class Login extends javax.swing.JFrame {
                 if (resultado == 1) {
                     JOptionPane.showMessageDialog(null, "Bienvenido " + userTxt.getText());
                     this.dispose();
-                    Frm_PrincipalDemo farm = new Frm_PrincipalDemo(null, true);
+                    Frm_PrincipalMenu farm = new Frm_PrincipalMenu(null, true);
                     farm.setVisible(true);
 
                 }
@@ -371,9 +371,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passTxtMousePressed
 
     private void loginregistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginregistrarseMouseClicked
-        Frm_RegistroUsuarios usuarios = new Frm_RegistroUsuarios();
-        usuarios.setVisible(true);
-
+       
     }//GEN-LAST:event_loginregistrarseMouseClicked
 
     private void loginentrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginentrarMouseClicked
