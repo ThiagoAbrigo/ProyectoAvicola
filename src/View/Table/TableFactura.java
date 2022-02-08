@@ -13,7 +13,8 @@ import modelo.Factura;
  *
  * @author John
  */
-public class TableFactura extends AbstractTableModel{
+public class TableFactura extends AbstractTableModel {
+
     private Lista<Factura> lista = new Lista();
 
     public Lista<Factura> getLista() {
@@ -23,7 +24,7 @@ public class TableFactura extends AbstractTableModel{
     public void setLista(Lista lista) {
         this.lista = lista;
     }
-    
+
     @Override
     public int getRowCount() {
         return lista.tamanio();
@@ -31,24 +32,43 @@ public class TableFactura extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 1;
+        return 5;
     }
 
     @Override
     public Object getValueAt(int i, int i1) {
         Factura dato = lista.consultarDatoPosicion(i);
         switch (i1) {
-            case 0: return dato.getPeso();
-            default: return null;             
-        }            
+            case 0:
+                return dato.getNombreCliente();
+            case 1:
+                return dato.getCantidad();
+            case 2:
+                return dato.getDescripcionProducto();
+            case 3:
+                return dato.getPrecioUnitario();
+            case 4:
+                return dato.getTotal();
+            default:
+                return null;
+        }
     }
 
     @Override
     public String getColumnName(int i) {
         switch (i) {
             case 0:
-                return "Peso";
-                default:return null;
+                return "Nombre Cliente";
+            case 1:
+                return "Cantidad";
+            case 2:
+                return "Descripcion";
+            case 3:
+                return "Precio Unitario";
+            case 4:
+                return "Precio Total";
+            default:
+                return null;
 
         }
     }

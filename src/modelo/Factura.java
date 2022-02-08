@@ -12,59 +12,37 @@ import java.util.Date;
  * @author John
  */
 public class Factura extends DetalleFactura {
-    
-    private String NombreCliente;
-    private Long Id;
-    private Date fechaEmision;
-    private double Iva = 0.12;
-    private double precioFinal;
+    private int Id;
+    private String NombreEmpresa = "Granja San Antonio";
+    private String RUC = "1716579451001";
     private String codigoFactura;
-
-    public Factura(Long Id, String NombreCliente, Date fechaEmision, double precioFinal, String codigoFactura, int cantidad, String descripcion, double peso) {
-        this.Id = Id;
-        this.NombreCliente = NombreCliente;
-        this.fechaEmision = fechaEmision;
-        this.precioFinal = precioFinal;
-        this.codigoFactura = codigoFactura;
-        super.setCantidad(cantidad);
-        super.setDescripcionProducto(descripcion);
-        super.setId(Id);
-        super.setPeso(peso);
-    }
-
-    public Factura() {
-    }
-
-    public Long getId() {
+    private String codigoAutorizacion = "1122233877";
+    private String direccionEmpresa= "San Jose/ San Antonio de las Aradas";
+    private String telefonoE = "0997793377";
+    private String email  = "leninsa_18@hotmail.com";
+    
+    public int getId() {
         return Id;
     }
 
-    public void setId(Long Id) {
+    public void setId(int Id) {
         this.Id = Id;
     }
 
-    public Date getFechaEmision() {
-        return fechaEmision;
+    public String getNombreEmpresa() {
+        return NombreEmpresa;
     }
 
-    public void setFechaEmision(Date fechaEmision) {
-        this.fechaEmision = fechaEmision;
+    public void setNombreEmpresa(String NombreEmpresa) {
+        this.NombreEmpresa = NombreEmpresa;
     }
 
-    public double getIva() {
-        return Iva;
+    public String getRUC() {
+        return RUC;
     }
 
-    public void setIva(double Iva) {
-        this.Iva = Iva;
-    }
-
-    public double getPrecioFinal() {
-        return precioFinal;
-    }
-
-    public void setPrecioFinal(double precioFinal) {
-        this.precioFinal = precioFinal;
+    public void setRUC(String RUC) {
+        this.RUC = RUC;
     }
 
     public String getCodigoFactura() {
@@ -75,11 +53,37 @@ public class Factura extends DetalleFactura {
         this.codigoFactura = codigoFactura;
     }
 
-    public String getNombreCliente() {
-        return NombreCliente;
+    public String getCodigoAutorizacion() {
+        return codigoAutorizacion;
     }
 
-    public void setNombreCliente(String NombreCliente) {
-        this.NombreCliente = NombreCliente;
+    public void setCodigoAutorizacion(String codigoAutorizacion) {
+        this.codigoAutorizacion = codigoAutorizacion;
     }
+
+    public String getDireccionEmpresa() {
+        return direccionEmpresa;
+    }
+
+    public void setDireccionEmpresa(String direccionEmpresa) {
+        this.direccionEmpresa = direccionEmpresa;
+    }
+
+    public String getTelefonoE() {
+        return telefonoE;
+    }
+
+    public void setTelefonoE(String telefonoE) {
+        this.telefonoE = telefonoE;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
 }
