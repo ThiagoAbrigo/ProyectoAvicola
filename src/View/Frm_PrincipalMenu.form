@@ -356,7 +356,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                          <Component id="mortalidadtxt" pref="147" max="32767" attributes="0"/>
+                          <Component id="mortalidadtxt" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -2041,12 +2041,10 @@
                                       <EmptySpace pref="25" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="jSeparator16" pref="138" max="32767" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="cbxTipoRol" pref="138" max="32767" attributes="0"/>
-                                              <Component id="checkRolActivo" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
-                                              <Component id="checkRolBoqueado" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
-                                              <Component id="txtRolDescripcion" max="32767" attributes="0"/>
-                                          </Group>
+                                          <Component id="cbxTipoRol" pref="138" max="32767" attributes="0"/>
+                                          <Component id="checkRolActivo" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
+                                          <Component id="checkRolBoqueado" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
+                                          <Component id="txtRolDescripcion" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>

@@ -44,7 +44,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author JavierSarango
  */
 public class Frm_PrincipalMenu extends javax.swing.JDialog {
-    
+
     fondoPaneles paneles = new fondoPaneles();
     fondoLabel logotipo = new fondoLabel();
     private DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
@@ -73,13 +73,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         txtId.setVisible(false);
         cargarTableAdminitracion();
     }
-    
+
     private void cargarTableAdminitracion() {
         modelo.setLista(pc.listar());
         tablaPersonas.setModel(modelo);
         tablaPersonas.updateUI();
     }
-    
+
     private boolean estadoRol() {
         Boolean estado = false;
         if (checkRolActivo.isSelected() && checkRolBoqueado.isSelected() == true) {
@@ -99,9 +99,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         }
         return estado;
-        
+
     }
-    
+
     private void limpiarAdministracion() {
         ///Persona
         pc.setPersona(null);
@@ -118,16 +118,16 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         txtRolDescripcion.setText("");
         checkRolActivo.setSelected(false);
         checkRolBoqueado.setSelected(false);
-        
+
     }
-    
+
     private boolean verficarEspacios() {
         return (txtNombre.getText().trim().length() > 0 && txtCadula.getText().trim().length() > 0
                 && txtCelular.getText().trim().length() > 0 && txtCorreo.getText().trim().length() > 0
                 && txtDirecion.getText().trim().length() > 0 && txtRolDescripcion.getText().trim().length() > 0);
-        
+
     }
-    
+
     public void prueba() {
         int seleccionar = tablaPersonas.getSelectedRow();
         //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
@@ -135,18 +135,15 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         //System.out.println("valor"+valor);
 
         System.out.println(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
-        
+
     }
-    
+
     private void guardar() {
-        //Integer aux = (pc.getPersona() !=null) ? pc.getPersona().getId()+1: 1;
-        if (pc.getPersona() == null) {
-            pc.getPersona().setId(1);
-            txtId.setText(String.valueOf(pc.getPersona().getId() + 1));
-        }
-        //txtId.setText(String.valueOf(new Long(String.valueOf(aux))));
+        int valor = tablaPersonas.getRowCount();
+        txtId.setText(String.valueOf(valor + 1));
         if (verficarEspacios()) {
-            pc.getPersona().setId(Integer.valueOf(txtId.getText()));
+            //pc.getPersona().setId(Integer.valueOf(txtId.getText()));
+            pc.getPersona().setId(pc.getLisPers().tamanio() + 1);
             pc.getPersona().setNombre(txtNombre.getText());
             pc.getPersona().setApellido(txtApellido.getText());
             pc.getPersona().setCedula(txtCadula.getText());
@@ -154,11 +151,12 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             pc.getPersona().setCorreo(txtCorreo.getText());
             pc.getPersona().setDireccion(txtDirecion.getText());
             pc.getPersona().setPassword(txtPassword.getText().toString());
-            
+
+            //pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
             pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
             pc.getPersona().getRol().setAutorizacion(estadoRol());
             pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
-            
+
             if (pc.Save()) {
                 JOptionPane.showMessageDialog(null, "Se guardar correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 limpiarAdministracion();
@@ -170,13 +168,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void editar() {
-        int seleccionar = tablaPersonas.getSelectedRow() + 1;
-        String aux = String.valueOf(seleccionar);
-        txtId.setText(aux);
         if (verficarEspacios()) {
-            
+
             pc.getPersona().setId(Integer.valueOf(txtId.getText()));
             pc.getPersona().setNombre(txtNombre.getText());
             pc.getPersona().setApellido(txtApellido.getText());
@@ -185,7 +180,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             pc.getPersona().setCorreo(txtCorreo.getText());
             pc.getPersona().setDireccion(txtDirecion.getText());
             pc.getPersona().setPassword(txtPassword.getText().toString());
-            
+
             pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
             pc.getPersona().getRol().setAutorizacion(estadoRol());
             pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
@@ -200,43 +195,47 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     public void eliminar() {
-        
-        int seleccionar = tablaPersonas.getSelectedRow();
-        if (seleccionar == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        } else {
-            pc.getPersona().setId(Integer.parseInt(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0))));
-            if (pc.Delete()) {
-                JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
-                limpiarAdministracion();
+        try {
+            if (txtId.getText() == "") {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Error al eliminar");
+                pc.getPersona().setId(Integer.parseInt(txtId.getText().toString()));
+                if (pc.Delete()) {
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+                    limpiarAdministracion();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                }
+                cargarTableAdminitracion();
             }
-            cargarTableAdminitracion();
+        } catch (Exception e) {
+            System.out.println("Error en eliminar " + e);
         }
     }
-    
-    public void leer() {
+
+    public void leer() throws Exception {
         limpiarAdministracion();
         int seleccionar = tablaPersonas.getSelectedRow();
+        //System.out.println("Seleccionar es "+seleccionar);
+        //System.out.println("dato es "+String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
         if (seleccionar >= 0) {
             //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
-            txtId.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
-            txtNombre.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 1)));
-            txtApellido.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
-            txtCadula.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 3)));
-            txtCelular.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
-            txtCorreo.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
-            txtDirecion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
-            txtPassword.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 7)));
+            txtId.setText(String.valueOf(pc.getLisPers().value(pc.getLisPers().consultarDatoPosicion(seleccionar), "id")));
+            txtNombre.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
+            txtApellido.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 1)));
+            txtCadula.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
+            txtCelular.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 3)));
+            txtCorreo.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
+            txtDirecion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
+            txtPassword.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
             //cbxTipoRol.setToolTipText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 8)));
-            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 10)));
+            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
+
         } else {
             JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
 
     /**
@@ -1836,7 +1835,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_bttEditarActionPerformed
 
     private void bttLeerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttLeerActionPerformed
-        leer();
+        try {
+            leer();
+        } catch (Exception ex) {
+            Logger.getLogger(Frm_PrincipalMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bttLeerActionPerformed
 
     private void bttEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttEliminarActionPerformed
@@ -1920,10 +1923,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             tablegalpones.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
             tablegalpones.getColumnModel().getColumn(i).setCellRenderer(tcr);
             tablegalpones.setModel(modeloG);
-            
+
         }
         tablegalpones.updateUI();
-        
+
     }
 
     /*
@@ -1940,11 +1943,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             Document document = new Document();
             PdfWriter.getInstance(document, archivo);
             document.open();
-            
+
             Paragraph paragraph = new Paragraph("Registro de Vacuna");
             paragraph.setAlignment(1);
             document.add(paragraph);
-            
+
             document.add(new Paragraph("Galpón: " + txfGalponSeleccionado.getText().trim()));
             document.add(new Paragraph("Nombre del Producto: " + txtnombreProducto.getText().trim()));
             document.add(new Paragraph("Tipo de Producto: " + String.valueOf(cbTipoFarmaco.getSelectedItem())));
@@ -1971,7 +1974,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e, "Atencion", 2);
         }
-        
+
     }
 
     /*
@@ -2030,7 +2033,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
      */
     private void seleccionarVacuna() {
-        
+
         String primeraVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 5).toString();
         Date fechaprimera = null;
         String segundaVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 6).toString();
@@ -2045,11 +2048,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             this.txfDosis.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 4).toString());
             this.jDate1.setDate(fechaprimera);
             this.jDate2.setDate(fechasegunda);
-            
+
         } catch (Exception e) {
         }
     }
-    
+
     public void poputTable() {
         JPopupMenu popuMenu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem("Aplicar Vacuna", new ImageIcon(getClass().getResource("/Image/vacuna.png")));
@@ -2061,7 +2064,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                 int fila = tablegalpones.getSelectedRow();
                 JPRegistroVacuna.setVisible(true);
                 txfGalponSeleccionado.setText(tablegalpones.getValueAt(fila, 0).toString());
-                
+
             }
         });
         menuItem2.addActionListener(new ActionListener() {
@@ -2102,7 +2105,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         txtCtdPollosActual.setText("");
         txtPollosFallecidos.setText("");
         galponController.setGalpon(null);
-        
+
     }
 
     /*
@@ -2116,7 +2119,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         vacunaController.setVacuna(null);
         //cargarTableVacuna();
     }
-    
+
     private void guardarGalpon() {
         if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -2137,7 +2140,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableGalpon();
         }
     }
-    
+
     private void guardarMortalidadPollo() {
         if (txtPollosFallecidos.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Rellene el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
@@ -2148,7 +2151,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             galponController.getGalpon().setNumPollo(ctActual);
             galponController.getGalpon().setPollosMuertos(ctFallecidos);
             galponController.getGalpon().setExistencias((ctActual - ctFallecidos));
-            
+
             if (galponController.SaveMortalidad()) {
                 JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 cargarTableMortalidad();
@@ -2158,15 +2161,15 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                 }
                 cargarTableGalpon();
                 limpiardatosMortalidad();
-                
+
             } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
             }
             cargarTableMortalidad();
         }
-        
+
     }
-    
+
     private void guardarVacuna() {
         if (txtnombreProducto.getText().trim().isEmpty() || txfDosis.getText().trim().isEmpty()
                 || cbTipoFarmaco.getSelectedItem() == null || JtaJustificacion.getText().trim().isEmpty()) {
@@ -2186,7 +2189,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableVacuna();
         }
     }
-    
+
     private void updateVacuna() {
         vacunaController.getVacuna().setId_vacuna(Integer.parseInt(txtidvacuna.getText()));
         vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
@@ -2203,7 +2206,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
         cargarTableVacuna();
     }
-    
+
     private void Updategalpon() {
         galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
         galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
@@ -2220,9 +2223,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
         }
         cargarTableGalpon();
-        
+
     }
-    
+
     private void deleteGalpon() {
         int seleccionar = tablegalpones.getSelectedRow();
         if (seleccionar == -1) {
@@ -2238,11 +2241,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableGalpon();
         }
     }
-    
+
     class fondoPaneles extends JPanel {
-        
+
         private Image pollo;
-        
+
         @Override
         public void paint(Graphics g) {
             pollo = new ImageIcon(getClass().getResource("/Image/fondo-granja.png")).getImage();
@@ -2250,13 +2253,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             setOpaque(false);
             super.paint(g);
         }
-        
+
     }
-    
+
     class fondoLabel extends JLabel {
-        
+
         private Image logo;
-        
+
         @Override
         public void paint(Graphics g) {
             logo = new ImageIcon(getClass().getResource("/Image/logotipo-granja.png")).getImage();
@@ -2264,7 +2267,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             setOpaque(false);
             super.paint(g);
         }
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
