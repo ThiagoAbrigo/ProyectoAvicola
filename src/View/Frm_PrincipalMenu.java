@@ -73,71 +73,99 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         txtId.setVisible(false);
         cargarTableAdminitracion();
     }
+    /*
+        Métodos de Tablas
+    */
+    /*
+        Carga la tabla de la administración
+    */
 
     private void cargarTableAdminitracion() {
         modelo.setLista(pc.listar());
         tablaPersonas.setModel(modelo);
         tablaPersonas.updateUI();
     }
+    
+    /*
+        Carga la tabla de galpones con los nombres de las columnas centradas
+     */
+    private void cargarTableGalpon() {
+        modeloG.setLista(galponController.listar());
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tablegalpones.getColumnCount(); i++) {
+            tablegalpones.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
+            tablegalpones.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            tablegalpones.setModel(modeloG);
 
-    private boolean estadoRol() {
-        Boolean estado = false;
-        if (checkRolActivo.isSelected() && checkRolBoqueado.isSelected() == true) {
-            checkRolBoqueado.setSelected(false);
-            checkRolActivo.setSelected(false);
-            JOptionPane.showMessageDialog(null, "Selecioanr solo un estado Rol", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (checkRolActivo.isSelected()) {
-                checkRolBoqueado.setSelected(false);
-                System.out.println("Esta acivado es true");
-                estado = true;
-            }
-            if (checkRolBoqueado.isSelected()) {
-                checkRolActivo.setSelected(false);
-                System.out.println("Esta blqueado es true");
-                estado = false;
-            }
         }
-        return estado;
+        tablegalpones.updateUI();
 
     }
-
-    private void limpiarAdministracion() {
-        ///Persona
-        pc.setPersona(null);
-        txtId.setText("");
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtCadula.setText("");
-        txtCelular.setText("");
-        txtCorreo.setText("");
-        txtDirecion.setText("");
-        txtPassword.setText("");
-        ///Roles
-        cbxTipoRol.setSelectedIndex(0);
-        txtRolDescripcion.setText("");
-        checkRolActivo.setSelected(false);
-        checkRolBoqueado.setSelected(false);
-
+    
+    /*
+        Carga la tabla de vacunas con los nombres de las columnas centradas
+     */
+    private void cargarTableVacuna() {
+        modelov.setLista(vacunaController.listar());
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tablevacuna.getColumnCount(); i++) {
+            tablevacuna.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
+            tablevacuna.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            tablevacuna.setModel(modelov);
+        }
+        tablevacuna.updateUI();
     }
-
-    private boolean verficarEspacios() {
-        return (txtNombre.getText().trim().length() > 0 && txtCadula.getText().trim().length() > 0
-                && txtCelular.getText().trim().length() > 0 && txtCorreo.getText().trim().length() > 0
-                && txtDirecion.getText().trim().length() > 0 && txtRolDescripcion.getText().trim().length() > 0);
-
+    /*
+        Carga la tabla de mortalidad de pollos
+     */
+    private void cargarTableMortalidad() {
+        modeloGM.setLista(galponController.listarMortalidad());
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tblMortalidad.getColumnCount(); i++) {
+            tblMortalidad.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
+            tblMortalidad.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            tblMortalidad.setModel(modeloGM);
+        }
+        tblMortalidad.updateUI();
     }
+    /*
+        Crea submenús en la tabla
+    */
+    public void poputTable() {
+        JPopupMenu popuMenu = new JPopupMenu();
+        JMenuItem menuItem1 = new JMenuItem("Aplicar Vacuna", new ImageIcon(getClass().getResource("/Image/vacuna.png")));
+        JMenuItem menuItem2 = new JMenuItem("Registro de Muerte");
+        menuItem1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jPanelSlider1.nextPanel(4, 0, JPRegistroVacuna, jPanelSlider1.right);
+                int fila = tablegalpones.getSelectedRow();
+                JPRegistroVacuna.setVisible(true);
+                txfGalponSeleccionado.setText(tablegalpones.getValueAt(fila, 0).toString());
 
-    public void prueba() {
-        int seleccionar = tablaPersonas.getSelectedRow();
-        //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
-        //int valor = tablaPersonas.getSelectedRow()+1;
-        //System.out.println("valor"+valor);
-
-        System.out.println(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
-
+            }
+        });
+        menuItem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                jPanelSlider1.nextPanel(4, 0, JPMortalidad, jPanelSlider1.right);
+                int fila = tablegalpones.getSelectedRow();
+                JPMortalidad.setVisible(true);
+                txfGalponSeleccionado1.setText(tablegalpones.getValueAt(fila, 0).toString());
+                txtCtdPollosActual.setText(tablegalpones.getValueAt(fila, 1).toString());
+            }
+        });
+        popuMenu.add(menuItem1);
+        popuMenu.add(menuItem2);
+        tablegalpones.setComponentPopupMenu(popuMenu);
     }
-
+    /*
+        Métodos guardar
+    */
+    /*
+        Guarda los datos de las personas
+    */
+    
     private void guardar() {
         int valor = tablaPersonas.getRowCount();
         txtId.setText(String.valueOf(valor + 1));
@@ -168,7 +196,337 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    /*
+        Guarda informacion del galpón
+    */
+    private void guardarGalpon() {
+        if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
+            galponController.getGalpon().setRaza(txtraza.getText());
+            galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
+            galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
+            galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(cbFDAlimentacion.getSelectedItem().toString()));
+            galponController.getGalpon().setfIncio(jDateFInicio.getDate());
+            galponController.getGalpon().setfFin(jDatefFin.getDate());
+            if (galponController.Save()) {
+                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                limpiardatosGalpon();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            cargarTableGalpon();
+        }
+    }
+    /*
+        Guarda información de la vacuna
+    */
+    private void guardarVacuna() {
+        if (txtnombreProducto.getText().trim().isEmpty() || txfDosis.getText().trim().isEmpty()
+                || cbTipoFarmaco.getSelectedItem() == null || JtaJustificacion.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
+            vacunaController.getVacuna().setFarmaco(String.valueOf(cbTipoFarmaco.getSelectedItem()));
+            vacunaController.getVacuna().setJustificacion(JtaJustificacion.getText().trim());
+            vacunaController.getVacuna().setDosis(Double.parseDouble(txfDosis.getText()));
+            vacunaController.getVacuna().setOnevacuna(jDate1.getDate());
+            vacunaController.getVacuna().setTwovacuna(jDate2.getDate());
+            if (vacunaController.Save()) {
+                JOptionPane.showMessageDialog(null, "Guardado", "Ok", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            cargarTableVacuna();
+        }
+    }
+    /*
+        Guarda información de la mortalidad de pollos
+    */
+    private void guardarMortalidadPollo() {
+        if (txtPollosFallecidos.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Rellene el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Integer ctActual = Integer.parseInt(txtCtdPollosActual.getText().trim());
+            Integer ctFallecidos = Integer.parseInt(txtPollosFallecidos.getText().trim());
+            galponController.getGalpon().setId(Integer.parseInt(txfGalponSeleccionado1.getText()));
+            galponController.getGalpon().setNumPollo(ctActual);
+            galponController.getGalpon().setPollosMuertos(ctFallecidos);
+            galponController.getGalpon().setExistencias((ctActual - ctFallecidos));
 
+            if (galponController.SaveMortalidad()) {
+                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                cargarTableMortalidad();
+                galponController.getGalpon().setNumPollo(galponController.getGalpon().getExistencias());
+                if (galponController.Updategalpon()) {
+                    JOptionPane.showMessageDialog(null, "Informacion del galpon actualizada", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                }
+                cargarTableGalpon();
+                limpiardatosMortalidad();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            cargarTableMortalidad();
+        }
+
+    }
+   
+    /*
+        Métodos Eliminar
+    */
+    /*
+        Elimina al usuario seleccionado 
+    */
+    public void eliminar() {
+        try {
+            if (txtId.getText() == "") {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            } else {
+                pc.getPersona().setId(Integer.parseInt(txtId.getText().toString()));
+                if (pc.Delete()) {
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+                    limpiarAdministracion();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                }
+                cargarTableAdminitracion();
+            }
+        } catch (Exception e) {
+            System.out.println("Error en eliminar " + e);
+        }
+    }
+    /*
+        Elimina el galpón seleccionado
+    */
+    private void deleteGalpon() {
+        int seleccionar = tablegalpones.getSelectedRow();
+        if (seleccionar == -1) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
+            if (galponController.Delete()) {
+                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
+                limpiardatosGalpon();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar");
+            }
+            cargarTableGalpon();
+        }
+    }
+    
+    /*
+        Limpiar datos
+    */
+    /*
+        Limpia los datos de los campos ventana administración
+    */
+    private void limpiarAdministracion() {
+        ///Persona
+        pc.setPersona(null);
+        txtId.setText("");
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtCadula.setText("");
+        txtCelular.setText("");
+        txtCorreo.setText("");
+        txtDirecion.setText("");
+        txtPassword.setText("");
+        ///Roles
+        cbxTipoRol.setSelectedIndex(0);
+        txtRolDescripcion.setText("");
+        checkRolActivo.setSelected(false);
+        checkRolBoqueado.setSelected(false);
+
+    }
+        /*
+        Limpia los campos de la vista
+     */
+    private void limpiardatosGalpon() {
+        txtCtdBalanceadoSuministrada.setText("");
+        txtnumeropollo.setText("");
+        txtraza.setText("");
+        jDateFInicio.setDate(new Date());
+        jDatefFin.setDate(new Date());
+        BusquedaDesde.setDate(new Date());
+        BusquedaHasta.setDate(new Date());
+        galponController.setGalpon(null);
+        //cargarTableGalpon();
+    }
+
+    /*
+        Limpia los campos de la tabla Mortalidad
+     */
+    private void limpiardatosMortalidad() {
+        txfGalponSeleccionado1.setText("");
+        txtCtdPollosActual.setText("");
+        txtPollosFallecidos.setText("");
+        galponController.setGalpon(null);
+
+    }
+
+    /*
+        Limpia los campos de la vista
+     */
+    private void limpiardatosVacuna() {
+        txtnombreProducto.setText(" ");
+        JtaJustificacion.setText(" ");
+        jDate1.setDate(new Date());
+        jDate2.setDate(new Date());
+        vacunaController.setVacuna(null);
+        //cargarTableVacuna();
+    }
+    /*
+        Metodos de seleccion
+    */
+    /*
+        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
+     */
+    private void seleccionar() {
+        String fechaIni = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 6).toString();
+        Date fechaIn = null;
+        String fechaFin = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 7).toString();
+        Date fechaF = null;
+        try {
+            fechaIn = st.parse(fechaIni);
+            fechaF = st.parse(fechaFin);
+            this.txtid.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 0).toString());
+            this.txtnumeropollo.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 1).toString());
+            this.txtraza.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 2).toString());
+            this.txtCtdBalanceadoSuministrada.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 3).toString());
+            this.cbTipoBalanceado.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 4).toString());
+            this.cbFDAlimentacion.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 5).toString());
+            this.jDateFInicio.setDate(fechaIn);
+            this.jDatefFin.setDate(fechaF);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+     /*
+        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
+     */
+    private void seleccionarVacuna() {
+
+        String primeraVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 5).toString();
+        Date fechaprimera = null;
+        String segundaVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 6).toString();
+        Date fechasegunda = null;
+        try {
+            fechaprimera = st.parse(primeraVacuna);
+            fechasegunda = st.parse(segundaVacuna);
+            this.txtidvacuna.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 0).toString());
+            this.txtnombreProducto.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 1).toString());
+            this.cbTipoFarmaco.setSelectedItem(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 2).toString());
+            this.JtaJustificacion.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 3).toString());
+            this.txfDosis.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 4).toString());
+            this.jDate1.setDate(fechaprimera);
+            this.jDate2.setDate(fechasegunda);
+
+        } catch (Exception e) {
+        }
+    }
+        /*
+    Rescata los datos de la tabla y los muestra en los campos designados.
+    */
+    
+    public void leer() throws Exception {
+        limpiarAdministracion();
+        int seleccionar = tablaPersonas.getSelectedRow();
+        //System.out.println("Seleccionar es "+seleccionar);
+        //System.out.println("dato es "+String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
+        if (seleccionar >= 0) {
+            //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
+            txtId.setText(String.valueOf(pc.getLisPers().value(pc.getLisPers().consultarDatoPosicion(seleccionar), "id")));
+            txtNombre.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
+            txtApellido.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 1)));
+            txtCadula.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
+            txtCelular.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 3)));
+            txtCorreo.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
+            txtDirecion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
+            txtPassword.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
+            //cbxTipoRol.setToolTipText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 8)));
+            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    /*
+        Métodos actualizar
+    */
+    /*
+        Actualiza la información de vacuna
+    */
+    private void updateVacuna() {
+        vacunaController.getVacuna().setId_vacuna(Integer.parseInt(txtidvacuna.getText()));
+        vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
+        vacunaController.getVacuna().setFarmaco(String.valueOf(cbTipoFarmaco.getSelectedItem()));
+        vacunaController.getVacuna().setJustificacion(JtaJustificacion.getText().trim());
+        vacunaController.getVacuna().setDosis(Double.parseDouble(txfDosis.getText()));
+        vacunaController.getVacuna().setOnevacuna(jDate1.getDate());
+        vacunaController.getVacuna().setTwovacuna(jDate2.getDate());
+        if (vacunaController.Update()) {
+            JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+            limpiardatosVacuna();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        cargarTableVacuna();
+    }
+    /*
+    Actualiza la informacion del galpon
+    */
+    private void Updategalpon() {
+        galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
+        galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
+        galponController.getGalpon().setRaza(txtraza.getText());
+        galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
+        galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
+        galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(String.valueOf(cbFDAlimentacion.getSelectedItem())));
+        galponController.getGalpon().setfIncio(jDateFInicio.getDate());
+        galponController.getGalpon().setfFin(jDatefFin.getDate());
+        if (galponController.Update()) {
+            JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+            limpiardatosGalpon();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        cargarTableGalpon();
+
+    }
+    
+    /*
+        Métodos para ventana Frm_Persona
+    */
+    /*
+        Verifica si el rol está activo o bloqueado
+    */
+    private boolean estadoRol() {
+        Boolean estado = false;
+        if (checkRolActivo.isSelected() && checkRolBoqueado.isSelected() == true) {
+            checkRolBoqueado.setSelected(false);
+            checkRolActivo.setSelected(false);
+            JOptionPane.showMessageDialog(null, "Selecioanr solo un estado Rol", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            if (checkRolActivo.isSelected()) {
+                checkRolBoqueado.setSelected(false);
+                System.out.println("Esta activado es true");
+                estado = true;
+            }
+            if (checkRolBoqueado.isSelected()) {
+                checkRolActivo.setSelected(false);
+                System.out.println("Esta bloqueado es true");
+                estado = false;
+            }
+        }
+        return estado;
+
+    }
+    /*
+    Cumple la funcion de un update
+    Permite editar la información que ha sido ingresada por el administrador
+    */
     private void editar() {
         if (verficarEspacios()) {
 
@@ -195,48 +553,80 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    /*
+        Generar PDF
+    */
 
-    public void eliminar() {
-        try {
-            if (txtId.getText() == "") {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            } else {
-                pc.getPersona().setId(Integer.parseInt(txtId.getText().toString()));
-                if (pc.Delete()) {
-                    JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
-                    limpiarAdministracion();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al eliminar");
-                }
-                cargarTableAdminitracion();
-            }
-        } catch (Exception e) {
-            System.out.println("Error en eliminar " + e);
-        }
-    }
+    /*
+        Genera un Documento PDF con la información obtenida de los campos de la vista al seleccionar
+        alguna fila de la tabla
+     */
+    private void generarPDF() throws FileNotFoundException, DocumentException {
+        if (!(txfGalponSeleccionado.getText().trim().isEmpty()
+                || txtnombreProducto.getText().trim().isEmpty()
+                || JtaJustificacion.getText().trim().isEmpty()
+                || txfDosis.getText().trim().isEmpty())) {
+            String galpon = txfGalponSeleccionado.getText().trim();
+            FileOutputStream archivo = new FileOutputStream("Registro_Vacuna_Galpon_" + galpon + ".pdf", true);
+            Document document = new Document();
+            PdfWriter.getInstance(document, archivo);
+            document.open();
 
-    public void leer() throws Exception {
-        limpiarAdministracion();
-        int seleccionar = tablaPersonas.getSelectedRow();
-        //System.out.println("Seleccionar es "+seleccionar);
-        //System.out.println("dato es "+String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
-        if (seleccionar >= 0) {
-            //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
-            txtId.setText(String.valueOf(pc.getLisPers().value(pc.getLisPers().consultarDatoPosicion(seleccionar), "id")));
-            txtNombre.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
-            txtApellido.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 1)));
-            txtCadula.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
-            txtCelular.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 3)));
-            txtCorreo.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
-            txtDirecion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
-            txtPassword.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
-            //cbxTipoRol.setToolTipText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 8)));
-            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
+            Paragraph paragraph = new Paragraph("Registro de Vacuna");
+            paragraph.setAlignment(1);
+            document.add(paragraph);
+
+            document.add(new Paragraph("Galpón: " + txfGalponSeleccionado.getText().trim()));
+            document.add(new Paragraph("Nombre del Producto: " + txtnombreProducto.getText().trim()));
+            document.add(new Paragraph("Tipo de Producto: " + String.valueOf(cbTipoFarmaco.getSelectedItem())));
+            document.add(new Paragraph("Dosis: " + txfDosis.getText().trim() + String.valueOf(cbMedidaDosis.getSelectedItem())));
+            document.add(new Paragraph("Justificación: " + JtaJustificacion.getText().trim()));
+            document.add(new Paragraph("Primera Inyección: " + st.format(jDate1.getDate())));
+            document.add(new Paragraph("Próxima Inyección: " + st.format(jDate2.getDate())));
+            document.close();
+            //JOptionPane.showMessageDialog(null, "Archivo PDF creado correctamente", "Informacion", 1);
 
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Debe tener llenos todos los campos", "Atencion", 2);
         }
     }
+
+    /*
+        Abre el archivo PDF correspondiente al galpón seleccionado en la tabla
+     */
+    private void abrirpdf() {
+        String galpon = txfGalponSeleccionado.getText().trim();
+        try {
+            File path = new File("Registro_Vacuna_Galpon_" + galpon + ".pdf");
+            Desktop.getDesktop().open(path);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e, "Atencion", 2);
+        }
+
+    }
+
+    /*
+        Otros métodos
+    */
+    /*
+    valida que los campos no estén vacíos
+    */
+    private boolean verficarEspacios() {
+        return (txtNombre.getText().trim().length() > 0 && txtCadula.getText().trim().length() > 0
+                && txtCelular.getText().trim().length() > 0 && txtCorreo.getText().trim().length() > 0
+                && txtDirecion.getText().trim().length() > 0 && txtRolDescripcion.getText().trim().length() > 0);
+
+    }
+
+//    public void prueba() {
+//        int seleccionar = tablaPersonas.getSelectedRow();
+//        //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
+//        //int valor = tablaPersonas.getSelectedRow()+1;
+//        //System.out.println("valor"+valor);
+//
+//        System.out.println(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
+//
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1655,8 +2045,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_BtnRegistroGalponMouseEntered
 
     private void BtnRegistroGalponMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnRegistroGalponMouseExited
-        // TODO add your handling code here:
-        //[102,102,255]
 
         BtnRegistroGalpon.setBackground(new Color(102, 102, 255));
         registroGalpontxt.setForeground(Color.WHITE);
@@ -1912,336 +2300,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
     }
-
     /*
-        Carga la tabla de galpones con los nombres de las columnas centradas
-     */
-    private void cargarTableGalpon() {
-        modeloG.setLista(galponController.listar());
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < tablegalpones.getColumnCount(); i++) {
-            tablegalpones.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
-            tablegalpones.getColumnModel().getColumn(i).setCellRenderer(tcr);
-            tablegalpones.setModel(modeloG);
-
-        }
-        tablegalpones.updateUI();
-
-    }
-
-    /*
-        Genera un Documento PDF con la información obtenida de los campos de la vista al seleccionar
-        alguna fila de la tabla
-     */
-    private void generarPDF() throws FileNotFoundException, DocumentException {
-        if (!(txfGalponSeleccionado.getText().trim().isEmpty()
-                || txtnombreProducto.getText().trim().isEmpty()
-                || JtaJustificacion.getText().trim().isEmpty()
-                || txfDosis.getText().trim().isEmpty())) {
-            String galpon = txfGalponSeleccionado.getText().trim();
-            FileOutputStream archivo = new FileOutputStream("Registro_Vacuna_Galpon_" + galpon + ".pdf", true);
-            Document document = new Document();
-            PdfWriter.getInstance(document, archivo);
-            document.open();
-
-            Paragraph paragraph = new Paragraph("Registro de Vacuna");
-            paragraph.setAlignment(1);
-            document.add(paragraph);
-
-            document.add(new Paragraph("Galpón: " + txfGalponSeleccionado.getText().trim()));
-            document.add(new Paragraph("Nombre del Producto: " + txtnombreProducto.getText().trim()));
-            document.add(new Paragraph("Tipo de Producto: " + String.valueOf(cbTipoFarmaco.getSelectedItem())));
-            document.add(new Paragraph("Dosis: " + txfDosis.getText().trim() + String.valueOf(cbMedidaDosis.getSelectedItem())));
-            document.add(new Paragraph("Justificación: " + JtaJustificacion.getText().trim()));
-            document.add(new Paragraph("Primera Inyección: " + st.format(jDate1.getDate())));
-            document.add(new Paragraph("Próxima Inyección: " + st.format(jDate2.getDate())));
-            document.close();
-            //JOptionPane.showMessageDialog(null, "Archivo PDF creado correctamente", "Informacion", 1);
-
-        } else {
-            //JOptionPane.showMessageDialog(null, "Debe tener llenos todos los campos", "Atencion", 2);
-        }
-    }
-
-    /*
-        Abre el archivo PDF correspondiente al galpón seleccionado en la tabla
-     */
-    private void abrirpdf() {
-        String galpon = txfGalponSeleccionado.getText().trim();
-        try {
-            File path = new File("Registro_Vacuna_Galpon_" + galpon + ".pdf");
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e, "Atencion", 2);
-        }
-
-    }
-
-    /*
-        Carga la tabla de vacunas con los nombres de las columnas centradas
-     */
-    private void cargarTableVacuna() {
-        modelov.setLista(vacunaController.listar());
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < tablevacuna.getColumnCount(); i++) {
-            tablevacuna.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
-            tablevacuna.getColumnModel().getColumn(i).setCellRenderer(tcr);
-            tablevacuna.setModel(modelov);
-        }
-        tablevacuna.updateUI();
-    }
-
-    /*
-        Carga la tabla de mortalidad de pollos
-     */
-    private void cargarTableMortalidad() {
-        modeloGM.setLista(galponController.listarMortalidad());
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < tblMortalidad.getColumnCount(); i++) {
-            tblMortalidad.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
-            tblMortalidad.getColumnModel().getColumn(i).setCellRenderer(tcr);
-            tblMortalidad.setModel(modeloGM);
-        }
-        tblMortalidad.updateUI();
-    }
-
-    /*
-        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
-     */
-    private void seleccionar() {
-        String fechaIni = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 6).toString();
-        Date fechaIn = null;
-        String fechaFin = tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 7).toString();
-        Date fechaF = null;
-        try {
-            fechaIn = st.parse(fechaIni);
-            fechaF = st.parse(fechaFin);
-            this.txtid.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 0).toString());
-            this.txtnumeropollo.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 1).toString());
-            this.txtraza.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 2).toString());
-            this.txtCtdBalanceadoSuministrada.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 3).toString());
-            this.cbTipoBalanceado.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 4).toString());
-            this.cbFDAlimentacion.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 5).toString());
-            this.jDateFInicio.setDate(fechaIn);
-            this.jDatefFin.setDate(fechaF);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    /*
-        Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
-     */
-    private void seleccionarVacuna() {
-
-        String primeraVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 5).toString();
-        Date fechaprimera = null;
-        String segundaVacuna = tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 6).toString();
-        Date fechasegunda = null;
-        try {
-            fechaprimera = st.parse(primeraVacuna);
-            fechasegunda = st.parse(segundaVacuna);
-            this.txtidvacuna.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 0).toString());
-            this.txtnombreProducto.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 1).toString());
-            this.cbTipoFarmaco.setSelectedItem(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 2).toString());
-            this.JtaJustificacion.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 3).toString());
-            this.txfDosis.setText(tablevacuna.getValueAt(tablevacuna.getSelectedRow(), 4).toString());
-            this.jDate1.setDate(fechaprimera);
-            this.jDate2.setDate(fechasegunda);
-
-        } catch (Exception e) {
-        }
-    }
-
-    public void poputTable() {
-        JPopupMenu popuMenu = new JPopupMenu();
-        JMenuItem menuItem1 = new JMenuItem("Aplicar Vacuna", new ImageIcon(getClass().getResource("/Image/vacuna.png")));
-        JMenuItem menuItem2 = new JMenuItem("Registro de Muerte");
-        menuItem1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jPanelSlider1.nextPanel(4, 0, JPRegistroVacuna, jPanelSlider1.right);
-                int fila = tablegalpones.getSelectedRow();
-                JPRegistroVacuna.setVisible(true);
-                txfGalponSeleccionado.setText(tablegalpones.getValueAt(fila, 0).toString());
-
-            }
-        });
-        menuItem2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                jPanelSlider1.nextPanel(4, 0, JPMortalidad, jPanelSlider1.right);
-                int fila = tablegalpones.getSelectedRow();
-                JPMortalidad.setVisible(true);
-                txfGalponSeleccionado1.setText(tablegalpones.getValueAt(fila, 0).toString());
-                txtCtdPollosActual.setText(tablegalpones.getValueAt(fila, 1).toString());
-            }
-        });
-        popuMenu.add(menuItem1);
-        popuMenu.add(menuItem2);
-        tablegalpones.setComponentPopupMenu(popuMenu);
-    }
-
-    /*
-        Limpia los campos de la vista
-     */
-    private void limpiardatosGalpon() {
-        txtCtdBalanceadoSuministrada.setText("");
-        txtnumeropollo.setText("");
-        txtraza.setText("");
-        jDateFInicio.setDate(new Date());
-        jDatefFin.setDate(new Date());
-        BusquedaDesde.setDate(new Date());
-        BusquedaHasta.setDate(new Date());
-        galponController.setGalpon(null);
-        //cargarTableGalpon();
-    }
-
-    /*
-        Limpia los campos de la tabla Mortalidad
-     */
-    private void limpiardatosMortalidad() {
-        txfGalponSeleccionado1.setText("");
-        txtCtdPollosActual.setText("");
-        txtPollosFallecidos.setText("");
-        galponController.setGalpon(null);
-
-    }
-
-    /*
-        Limpia los campos de la vista
-     */
-    private void limpiardatosVacuna() {
-        txtnombreProducto.setText(" ");
-        JtaJustificacion.setText(" ");
-        jDate1.setDate(new Date());
-        jDate2.setDate(new Date());
-        vacunaController.setVacuna(null);
-        //cargarTableVacuna();
-    }
-
-    private void guardarGalpon() {
-        if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
-            galponController.getGalpon().setRaza(txtraza.getText());
-            galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
-            galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
-            galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(cbFDAlimentacion.getSelectedItem().toString()));
-            galponController.getGalpon().setfIncio(jDateFInicio.getDate());
-            galponController.getGalpon().setfFin(jDatefFin.getDate());
-            if (galponController.Save()) {
-                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                limpiardatosGalpon();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            cargarTableGalpon();
-        }
-    }
-
-    private void guardarMortalidadPollo() {
-        if (txtPollosFallecidos.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Rellene el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            Integer ctActual = Integer.parseInt(txtCtdPollosActual.getText().trim());
-            Integer ctFallecidos = Integer.parseInt(txtPollosFallecidos.getText().trim());
-            galponController.getGalpon().setId(Integer.parseInt(txfGalponSeleccionado1.getText()));
-            galponController.getGalpon().setNumPollo(ctActual);
-            galponController.getGalpon().setPollosMuertos(ctFallecidos);
-            galponController.getGalpon().setExistencias((ctActual - ctFallecidos));
-
-            if (galponController.SaveMortalidad()) {
-                JOptionPane.showMessageDialog(null, "Se guardo correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                cargarTableMortalidad();
-                galponController.getGalpon().setNumPollo(galponController.getGalpon().getExistencias());
-                if (galponController.Updategalpon()) {
-                    JOptionPane.showMessageDialog(null, "Informacion del galpon actualizada", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                }
-                cargarTableGalpon();
-                limpiardatosMortalidad();
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            cargarTableMortalidad();
-        }
-
-    }
-
-    private void guardarVacuna() {
-        if (txtnombreProducto.getText().trim().isEmpty() || txfDosis.getText().trim().isEmpty()
-                || cbTipoFarmaco.getSelectedItem() == null || JtaJustificacion.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
-            vacunaController.getVacuna().setFarmaco(String.valueOf(cbTipoFarmaco.getSelectedItem()));
-            vacunaController.getVacuna().setJustificacion(JtaJustificacion.getText().trim());
-            vacunaController.getVacuna().setDosis(Double.parseDouble(txfDosis.getText()));
-            vacunaController.getVacuna().setOnevacuna(jDate1.getDate());
-            vacunaController.getVacuna().setTwovacuna(jDate2.getDate());
-            if (vacunaController.Save()) {
-                JOptionPane.showMessageDialog(null, "Guardado", "Ok", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            cargarTableVacuna();
-        }
-    }
-
-    private void updateVacuna() {
-        vacunaController.getVacuna().setId_vacuna(Integer.parseInt(txtidvacuna.getText()));
-        vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
-        vacunaController.getVacuna().setFarmaco(String.valueOf(cbTipoFarmaco.getSelectedItem()));
-        vacunaController.getVacuna().setJustificacion(JtaJustificacion.getText().trim());
-        vacunaController.getVacuna().setDosis(Double.parseDouble(txfDosis.getText()));
-        vacunaController.getVacuna().setOnevacuna(jDate1.getDate());
-        vacunaController.getVacuna().setTwovacuna(jDate2.getDate());
-        if (vacunaController.Update()) {
-            JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-            limpiardatosVacuna();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        cargarTableVacuna();
-    }
-
-    private void Updategalpon() {
-        galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
-        galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
-        galponController.getGalpon().setRaza(txtraza.getText());
-        galponController.getGalpon().setCtdSuministrada(Integer.parseInt(txtCtdBalanceadoSuministrada.getText().trim()));
-        galponController.getGalpon().setTbalanceado(String.valueOf(cbTipoBalanceado.getSelectedItem()));
-        galponController.getGalpon().setfDiarioAlimentacion(Integer.parseInt(String.valueOf(cbFDAlimentacion.getSelectedItem())));
-        galponController.getGalpon().setfIncio(jDateFInicio.getDate());
-        galponController.getGalpon().setfFin(jDatefFin.getDate());
-        if (galponController.Update()) {
-            JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-            limpiardatosGalpon();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al modificar", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        cargarTableGalpon();
-
-    }
-
-    private void deleteGalpon() {
-        int seleccionar = tablegalpones.getSelectedRow();
-        if (seleccionar == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        } else {
-            galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
-            if (galponController.Delete()) {
-                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
-                limpiardatosGalpon();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al eliminar");
-            }
-            cargarTableGalpon();
-        }
-    }
-
+        Agrega una imagen al JPanel
+    */
     class fondoPaneles extends JPanel {
 
         private Image pollo;
@@ -2255,7 +2316,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
 
     }
-
+    /*
+    Agrega una imagen al JLabel
+    */
     class fondoLabel extends JLabel {
 
         private Image logo;
