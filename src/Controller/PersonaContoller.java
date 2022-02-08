@@ -25,7 +25,6 @@ import modelo.Persona;
  */
 public class PersonaContoller<T> implements CRUD {
 
-    // private final String CARPETA = "datos" + File.separatorChar + Persona.class.getSimpleName() + ".obj";
     private Lista<Persona> lisPers = new Lista();
     private Persona persona;
     private Lista<T> lista = new Lista();
@@ -35,6 +34,9 @@ public class PersonaContoller<T> implements CRUD {
     ResultSet rs;
 
     public Lista<Persona> getLisPers() {
+        if (lisPers == null) {
+            lisPers = new Lista<>();
+        }
         return lisPers;
     }
 
@@ -60,6 +62,7 @@ public class PersonaContoller<T> implements CRUD {
         try {
             PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
             ps.setInt(1, persona.getId());
+            //ps.setInt(1, new Long(lisPers.tamanio()+1));
             ps.setString(2, persona.getNombre());
             ps.setString(3, persona.getApellido());
             ps.setString(4, persona.getCedula());
@@ -74,7 +77,7 @@ public class PersonaContoller<T> implements CRUD {
             ps.close();
             return true;
         } catch (SQLException ex) {
-            System.out.println("Error en guar en Base de datos "+ex);
+            System.out.println("Error en guar en Base de datos " + ex);
             return false;
         }
 
@@ -107,28 +110,33 @@ public class PersonaContoller<T> implements CRUD {
         }
     }
 
-    @Override
+    public void parametroID(int id) {
+        persona.setId(id);
+    }
+
     public boolean Delete() {
+
         PreparedStatement ps = null;
         Connection con = c.conectar();
         String sql = ("DELETE FROM usuario WHERE id_usuario = ?");
         try {
             ps = (PreparedStatement) con.prepareStatement(sql);
             ps.setInt(1, persona.getId());
+            //ps.setInt(1, id);
             ps.executeUpdate();
             con.close();
             return true;
         } catch (SQLException e) {
-             System.out.println("Erro al eliminar "+ e);
+            System.out.println("Erro al eliminar " + e);
             return false;
         }
     }
-    
-    public boolean iniciarSesion(Persona user){
+
+    public boolean iniciarSesion(Persona user) {
         PreparedStatement pst = null;
         ResultSet rs = null;
         Connection con = c.conectar();
-        
+
         String sql = "SELECT id_usuario, correo, password, nombre ,cargo, autorizacion  From usuario where usuario =?";
         try {
             pst = (PreparedStatement) con.prepareStatement(sql);
@@ -141,16 +149,23 @@ public class PersonaContoller<T> implements CRUD {
                     persona.getRol().setCargo(rs.getString(5));
                     persona.getRol().setAutorizacion(rs.getBoolean(6));
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             }
             return false;
         } catch (SQLException e) {
-            System.out.println("Error de conttraseña "+e);
+            System.out.println("Error de conttraseña " + e);
             return false;
         }
-    
+
+    }
+
+    public void ordenar(String oreden, Integer tipo) {
+        lisPers.imprimir();
+        lisPers.seleccion_clase(oreden, tipo);
+        System.out.println("nuevo orden");
+        lisPers.imprimir();
     }
 
     @Override
@@ -164,6 +179,7 @@ public class PersonaContoller<T> implements CRUD {
             rs = st.executeQuery("SELECT * FROM usuario");
             while (rs.next()) {
                 Persona usuario = new Persona();
+                lisPers.setClazz(usuario.getClass());
                 usuario.setId(rs.getInt("id_usuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellido(rs.getString("apellido"));
@@ -174,14 +190,31 @@ public class PersonaContoller<T> implements CRUD {
                 usuario.setPassword(rs.getString("password"));
                 usuario.getRol().setCargo(rs.getString("cargo"));
                 usuario.getRol().setAutorizacion(rs.getBoolean("autorizacion"));
-                usuario.getRol().setDescripcion(rs.getString("descripcion")); 
+                usuario.getRol().setDescripcion(rs.getString("descripcion"));
+                lisPers.insertarNodo(usuario);
                 lista.insertarNodo((T) usuario);
+
             }
 
         } catch (Exception e) {
-            System.out.println("Error en listar Usuario"+e);
+            System.out.println("Error en listar Usuario" + e);
         }
+        setLisPers(lisPers);
         return lista;
+    }
+
+    public void comparaDatos(String atributo) throws Exception {
+        T pivote;
+        for (int i = 0; i < lisPers.tamanio(); i++) {
+            pivote = (T) lisPers.consultarDatoPosicion(i);
+        }
+
+        for (int i = 0; i < lisPers.tamanio(); i++) {
+            lisPers.value(lisPers.consultarDatoPosicion(i), atributo);
+            System.out.println("usuario ==> " + lisPers.value(lisPers.consultarDatoPosicion(i), atributo));
+            System.out.println("Cargo > " + lisPers.consultarDatoPosicion(i).toString());
+
+        }
     }
 
 }

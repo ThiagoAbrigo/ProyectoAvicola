@@ -12,13 +12,13 @@ import java.io.Serializable;
  * @author usuario
  */
 public class Persona implements Serializable{
-    private Rol rol;
+   private Rol rol;
     private int id;
-    private String nombre;
-    private String apellido;
-    private String cedula;
+    private String nombre;//
+    private String apellido;//
+    private String cedula;//
     private String celular;
-    private String correo;
+    private String correo;//
     private String direccion;
     private String password;
 
@@ -113,6 +113,18 @@ public class Persona implements Serializable{
         this.password = password;
     }
 
+//    @Override
+//    public String toString() {
+//        return rol.getCargo();
+//    }
+
     
     
+    
+    
+    
+   
+
+    
+   
 }
