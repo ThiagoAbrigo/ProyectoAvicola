@@ -52,23 +52,23 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         }
     }
 
-    private void eliminar() {
-        int indice = jTFacturas.getSelectedColumn();
-        File path = new File("carpeta/" + indice + ".pdf");
-        path.delete();
-        if (indice == -1) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        } else {
-            controlador.getFactura().setId((Integer.valueOf(JTcodigoFactura.getText())));
-            if (controlador.Delete()) {
-                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
-                limpiar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al eliminar");
-            }
-            cargarTable();
-        }
-    }
+//    private void eliminar() {
+//        int indice = jTFacturas.getSelectedColumn();
+//        File path = new File("carpeta/" + indice + ".pdf");
+//        path.delete();
+//        if (indice == -1) {
+//            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            controlador.getFactura().setId((Integer.valueOf(JTcodigoFactura.getText())));
+//            if (controlador.Delete()) {
+//                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
+//                limpiar();
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Error al eliminar");
+//            }
+//            cargarTable();
+//        }
+//    }
 
     private void limpiar() {
         JTcodigoFactura.setText(" ");
@@ -103,12 +103,8 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         JTcodigoFactura = new javax.swing.JTextField();
         jBuscar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(null);
-
-        jPanel1.setLayout(null);
 
         jTFacturas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -123,23 +119,14 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTFacturas);
 
-        jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 10, 400, 500);
-
         jButton1.setText("Crear Factura");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(470, 140, 110, 30);
 
-        jLabel1.setText("Codigo Factura:");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(430, 40, 90, 20);
-        jPanel1.add(JTcodigoFactura);
-        JTcodigoFactura.setBounds(530, 40, 150, 20);
+        jLabel1.setText("Nombre:");
 
         jBuscar.setText("Buscar");
         jBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -147,8 +134,6 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
                 jBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(jBuscar);
-        jBuscar.setBounds(490, 90, 73, 23);
 
         jButton3.setText("Imprimir");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -156,31 +141,74 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3);
-        jButton3.setBounds(470, 190, 110, 30);
 
-        jButton4.setText("Eliminar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton4);
-        jButton4.setBounds(470, 240, 110, 30);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(JTcodigoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTcodigoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addComponent(jBuscar)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
 
-        getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 700, 520);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
-        pack();
+        setSize(new java.awt.Dimension(738, 583));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBuscarActionPerformed
         buscar();
     }//GEN-LAST:event_jBuscarActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        eliminar();
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         cambioVentana();
@@ -248,7 +276,6 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
     private javax.swing.JButton jBuscar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
