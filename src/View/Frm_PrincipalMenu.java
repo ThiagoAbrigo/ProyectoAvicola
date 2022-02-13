@@ -5,6 +5,7 @@
 package View;
 ///
 
+import Controller.EmpleadoController;
 import java.awt.Frame.*;
 import Controller.GalponController;
 import Controller.PersonaContoller;
@@ -59,6 +60,8 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private SimpleDateFormat st = new SimpleDateFormat("yyyy-MM-dd");
     public PersonaContoller pc = new PersonaContoller();
     private TablaPersona modelo = new TablaPersona();
+    private TablaPersona mdelo2 = new TablaPersona();
+    public EmpleadoController ec = new EmpleadoController();
 
     /**
      * Se crea la ventana principal
@@ -168,35 +171,76 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         Guarda los datos de las personas
     */
     
-    private void guardar() {
+    private void guardarPersona() {
         int valor = tablaPersonas.getRowCount();
         txtId.setText(String.valueOf(valor + 1));
-        if (verficarEspacios()) {
-            //pc.getPersona().setId(Integer.valueOf(txtId.getText()));
-            pc.getPersona().setId(pc.getLisPers().tamanio() + 1);
-            pc.getPersona().setNombre(txtNombre.getText());
-            pc.getPersona().setApellido(txtApellido.getText());
-            pc.getPersona().setCedula(txtCadula.getText());
-            pc.getPersona().setCelular(txtCelular.getText());
-            pc.getPersona().setCorreo(txtCorreo.getText());
-            pc.getPersona().setDireccion(txtDirecion.getText());
-            pc.getPersona().setPassword(txtPassword.getText().toString());
+        if (buscarGuardarPersona()) {
 
-            //pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
-            pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
-            pc.getPersona().getRol().setAutorizacion(estadoRol());
-            pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
-
-            if (pc.Save()) {
-                JOptionPane.showMessageDialog(null, "Se guardar correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-                limpiarAdministracion();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            cargarTableAdminitracion();
         } else {
-            JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            if (verficarEspacios()) {
+                pc.getPersona().setId(pc.getLisPers().tamanio() + 1);
+                pc.getPersona().setNombre(txtNombre.getText());
+                pc.getPersona().setApellido(txtApellido.getText());
+                pc.getPersona().setCedula(txtCadula.getText());
+                pc.getPersona().setCelular(txtCelular.getText());
+                pc.getPersona().setCorreo(txtCorreo.getText());
+                pc.getPersona().setDireccion(txtDirecion.getText());
+                pc.getPersona().setPassword(txtPassword.getText().toString());
+
+                pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
+                pc.getPersona().getRol().setAutorizacion(estadoRol());
+                pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
+
+                if (pc.Save()) {
+                    if (cbxTipoRol.getSelectedItem() == "Empleado") {
+
+                        ec.getEmpleado().setId(pc.getLisPers().tamanio() + 1);
+                        ec.getEmpleado().setNombre(txtNombre.getText());
+                        ec.getEmpleado().setApellido(txtApellido.getText());
+                        ec.getEmpleado().setCedula(txtCadula.getText());
+                        ec.getEmpleado().setPagoHora(0.00);
+                        ec.getEmpleado().setSeguroSocialEmpleado(9.45);
+                        ec.getEmpleado().setSeguroSocialEmpleador(11.50);
+                        ec.getEmpleado().setHrsLaborada(0.00);
+                        ec.getEmpleado().setFechaContratacion("No hay");
+                        ec.getEmpleado().setFechaSalida("No hay");
+
+                        ec.getEmpleado().getRol().setCargo("Ninguno");
+                        ec.getEmpleado().getRol().setDescripcion("No asignado");
+                        if (ec.Save()) {
+                            limpiarAdministracion();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al guardar Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    JOptionPane.showMessageDialog(null, "Se guardar correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
+                    limpiarAdministracion();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                cargarTableAdminitracion();
+            } else {
+                JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
+
+    }
+    
+    public boolean buscarGuardarPersona() {
+        boolean repetido = false;
+        for (int i = 0; i < tablaPersonas.getRowCount(); i++) {
+            if (String.valueOf(tablaPersonas.getValueAt(i, 2)).compareToIgnoreCase(txtCadula.getText().toString()) == 0) {
+                JOptionPane.showMessageDialog(null, "Cedula ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+                txtCadula.setText("");
+                repetido = true;
+            }
+            if (String.valueOf(tablaPersonas.getValueAt(i, 4)).compareToIgnoreCase(txtCorreo.getText().toString()) == 0) {
+                JOptionPane.showMessageDialog(null, "Correo ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+                txtCorreo.setText("");
+                repetido = true;
+            }
+        }
+        return false;
     }
     /*
         Guarda informacion del galpón
@@ -281,13 +325,17 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     /*
         Elimina al usuario seleccionado 
     */
-    public void eliminar() {
-        try {
+    public void eliminarPersona() {
+         try {
             if (txtId.getText() == "") {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
                 pc.getPersona().setId(Integer.parseInt(txtId.getText().toString()));
+                ec.getEmpleado().setCedula(txtCadula.getText().toString());
                 if (pc.Delete()) {
+                    if (ec.Delete()) {
+
+                    }
                     JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
                     limpiarAdministracion();
                 } else {
@@ -432,11 +480,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     Rescata los datos de la tabla y los muestra en los campos designados.
     */
     
-    public void leer() throws Exception {
+    public void seleccionarPersona() throws Exception {
         limpiarAdministracion();
         int seleccionar = tablaPersonas.getSelectedRow();
-        //System.out.println("Seleccionar es "+seleccionar);
-        //System.out.println("dato es "+String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
         if (seleccionar >= 0) {
             //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
             txtId.setText(String.valueOf(pc.getLisPers().value(pc.getLisPers().consultarDatoPosicion(seleccionar), "id")));
@@ -447,7 +493,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             txtCorreo.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
             txtDirecion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
             txtPassword.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
-            //cbxTipoRol.setToolTipText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 8)));
+            cbxTipoRol.setSelectedItem(String.valueOf(tablaPersonas.getValueAt(seleccionar, 7)));
             txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
 
         } else {
@@ -529,7 +575,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     Cumple la funcion de un update
     Permite editar la información que ha sido ingresada por el administrador
     */
-    private void editar() {
+    private void editarPersona() {
         if (verficarEspacios()) {
 
             pc.getPersona().setId(Integer.valueOf(txtId.getText()));
@@ -540,17 +586,34 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             pc.getPersona().setCorreo(txtCorreo.getText());
             pc.getPersona().setDireccion(txtDirecion.getText());
             pc.getPersona().setPassword(txtPassword.getText().toString());
-
             pc.getPersona().getRol().setCargo(cbxTipoRol.getItemAt(cbxTipoRol.getSelectedIndex()));
             pc.getPersona().getRol().setAutorizacion(estadoRol());
             pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
             if (pc.Update()) {
+                if (cbxTipoRol.getSelectedItem() == "Empleado") {
+                    ec.getEmpleado().setId(Integer.valueOf(txtId.getText()));
+                    ec.getEmpleado().setNombre(txtNombre.getText());
+                    ec.getEmpleado().setApellido(txtApellido.getText());
+                    ec.getEmpleado().setCedula(txtCadula.getText());
+                    ec.getEmpleado().setPagoHora(0.00);
+                    ec.getEmpleado().setSeguroSocialEmpleado(9.45);
+                    ec.getEmpleado().setSeguroSocialEmpleador(11.50);
+                    ec.getEmpleado().setHrsLaborada(0.00);
+                    ec.getEmpleado().setFechaContratacion("");
+                    ec.getEmpleado().setFechaSalida("");
+                    ec.getEmpleado().getRol().setCargo("Ninguno");
+                    ec.getEmpleado().getRol().setDescripcion("No asignado");
+                    if (ec.Save()) {
+
+                    }
+                }
                 JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 limpiarAdministracion();
             } else {
                 JOptionPane.showMessageDialog(null, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
             }
             cargarTableAdminitracion();
+
         } else {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -632,16 +695,59 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         tablegalpones.setModel(modeloG);
         tablegalpones.updateUI();
     }
-
-//    public void prueba() {
-//        int seleccionar = tablaPersonas.getSelectedRow();
-//        //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
-//        //int valor = tablaPersonas.getSelectedRow()+1;
-//        //System.out.println("valor"+valor);
-//
-//        System.out.println(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
-//
-//    }
+    int tipoOrden = 0;
+    public void ordenarPersona() {
+        int cbxOrden = cbxOrdenar.getSelectedIndex();
+        try {
+            pc.setLisPers(null);
+            mdelo2.setLista(pc.getLisPers());
+            tablaPersonas.updateUI();
+            cargarTableAdminitracion();
+            if (tipoOrden == 0) {
+                if (cbxOrden == 0) {
+                    pc.getLisPers().seleccion_clase("nombre", 1);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                if (cbxOrden == 1) {
+                    pc.getLisPers().seleccion_clase("apellido", 1);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                if (cbxOrden == 2) {
+                    pc.getLisPers().seleccion_clase("cedula", 1);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                tipoOrden = 1;
+            } else {
+                if (cbxOrden == 0) {
+                    pc.getLisPers().seleccion_clase("nombre", 2);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                if (cbxOrden == 1) {
+                    pc.getLisPers().seleccion_clase("apellido", 2);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                if (cbxOrden == 2) {
+                    pc.getLisPers().seleccion_clase("cedula", 2);
+                    mdelo2.setLista(pc.getLisPers());
+                    tablaPersonas.setModel(mdelo2);
+                    tablaPersonas.updateUI();
+                }
+                tipoOrden = 0;
+            }
+        } catch (Exception e) {
+            System.out.println("erro ordenar " + e);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -787,9 +893,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jSeparator14 = new javax.swing.JSeparator();
         jSeparator15 = new javax.swing.JSeparator();
         bttEliminar = new javax.swing.JButton();
-        bttLeer = new javax.swing.JButton();
         bttEditar = new javax.swing.JButton();
         bttGuardar = new javax.swing.JButton();
+        bttOrdenar = new javax.swing.JButton();
+        cbxOrdenar = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
         tablaPersonas = new javax.swing.JTable();
 
@@ -1134,7 +1241,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel5.setText("Número de Pollos");
         jPanel4.add(jLabel5);
-        jLabel5.setBounds(20, 140, 110, 15);
+        jLabel5.setBounds(20, 140, 110, 16);
 
         jLabel6.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel6.setText("veces");
@@ -1237,7 +1344,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel8.setText("Tipo de Balanceado:");
         jPanel4.add(jLabel8);
-        jLabel8.setBounds(20, 20, 120, 15);
+        jLabel8.setBounds(20, 20, 120, 16);
 
         cbTipoBalanceado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Engorde", "Crecimiento" }));
         jPanel4.add(cbTipoBalanceado);
@@ -1252,7 +1359,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel9.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel9.setText("Cantidad Suministrada:");
         jPanel4.add(jLabel9);
-        jLabel9.setBounds(20, 70, 140, 15);
+        jLabel9.setBounds(20, 70, 140, 16);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel2.setText("Frecuencia Diaria de Alimentación:");
@@ -1266,7 +1373,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         cbFDAlimentacion.setBounds(660, 10, 40, 30);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Periodo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Periodo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel7.setText("Fecha Inicio:");
@@ -1337,7 +1444,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
         jPanel4.add(jButton2);
-        jButton2.setBounds(540, 250, 70, 24);
+        jButton2.setBounds(540, 250, 70, 23);
 
         JPRegistroGalpones.add(jPanel4);
         jPanel4.setBounds(10, 40, 840, 470);
@@ -1348,7 +1455,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         JPRegistroGalpones.add(jLabel3);
         jLabel3.setBounds(300, 0, 240, 30);
         JPRegistroGalpones.add(txtid);
-        txtid.setBounds(30, 10, 50, 24);
+        txtid.setBounds(30, 10, 50, 20);
 
         jPanelSlider1.add(JPRegistroGalpones, "card2");
 
@@ -1371,7 +1478,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel18.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel18.setText("Tipo de Producto:");
         jPanel2.add(jLabel18);
-        jLabel18.setBounds(10, 90, 100, 15);
+        jLabel18.setBounds(10, 90, 100, 16);
 
         btnGuardarVacuna.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarVacuna.setText("Guardar");
@@ -1400,12 +1507,12 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel19.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel19.setText("Galpón Seleccionado:");
         jPanel2.add(jLabel19);
-        jLabel19.setBounds(10, 10, 130, 15);
+        jLabel19.setBounds(10, 10, 130, 16);
 
         jLabel23.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel23.setText("Próxima:");
         jPanel2.add(jLabel23);
-        jLabel23.setBounds(490, 210, 80, 15);
+        jLabel23.setBounds(490, 210, 80, 16);
 
         cbTipoFarmaco.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fármaco", "Biológico" }));
         jPanel2.add(cbTipoFarmaco);
@@ -1420,7 +1527,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel24.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel24.setText("Nombre Producto:");
         jPanel2.add(jLabel24);
-        jLabel24.setBounds(10, 50, 120, 15);
+        jLabel24.setBounds(10, 50, 120, 16);
         jPanel2.add(jSeparator10);
         jSeparator10.setBounds(140, 70, 250, 10);
 
@@ -1440,7 +1547,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel26.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel26.setText("Dosis:");
         jPanel2.add(jLabel26);
-        jLabel26.setBounds(490, 40, 50, 15);
+        jLabel26.setBounds(490, 40, 50, 16);
 
         cbMedidaDosis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "g", "mg", "ml" }));
         jPanel2.add(cbMedidaDosis);
@@ -1449,22 +1556,22 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel25.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel25.setText("Justificación:");
         jPanel2.add(jLabel25);
-        jLabel25.setBounds(10, 130, 90, 15);
+        jLabel25.setBounds(10, 130, 90, 16);
 
         jLabel27.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel27.setText("Administra:");
         jPanel2.add(jLabel27);
-        jLabel27.setBounds(490, 90, 80, 15);
+        jLabel27.setBounds(490, 90, 80, 16);
 
         jLabel28.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel28.setText("Primera:");
         jPanel2.add(jLabel28);
-        jLabel28.setBounds(490, 170, 80, 15);
+        jLabel28.setBounds(490, 170, 80, 16);
 
         jLabel29.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel29.setText("Fecha Vacunas");
         jPanel2.add(jLabel29);
-        jLabel29.setBounds(610, 130, 110, 15);
+        jLabel29.setBounds(610, 130, 110, 16);
 
         tablevacuna.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1697,7 +1804,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel37.setText("Contraseña:");
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel38.setText("Tipo");
@@ -1800,14 +1907,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
 
-        bttLeer.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        bttLeer.setText("Leer");
-        bttLeer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bttLeerActionPerformed(evt);
-            }
-        });
-
         bttEditar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bttEditar.setText("Editar");
         bttEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -1824,6 +1923,39 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
 
+        bttOrdenar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        bttOrdenar.setText("Ordenar");
+        bttOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttOrdenarActionPerformed(evt);
+            }
+        });
+
+        cbxOrdenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "Cedula" }));
+        cbxOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxOrdenarActionPerformed(evt);
+            }
+        });
+
+        tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tablaPersonas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPersonasMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tablaPersonas);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -1839,31 +1971,20 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                                 .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(80, 80, 80)
-                                .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(bttGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(bttEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(16, 16, 16)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
+                                .addGap(20, 20, 20)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(bttLeer, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel37)
                                         .addGap(18, 18, 18)
-                                        .addComponent(bttEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                                .addComponent(jLabel37)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                                .addComponent(jLabel15)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(jLabel15)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(99, 99, 99)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -1901,9 +2022,23 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                         .addGap(90, 90, 90)
                         .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(606, 606, 606)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(185, 185, 185)
+                        .addComponent(bttGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bttEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bttEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(cbxOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bttOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1952,10 +2087,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                             .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(1, 1, 1)
                         .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bttGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bttEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(59, 59, 59)
+                                .addComponent(bttOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(cbxOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1963,32 +2101,22 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bttLeer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bttEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(37, 37, 37)
-                .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(bttEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bttEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bttGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(12, 12, 12)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel3.add(jPanel5);
-        jPanel5.setBounds(10, 10, 850, 340);
-
-        tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane6.setViewportView(tablaPersonas);
-
-        jPanel3.add(jScrollPane6);
-        jScrollPane6.setBounds(20, 360, 800, 140);
+        jPanel5.setBounds(10, 10, 850, 500);
 
         jPanelSlider1.add(jPanel3, "card6");
 
@@ -2218,24 +2346,16 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     }//GEN-LAST:event_checkRolBoqueadoActionPerformed
 
     private void bttGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttGuardarActionPerformed
-        guardar();
+        guardarPersona();
     }//GEN-LAST:event_bttGuardarActionPerformed
 
     private void bttEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttEditarActionPerformed
-        editar();
+        editarPersona();
     }//GEN-LAST:event_bttEditarActionPerformed
-
-    private void bttLeerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttLeerActionPerformed
-        try {
-            leer();
-        } catch (Exception ex) {
-            Logger.getLogger(Frm_PrincipalMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_bttLeerActionPerformed
 
     private void bttEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttEliminarActionPerformed
         // TODO add your handling code here:
-        eliminar();
+        eliminarPersona();
     }//GEN-LAST:event_bttEliminarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -2264,6 +2384,23 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         listarporfecha();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void bttOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttOrdenarActionPerformed
+        // TODO add your handling code here:
+        ordenarPersona();
+    }//GEN-LAST:event_bttOrdenarActionPerformed
+
+    private void cbxOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxOrdenarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxOrdenarActionPerformed
+
+    private void tablaPersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPersonasMouseClicked
+        try {
+            seleccionarPersona();
+        } catch (Exception ex) {
+            Logger.getLogger(Frm_PrincipalMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_tablaPersonasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -2369,11 +2506,12 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private javax.swing.JButton bttEditar;
     private javax.swing.JButton bttEliminar;
     private javax.swing.JButton bttGuardar;
-    private javax.swing.JButton bttLeer;
+    private javax.swing.JButton bttOrdenar;
     private javax.swing.JComboBox<String> cbFDAlimentacion;
     private javax.swing.JComboBox<String> cbMedidaDosis;
     private javax.swing.JComboBox<String> cbTipoBalanceado;
     private javax.swing.JComboBox<String> cbTipoFarmaco;
+    private javax.swing.JComboBox<String> cbxOrdenar;
     private javax.swing.JComboBox<String> cbxTipoRol;
     private javax.swing.JLabel cerrarSesiontxt;
     private javax.swing.JCheckBox checkRolActivo;
