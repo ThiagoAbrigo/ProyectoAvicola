@@ -86,7 +86,7 @@ public class Frm_Empleado extends javax.swing.JDialog {
             ec.getEmpleado().setPagoHora(0.00);
             ec.getEmpleado().setSeguroSocialEmpleado(0.00);
             ec.getEmpleado().setSeguroSocialEmpleador(0.00);
-            ec.getEmpleado().setHrsLaborada("No hay");
+            ec.getEmpleado().setHrsLaborada(0.0);
             ec.getEmpleado().setFechaContratacion("No hay");
             ec.getEmpleado().setFechaSalida("No hay");
 

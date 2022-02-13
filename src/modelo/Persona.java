@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author usuario
  */
 public class Persona implements Serializable{
-   private Rol rol;
+    private Rol rol;
     private int id;
     private String nombre;//
     private String apellido;//

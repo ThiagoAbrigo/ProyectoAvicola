@@ -5,21 +5,19 @@
  */
 package View.Table;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 import lista.Controller.Lista;
-import modelo.Galpon;
+import modelo.Caja;
+import modelo.DetalleFactura;
 
 /**
  *
  * @author Home
  */
-public class TableGalpon_Mortalidad extends AbstractTableModel{
-    private Lista<Galpon> lista = new Lista();
-    SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
-   private Date fechamod = new Date();
-    public Lista<Galpon> getLista() {
+public class TableCaja extends AbstractTableModel{
+    private Lista<Caja> lista = new Lista();
+
+    public Lista<Caja> getLista() {
         return lista;
     }
 
@@ -39,13 +37,14 @@ public class TableGalpon_Mortalidad extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int i, int i1) {
-        
-        Galpon dato = lista.consultarDatoPosicion(i);
+        Lista<DetalleFactura> li = new Lista();
+        Caja dato = lista.consultarDatoPosicion(i);
+        //DetalleFactura d = li.consultarDatoPosicion(i);
         switch (i1) {
-            case 0: return dato.getId();
-            case 1: return dato.getNumPollo();
-            case 2: return dato.getPollosMuertos();
-            case 3: return dato.getExistencias();
+            case 0: return (dato.getId_caja());
+            case 1: return dato.getGanancia();
+            case 2: return dato.getPago_sueldo()+"/n"+dato.getAlimento();
+            case 3: return dato.getPresupuesto_Actual()-dato.getPago_sueldo()-dato.getAlimento();
             default: return null;             
         }            
     }
@@ -56,12 +55,11 @@ public class TableGalpon_Mortalidad extends AbstractTableModel{
             case 0:
                 return "ID";
             case 1:
-                return "Nro. Pollos actual";
+                return "INGRESOS";
             case 2:
-                return "Nro. Pollos Fallecidos";
+                return "EGRESOS";
             case 3:
-                 return "Total";
-               
+                return "GANANCIA";
                 default:return null;
 
         }

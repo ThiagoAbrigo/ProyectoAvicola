@@ -52,9 +52,13 @@ public class GalponController<T> implements CRUD {
         this.galpon = galpon;
     }
 
+    /**
+     * Guarda galpones con BDD
+     *
+     * @return Boolean
+     */
     @Override
     public boolean Save() {
-        //Galpon galpon = (Galpon) dato;
         Connection con = c.conectar();
         String sql = "INSERT INTO galpones(id_galpon,pollos,raza, cant_Suministrada, Tipo_Balanceado, alimentacion, creacion, finaliza) VALUE(?,?,?,?,?,?,?,?)";
 
@@ -79,6 +83,11 @@ public class GalponController<T> implements CRUD {
         }
     }
 
+    /**
+     * Actualiza galpon BDD
+     *
+     * @return Boolean
+     */
     @Override
     public boolean Update() {
         PreparedStatement pst;
@@ -104,6 +113,11 @@ public class GalponController<T> implements CRUD {
         }
     }
 
+    /**
+     * Elimina galpon BDD
+     *
+     * @return Boolean
+     */
     @Override
     public boolean Delete() {
         //p = (Paciente) obj;
@@ -123,6 +137,11 @@ public class GalponController<T> implements CRUD {
         }
     }
 
+    /**
+     * Lista galpones en la tabla
+     *
+     * @return Lista
+     */
     @Override
     public Lista<T> listar() {
         st = null;
@@ -151,6 +170,11 @@ public class GalponController<T> implements CRUD {
         return lista;
     }
 
+    /**
+     * Guarda las muertes de la cantidad de pollos que hay en el galpon
+     *
+     * @return Boolean
+     */
     public boolean SaveMortalidad() {
         //Galpon galpon = (Galpon) dato;
         Connection con = c.conectar();
@@ -171,7 +195,33 @@ public class GalponController<T> implements CRUD {
             return false;
         }
     }
+    /**
+     * Actualiza la cantidad de pollos
+     * @return 
+     */
+    public boolean Updategalpon() {
+        PreparedStatement pst;
+        Connection con = c.conectar();
+        String sql = ("UPDATE galpones SET pollos =? WHERE id_galpon =?");
+        try {
+            pst = (PreparedStatement) con.prepareStatement(sql);
+            pst.setInt(1, galpon.getNumPollo());
+            pst.setInt(2, galpon.getId());
+            pst.executeUpdate();
+            pst.close();
+            return true;
 
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Ocurrido el siguiente error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Lista los pollos muertos con su respectivo galpon
+     *
+     * @return Lista
+     */
     public Lista<T> listarMortalidad() {
         st = null;
         rs = null;
@@ -195,63 +245,21 @@ public class GalponController<T> implements CRUD {
         }
         return lista;
     }
-
-    public boolean Updategalpon() {
-        PreparedStatement pst;
-        Connection con = c.conectar();
-        String sql = ("UPDATE galpones SET pollos =? WHERE id_galpon =?");
-        try {
-            pst = (PreparedStatement) con.prepareStatement(sql);
-            pst.setInt(1, galpon.getNumPollo());
-            pst.setInt(2, galpon.getId());
-            pst.executeUpdate();
-            pst.close();
-            return true;
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocurrido el siguiente error: " + e.getMessage());
-            return false;
+    /**
+     * Busca los galpones por fecha del dia que son ingresados
+     * @param date
+     * @return lista de galpones
+     */
+    public Lista<Galpon> buscarPorFechas(String date) {
+        Lista<Galpon> lista = new Lista();
+        Lista<Galpon> aux = (Lista<Galpon>) listar();
+        for (int i = 0; i < listar().tamanio(); i++) {
+            Galpon p = aux.consultarDatoPosicion(i);
+            if (p.getfIncio().toString().toLowerCase().contains(date.toLowerCase())){
+                lista.insertarNodo(p);
+            }
         }
+        return lista;
     }
-//    public Lista<Galpon> buscargalpon(Date dato1, Date dato2){
-//        Lista<Galpon> lista = new Lista();
-//
-//        Lista<Galpon> aux = (Lista<Galpon>) listarporFecha(dato1, dato2);
-//        for (int i = 0; i < listarporFecha(dato1, dato2).tamanio(); i++) {
-//            Galpon g = aux.consultarDatoPosicion(i);
-//            if (g.getfIncio().equals(dato1)||g.getfIncio().equals(dato2)) {
-//                lista.insertarNodo(g);
-//                System.out.println(lista);
-//            }
-//        }
-//        return lista;
-//    }
 
-//        public Lista<Galpon> listarporFecha(Date fecha1, Date fecha2) {
-//        st = null;
-//        rs = null;
-//        lista = new Lista();
-//        try {
-//            Connection con = c.conectar();
-//            st = (Statement) con.createStatement();
-//            rs = st.executeQuery("SELECT * FROM galpones");
-//            
-//            while (rs.next()) {
-//                Galpon galpon = new Galpon();
-//                galpon.setId(rs.getInt("id_galpon"));
-//                galpon.setNumPollo(rs.getInt("pollos"));
-//                galpon.setRaza(rs.getString("raza"));
-//                galpon.setCtdSuministrada(rs.getInt("cant_Suministrada"));
-//                galpon.setTbalanceado(rs.getString("Tipo_Balanceado"));
-//                galpon.setfDiarioAlimentacion(rs.getInt("alimentacion"));
-//                galpon.setfIncio(rs.getDate("creacion"));
-//                galpon.setfFin(rs.getDate("finaliza"));
-//                lista.insertarNodo((T) galpon);
-//            }
-//
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return (Lista<Galpon>) lista;
-//    }
 }
