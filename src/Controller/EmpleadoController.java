@@ -19,7 +19,8 @@ import modelo.Empleado;
  * @author usuario
  */
 public class EmpleadoController<T> implements CRUD {
-        private Lista<Empleado> lisEmpleado = new Lista();
+       
+    private Lista<Empleado> lisEmpleado = new Lista();
     private Empleado empleado;
     private Lista<T> lista = new Lista();
 
@@ -67,7 +68,6 @@ public class EmpleadoController<T> implements CRUD {
             ps.setDouble(6, empleado.getSeguroSocialEmpleado());
             ps.setDouble(7, empleado.getSeguroSocialEmpleador());
             ps.setDouble(8, empleado.getHrsLaborada());
-            //ps.setString(8, empleado.getHrsLaborada());
             ps.setString(9, empleado.getFechaContratacion());
             ps.setString(10,empleado.getFechaSalida());
             
@@ -88,15 +88,14 @@ public class EmpleadoController<T> implements CRUD {
         PreparedStatement pst;
         Connection con = c.conectar();
         String sql = ("UPDATE empleado SET pago_hora =?, seguro_social_empleado =?, "
-                + "seguro_social_empleador =?, hora_laborada =?, Fecha_contratacion =?, "
-                + "fecha_Salida =?,rol =? , descripcion =?,  WHERE cedula =?");
+                + "seguro_social_empleador =?, hora_laborada =?, fecha_contratacion =?, "
+                + "fecha_salida =?, rol =?, descripcion =? WHERE cedula =?" );
         try {
             pst = (PreparedStatement) con.prepareStatement(sql);
             pst.setDouble(1, empleado.getPagoHora());
             pst.setDouble(2, empleado.getSeguroSocialEmpleado());
             pst.setDouble(3, empleado.getSeguroSocialEmpleador());
             pst.setDouble(4, empleado.getHrsLaborada());
-            //pst.setString(4, empleado.getHrsLaborada());
             pst.setString(5, empleado.getFechaContratacion());
             pst.setString(6, empleado.getFechaSalida());
             pst.setString(7, empleado.getRol().getCargo());
@@ -111,9 +110,7 @@ public class EmpleadoController<T> implements CRUD {
         }
     }
 
-//    public void parametroID(int id) {
-//        persona.setId(id);
-//    }
+
 
     public boolean Delete() {
 
