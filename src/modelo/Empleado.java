@@ -12,8 +12,6 @@ import java.util.Date;
  * @author usuario
  */
 public class Empleado extends Persona {
-
-    
     private double pagoHora;
     private double seguroSocialEmpleado;
     private double seguroSocialEmpleador;
@@ -92,5 +90,6 @@ public class Empleado extends Persona {
         this.fechaSalida = fechaSalida;
     }
 
+    
     
 }

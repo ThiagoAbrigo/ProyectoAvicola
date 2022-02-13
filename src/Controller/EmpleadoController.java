@@ -19,7 +19,7 @@ import modelo.Empleado;
  * @author usuario
  */
 public class EmpleadoController<T> implements CRUD {
-       
+    
     private Lista<Empleado> lisEmpleado = new Lista();
     private Empleado empleado;
     private Lista<T> lista = new Lista();
