@@ -11,72 +11,85 @@ import java.util.Date;
  *
  * @author usuario
  */
-public class Empleado extends Persona{
-    private Persona persona;
-    private int hrsLaborada;
-    private int seguroSocial;
-    private Date fechaContratacion;
-    private Date fechaSalida;
+public class Empleado extends Persona {
+
+    private double pagoHora;
+    private double seguroSocialEmpleado;
+    private double seguroSocialEmpleador;
+    private String hrsLaborada;
+    private String fechaContratacion;
+    private String fechaSalida;
     private String infoActividad;
 
-    public Empleado(Persona persona, int hrsLaborada, int seguroSocial, Date fechaContratacion, Date fechaSalida, String infoActividad, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
+    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, String hrsLaborada, String fechaContratacion, String fechaSalida, String infoActividad, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
         super(rol, id, nombre, apellido, cedula, celular, correo, direccion, password);
-        this.persona = persona;
+        this.pagoHora = pagoHora;
+        this.seguroSocialEmpleado = seguroSocialEmpleado;
+        this.seguroSocialEmpleador = seguroSocialEmpleador;
         this.hrsLaborada = hrsLaborada;
-        this.seguroSocial = seguroSocial;
         this.fechaContratacion = fechaContratacion;
         this.fechaSalida = fechaSalida;
         this.infoActividad = infoActividad;
     }
 
-    public Empleado(Persona persona, int hrsLaborada, int seguroSocial, Date fechaContratacion, Date fechaSalida, String infoActividad) {
-        this.persona = persona;
+    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, String hrsLaborada, String fechaContratacion, String fechaSalida, String infoActividad) {
+        this.pagoHora = pagoHora;
+        this.seguroSocialEmpleado = seguroSocialEmpleado;
+        this.seguroSocialEmpleador = seguroSocialEmpleador;
         this.hrsLaborada = hrsLaborada;
-        this.seguroSocial = seguroSocial;
         this.fechaContratacion = fechaContratacion;
         this.fechaSalida = fechaSalida;
         this.infoActividad = infoActividad;
     }
 
-    
-
-    public Persona getPersona() {
-        return persona;
+    public Empleado() {
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public double getPagoHora() {
+        return pagoHora;
     }
 
-    public int getHrsLaborada() {
+    public void setPagoHora(double pagoHora) {
+        this.pagoHora = pagoHora;
+    }
+
+    public double getSeguroSocialEmpleado() {
+        return seguroSocialEmpleado;
+    }
+
+    public void setSeguroSocialEmpleado(double seguroSocialEmpleado) {
+        this.seguroSocialEmpleado = seguroSocialEmpleado;
+    }
+
+    public double getSeguroSocialEmpleador() {
+        return seguroSocialEmpleador;
+    }
+
+    public void setSeguroSocialEmpleador(double seguroSocialEmpleador) {
+        this.seguroSocialEmpleador = seguroSocialEmpleador;
+    }
+
+    public String getHrsLaborada() {
         return hrsLaborada;
     }
 
-    public void setHrsLaborada(int hrsLaborada) {
+    public void setHrsLaborada(String hrsLaborada) {
         this.hrsLaborada = hrsLaborada;
     }
 
-    public int getSeguroSocial() {
-        return seguroSocial;
-    }
-
-    public void setSeguroSocial(int seguroSocial) {
-        this.seguroSocial = seguroSocial;
-    }
-
-    public Date getFechaContratacion() {
+    public String getFechaContratacion() {
         return fechaContratacion;
     }
 
-    public void setFechaContratacion(Date fechaContratacion) {
+    public void setFechaContratacion(String fechaContratacion) {
         this.fechaContratacion = fechaContratacion;
     }
 
-    public Date getFechaSalida() {
+    public String getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(Date fechaSalida) {
+    public void setFechaSalida(String fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
