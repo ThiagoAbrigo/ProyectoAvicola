@@ -19,8 +19,7 @@ import modelo.Empleado;
  * @author usuario
  */
 public class EmpleadoController<T> implements CRUD {
-    
-    private Lista<Empleado> lisEmpleado = new Lista();
+        private Lista<Empleado> lisEmpleado = new Lista();
     private Empleado empleado;
     private Lista<T> lista = new Lista();
 
@@ -67,7 +66,8 @@ public class EmpleadoController<T> implements CRUD {
             ps.setDouble(5, empleado.getPagoHora());
             ps.setDouble(6, empleado.getSeguroSocialEmpleado());
             ps.setDouble(7, empleado.getSeguroSocialEmpleador());
-            ps.setString(8, empleado.getHrsLaborada());
+            ps.setDouble(8, empleado.getHrsLaborada());
+            //ps.setString(8, empleado.getHrsLaborada());
             ps.setString(9, empleado.getFechaContratacion());
             ps.setString(10,empleado.getFechaSalida());
             
@@ -95,7 +95,8 @@ public class EmpleadoController<T> implements CRUD {
             pst.setDouble(1, empleado.getPagoHora());
             pst.setDouble(2, empleado.getSeguroSocialEmpleado());
             pst.setDouble(3, empleado.getSeguroSocialEmpleador());
-            pst.setString(4, empleado.getHrsLaborada());
+            pst.setDouble(4, empleado.getHrsLaborada());
+            //pst.setString(4, empleado.getHrsLaborada());
             pst.setString(5, empleado.getFechaContratacion());
             pst.setString(6, empleado.getFechaSalida());
             pst.setString(7, empleado.getRol().getCargo());
@@ -159,7 +160,8 @@ public class EmpleadoController<T> implements CRUD {
                 user.setPagoHora(rs.getDouble("pago_hora"));
                 user.setSeguroSocialEmpleado(rs.getDouble("seguro_social_empleado"));
                 user.setSeguroSocialEmpleador(rs.getDouble("seguro_social_empleador"));
-                user.setHrsLaborada(rs.getString("hora_laborada"));
+                user.setHrsLaborada(rs.getDouble("hora_laborada"));
+                //user.setHrsLaborada(rs.getString("hora_laborada"));
                 user.setFechaContratacion(rs.getString("fecha_contratacion"));
                 user.setFechaSalida(rs.getString("fecha_salida"));
                 user.getRol().setCargo(rs.getString("rol"));
