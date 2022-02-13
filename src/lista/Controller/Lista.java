@@ -8,13 +8,15 @@ package lista.Controller;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import lista.Model.Nodo;
+import modelo.Galpon;
 
 /**
  *
  * @author Home
  * @param <T>
  */
-public class Lista <T> implements Serializable{
+public class Lista<T> implements Serializable {
+
     private Nodo cabecera;
     private Class clazz;
     public static final Integer ASCENDENTE = 1;
@@ -254,5 +256,64 @@ public class Lista <T> implements Serializable{
 
     }
 
-    //////////
+    public Lista<T> Ordenar_Shell(String atributo, Lista mortalidad) {
+        //Lista<T> auto = this;
+        try {
+            int i, salto;
+            int n = tamanio() / 2;
+            T aux;
+            boolean cambio;
+            for (salto = n; salto != 0; salto /= 2) {
+                cambio = true;
+                while (cambio) {
+                    cambio = false;
+                    for (i = salto; i < tamanio(); i++) {
+                        Object datoT = value(consultarDatoPosicion(i - salto), atributo);
+                        Object datoJ = value(consultarDatoPosicion(i), atributo);
+                        if (datoT.toString().compareTo(datoJ.toString()) > 0) {
+                            aux = consultarDatoPosicion(i);
+                            modificarPorPos(consultarDatoPosicion(i - salto), i);
+                            modificarPorPos(aux, i - salto);
+                            cambio = true;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+    
+    public Lista<Galpon> ordenarQuicksort3(Lista<Galpon> galpon, int primero, int ultimo) {
+        int i, j, central;
+        Galpon pivote = null;
+        central = (primero + ultimo) / 2;
+        pivote = (Galpon) galpon.consultarDatoPosicion(central);
+        i = primero;
+        j = ultimo;
+        do {
+
+            while (galpon.consultarDatoPosicion(i).getPollosMuertos().compareTo(pivote.getPollosMuertos()) <0) {
+                i++;
+            }
+            while (pivote.getPollosMuertos().compareTo(galpon.consultarDatoPosicion(j).getPollosMuertos())<0) {
+                j--;
+            }
+            if (i <= j) {
+                Galpon aux = galpon.consultarDatoPosicion(i);
+                galpon.modificarPorPos(galpon.consultarDatoPosicion(j), i);
+                galpon.modificarPorPos(aux, j);
+                i++;
+                j--;
+            }
+        } while (i <= j);
+        if (primero < j) {
+            ordenarQuicksort3(galpon, primero, j);
+        }
+        if (i < ultimo) {
+            ordenarQuicksort3(galpon, i, ultimo);
+        }
+        return galpon;
+    }
 }

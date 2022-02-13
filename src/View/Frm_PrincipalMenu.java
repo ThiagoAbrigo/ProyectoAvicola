@@ -55,6 +55,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     int xmouse, ymouse;
     public GalponController galponController = new GalponController();
     private TableGalpon modeloG = new TableGalpon();
+    private TableGalpon_Mortalidad modeloM = new TableGalpon_Mortalidad();
     private TableGalpon_Mortalidad modeloGM = new TableGalpon_Mortalidad();
     private SimpleDateFormat st = new SimpleDateFormat("yyyy-MM-dd");
     public PersonaContoller pc = new PersonaContoller();
@@ -75,19 +76,20 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         txtId.setVisible(false);
         cargarTableAdminitracion();
     }
+
     /*
         Métodos de Tablas
-    */
-    /*
+     */
+ /*
         Carga la tabla de la administración
-    */
+     */
 
     private void cargarTableAdminitracion() {
         modelo.setLista(pc.listar());
         tablaPersonas.setModel(modelo);
         tablaPersonas.updateUI();
     }
-    
+
     /*
         Carga la tabla de galpones con los nombres de las columnas centradas
      */
@@ -103,7 +105,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         tablegalpones.updateUI();
 
     }
-    
+
     /*
         Carga la tabla de vacunas con los nombres de las columnas centradas
      */
@@ -117,6 +119,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
         tablevacuna.updateUI();
     }
+
     /*
         Carga la tabla de mortalidad de pollos
      */
@@ -130,9 +133,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
         tblMortalidad.updateUI();
     }
+    /**
+     * Carga el detalle de ingresos
+     */
+
     /*
         Crea submenús en la tabla
-    */
+     */
     public void poputTable() {
         JPopupMenu popuMenu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem("Aplicar Vacuna", new ImageIcon(getClass().getResource("/Image/vacuna.png")));
@@ -161,13 +168,14 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         popuMenu.add(menuItem2);
         tablegalpones.setComponentPopupMenu(popuMenu);
     }
+
     /*
         Métodos guardar
-    */
-    /*
+     */
+ /*
         Guarda los datos de las personas
-    */
-    
+     */
+
     private void guardar() {
         int valor = tablaPersonas.getRowCount();
         txtId.setText(String.valueOf(valor + 1));
@@ -198,9 +206,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /*
         Guarda informacion del galpón
-    */
+     */
     private void guardarGalpon() {
         if (txtnumeropollo.getText().trim().isEmpty() || txtraza.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -221,9 +230,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableGalpon();
         }
     }
+
     /*
         Guarda información de la vacuna
-    */
+     */
     private void guardarVacuna() {
         if (txtnombreProducto.getText().trim().isEmpty() || txfDosis.getText().trim().isEmpty()
                 || cbTipoFarmaco.getSelectedItem() == null || JtaJustificacion.getText().trim().isEmpty()) {
@@ -243,9 +253,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableVacuna();
         }
     }
+
     /*
         Guarda información de la mortalidad de pollos
-    */
+     */
     private void guardarMortalidadPollo() {
         if (txtPollosFallecidos.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Rellene el campo vacío", "Error", JOptionPane.ERROR_MESSAGE);
@@ -274,13 +285,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
 
     }
-   
+
     /*
         Métodos Eliminar
-    */
-    /*
+     */
+ /*
         Elimina al usuario seleccionado 
-    */
+     */
     public void eliminar() {
         try {
             if (txtId.getText() == "") {
@@ -299,9 +310,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             System.out.println("Error en eliminar " + e);
         }
     }
+
     /*
         Elimina el galpón seleccionado
-    */
+     */
     private void deleteGalpon() {
         int seleccionar = tablegalpones.getSelectedRow();
         if (seleccionar == -1) {
@@ -317,13 +329,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             cargarTableGalpon();
         }
     }
-    
+
     /*
         Limpiar datos
-    */
-    /*
+     */
+ /*
         Limpia los datos de los campos ventana administración
-    */
+     */
     private void limpiarAdministracion() {
         ///Persona
         pc.setPersona(null);
@@ -342,7 +354,8 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         checkRolBoqueado.setSelected(false);
 
     }
-        /*
+
+    /*
         Limpia los campos de la vista
      */
     private void limpiardatosGalpon() {
@@ -379,10 +392,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         vacunaController.setVacuna(null);
         //cargarTableVacuna();
     }
+
     /*
         Metodos de seleccion
-    */
-    /*
+     */
+ /*
         Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
      */
     private void seleccionar() {
@@ -405,7 +419,8 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             System.out.println(e);
         }
     }
-     /*
+
+    /*
         Recupera la información de la fila seleccionada hacia los campos respectivos en la vista
      */
     private void seleccionarVacuna() {
@@ -428,10 +443,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         } catch (Exception e) {
         }
     }
-        /*
+
+    /*
     Rescata los datos de la tabla y los muestra en los campos designados.
-    */
-    
+     */
+
     public void leer() throws Exception {
         limpiarAdministracion();
         int seleccionar = tablaPersonas.getSelectedRow();
@@ -454,12 +470,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /*
         Métodos actualizar
-    */
-    /*
+     */
+ /*
         Actualiza la información de vacuna
-    */
+     */
     private void updateVacuna() {
         vacunaController.getVacuna().setId_vacuna(Integer.parseInt(txtidvacuna.getText()));
         vacunaController.getVacuna().setNombre(txtnombreProducto.getText());
@@ -476,9 +493,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
         cargarTableVacuna();
     }
+
     /*
     Actualiza la informacion del galpon
-    */
+     */
     private void Updategalpon() {
         galponController.getGalpon().setId(Integer.parseInt(txtid.getText()));
         galponController.getGalpon().setNumPollo(Integer.parseInt(txtnumeropollo.getText()));
@@ -497,13 +515,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         cargarTableGalpon();
 
     }
-    
+
     /*
         Métodos para ventana Frm_Persona
-    */
-    /*
+     */
+ /*
         Verifica si el rol está activo o bloqueado
-    */
+     */
     private boolean estadoRol() {
         Boolean estado = false;
         if (checkRolActivo.isSelected() && checkRolBoqueado.isSelected() == true) {
@@ -525,10 +543,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         return estado;
 
     }
+
     /*
     Cumple la funcion de un update
     Permite editar la información que ha sido ingresada por el administrador
-    */
+     */
     private void editar() {
         if (verficarEspacios()) {
 
@@ -555,11 +574,12 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    /*
-        Generar PDF
-    */
 
     /*
+        Generar PDF
+     */
+
+ /*
         Genera un Documento PDF con la información obtenida de los campos de la vista al seleccionar
         alguna fila de la tabla
      */
@@ -609,20 +629,21 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
 
     /*
         Otros métodos
-    */
-    /*
+     */
+ /*
     valida que los campos no estén vacíos
-    */
+     */
     private boolean verficarEspacios() {
         return (txtNombre.getText().trim().length() > 0 && txtCadula.getText().trim().length() > 0
                 && txtCelular.getText().trim().length() > 0 && txtCorreo.getText().trim().length() > 0
                 && txtDirecion.getText().trim().length() > 0 && txtRolDescripcion.getText().trim().length() > 0);
 
     }
+
     /**
      * Buscar los galpones por fechas
      */
-    private void listarporfecha(){
+    private void listarporfecha() {
         DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = BusquedaDesde.getDate();
         Lista aux = new Lista();
@@ -632,7 +653,21 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         tablegalpones.setModel(modeloG);
         tablegalpones.updateUI();
     }
-
+    /**
+     * Ordena el numero de totales de pollos por quicksort
+     */
+    private void ordenarMortalidadQuicksort() {
+        Lista aux = galponController.listarMortalidad();
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < tblMortalidad.getColumnCount(); i++) {
+            aux.ordenarQuicksort3(aux, 0, aux.tamanio()-1);
+            tblMortalidad.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
+            tblMortalidad.getColumnModel().getColumn(i).setCellRenderer(tcr);
+            modeloM.setLista(aux);
+            tblMortalidad.setModel(modeloM);
+        }
+        tblMortalidad.updateUI();
+    }
 //    public void prueba() {
 //        int seleccionar = tablaPersonas.getSelectedRow();
 //        //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
@@ -752,6 +787,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jScrollPane4 = new javax.swing.JScrollPane();
         tblMortalidad = new javax.swing.JTable();
         btnRegistrarMortalidad = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         txtNombre = new javax.swing.JTextField();
@@ -1574,44 +1610,57 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
 
+        jButton3.setText("Ordenar por Total");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout JPMortalidadLayout = new javax.swing.GroupLayout(JPMortalidad);
         JPMortalidad.setLayout(JPMortalidadLayout);
         JPMortalidadLayout.setHorizontalGroup(
             JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(215, 215, 215)
-                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(txfGalponSeleccionado1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPMortalidadLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(txtCtdPollosActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(txfGalponSeleccionado1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(JPMortalidadLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(txtPollosFallecidos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(JPMortalidadLayout.createSequentialGroup()
-                .addGap(600, 600, 600)
-                .addComponent(btnRegistrarMortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(txtCtdPollosActual, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JPMortalidadLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(txtPollosFallecidos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(600, 600, 600)
+                        .addComponent(btnRegistrarMortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(JPMortalidadLayout.createSequentialGroup()
+                        .addGap(215, 215, 215)
+                        .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(130, 130, 130))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPMortalidadLayout.createSequentialGroup()
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(317, 317, 317))
         );
         JPMortalidadLayout.setVerticalGroup(
             JPMortalidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1643,7 +1692,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                         .addComponent(txtPollosFallecidos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50)
+                .addGap(20, 20, 20)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(btnRegistrarMortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2265,6 +2316,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         listarporfecha();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        ordenarMortalidadQuicksort();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2307,9 +2362,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
     }
+
     /*
         Agrega una imagen al JPanel
-    */
+     */
     class fondoPaneles extends JPanel {
 
         private Image pollo;
@@ -2323,9 +2379,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
 
     }
+
     /*
     Agrega una imagen al JLabel
-    */
+     */
     class fondoLabel extends JLabel {
 
         private Image logo;
@@ -2382,6 +2439,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private com.toedter.calendar.JDateChooser jDate1;
     private com.toedter.calendar.JDateChooser jDate2;
     private com.toedter.calendar.JDateChooser jDateFInicio;

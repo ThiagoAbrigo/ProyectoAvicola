@@ -29,10 +29,17 @@ public class GalponController<T> implements CRUD {
     private Lista<Galpon> galpones = new Lista();
     private Galpon galpon;
     private Lista<T> lista = new Lista();
+    private Class<T> clazz;
     ConexionBaseDatos c = new ConexionBaseDatos();
     Statement st;
     ResultSet rs;
-
+    public GalponController(){
+        
+    }
+    public GalponController(Class<T> clazz){
+        this.clazz = clazz;
+        lista.setClazz(clazz);
+    }
     public Lista<Galpon> getGalpones() {
         return galpones;
     }
@@ -161,6 +168,7 @@ public class GalponController<T> implements CRUD {
                 galpon.setfDiarioAlimentacion(rs.getInt("alimentacion"));
                 galpon.setfIncio(rs.getDate("creacion"));
                 galpon.setfFin(rs.getDate("finaliza"));
+                galpones.insertarNodo(galpon);
                 lista.insertarNodo((T) galpon);
             }
 
@@ -232,6 +240,7 @@ public class GalponController<T> implements CRUD {
             rs = st.executeQuery("SELECT * FROM mortalidad");
             while (rs.next()) {
                 Galpon galpon = new Galpon();
+                galpones.setClazz(galpon.getClass());
                 galpon.setId(rs.getInt("id_galpon"));
                 galpon.setNumPollo(rs.getInt("pollos_actuales"));
                 galpon.setPollosMuertos(rs.getInt("pollos_fallecidos"));

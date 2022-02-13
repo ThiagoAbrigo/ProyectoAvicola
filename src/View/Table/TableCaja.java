@@ -37,14 +37,13 @@ public class TableCaja extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int i, int i1) {
-        Lista<DetalleFactura> li = new Lista();
         Caja dato = lista.consultarDatoPosicion(i);
         //DetalleFactura d = li.consultarDatoPosicion(i);
         switch (i1) {
             case 0: return (dato.getId_caja());
-            case 1: return dato.getGanancia();
-            case 2: return dato.getPago_sueldo()+"/n"+dato.getAlimento();
-            case 3: return dato.getPresupuesto_Actual()-dato.getPago_sueldo()-dato.getAlimento();
+            case 1: return dato.getIngresos();
+            case 2: return dato.getEgresos();
+            case 3: return dato.getGanancia();
             default: return null;             
         }            
     }
