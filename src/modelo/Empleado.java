@@ -13,15 +13,16 @@ import java.util.Date;
  */
 public class Empleado extends Persona {
 
+    
     private double pagoHora;
     private double seguroSocialEmpleado;
     private double seguroSocialEmpleador;
-    private String hrsLaborada;
+    private double hrsLaborada;
+    
     private String fechaContratacion;
     private String fechaSalida;
-    private String infoActividad;
 
-    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, String hrsLaborada, String fechaContratacion, String fechaSalida, String infoActividad, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
+    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, double hrsLaborada, String fechaContratacion, String fechaSalida, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
         super(rol, id, nombre, apellido, cedula, celular, correo, direccion, password);
         this.pagoHora = pagoHora;
         this.seguroSocialEmpleado = seguroSocialEmpleado;
@@ -29,17 +30,15 @@ public class Empleado extends Persona {
         this.hrsLaborada = hrsLaborada;
         this.fechaContratacion = fechaContratacion;
         this.fechaSalida = fechaSalida;
-        this.infoActividad = infoActividad;
     }
 
-    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, String hrsLaborada, String fechaContratacion, String fechaSalida, String infoActividad) {
+    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, double hrsLaborada, String fechaContratacion, String fechaSalida) {
         this.pagoHora = pagoHora;
         this.seguroSocialEmpleado = seguroSocialEmpleado;
         this.seguroSocialEmpleador = seguroSocialEmpleador;
         this.hrsLaborada = hrsLaborada;
         this.fechaContratacion = fechaContratacion;
         this.fechaSalida = fechaSalida;
-        this.infoActividad = infoActividad;
     }
 
     public Empleado() {
@@ -69,11 +68,11 @@ public class Empleado extends Persona {
         this.seguroSocialEmpleador = seguroSocialEmpleador;
     }
 
-    public String getHrsLaborada() {
+    public double getHrsLaborada() {
         return hrsLaborada;
     }
 
-    public void setHrsLaborada(String hrsLaborada) {
+    public void setHrsLaborada(double hrsLaborada) {
         this.hrsLaborada = hrsLaborada;
     }
 
@@ -93,13 +92,5 @@ public class Empleado extends Persona {
         this.fechaSalida = fechaSalida;
     }
 
-    public String getInfoActividad() {
-        return infoActividad;
-    }
-
-    public void setInfoActividad(String infoActividad) {
-        this.infoActividad = infoActividad;
-    }
-    
     
 }
