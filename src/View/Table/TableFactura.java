@@ -15,12 +15,25 @@ import modelo.Factura;
  */
 public class TableFactura extends AbstractTableModel {
 
+    /**
+     * lista de tipo factura
+     */
     private Lista<Factura> lista = new Lista();
 
+    /**
+     * metodo para obtener la lista de tipo factura
+     *
+     * @return lista tipo factura
+     */
     public Lista<Factura> getLista() {
         return lista;
     }
 
+    /**
+     * metodo para ingresar una lista
+     *
+     * @param lista
+     */
     public void setLista(Lista lista) {
         this.lista = lista;
     }

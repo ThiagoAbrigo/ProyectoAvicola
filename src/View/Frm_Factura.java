@@ -23,12 +23,30 @@ import modelo.Factura;
  * @author John
  */
 public class Frm_Factura extends javax.swing.JFrame {
-    
+
+    /**
+     * variable para llamar al controlador de galpon
+     */
     private GalponController controlador = new GalponController();
+    /**
+     * variable para llamar al modelo de la tabla galpo
+     */
     private TableGalpon tabla = new TableGalpon();
+    /**
+     * variable para llamar al controlador de factura
+     */
     private FacturaController facturaController = new FacturaController();
+    /**
+     * variable para llamar al modelo de la tabla de factura
+     */
     private TableFactura modelo = new TableFactura();
+    /**
+     * variables tipo double para obtener los datos del metodo calcular
+     */
     private double precioUnitario, precioTotal, subtotal, iva, total;
+    /**
+     * variables tipo int para obtener los datos obtenidos por el usuario
+     */
     private int libras, cantidad;
 
     /**
@@ -40,6 +58,9 @@ public class Frm_Factura extends javax.swing.JFrame {
         jTidFactura.setVisible(false);
     }
 
+    /**
+     * metodo para vaciar los jTextField del diseño
+     */
     public void limpiar() {
         jTCantidad.setText(" ");
         jTDescripcion.setText(" ");
@@ -50,6 +71,10 @@ public class Frm_Factura extends javax.swing.JFrame {
         jTelefono.setText(" ");
     }
 
+    /**
+     * metodo para guardar los datos ingresados por el usuario a la base de
+     * datos mediante el controlador de factura
+     */
     private void guardar() {
         if (jTNombreCliente.getText().trim().isEmpty() || jTDireccion.getText().trim().isEmpty()
                 || jTCedula.getText().trim().isEmpty() || jTelefono.getText().trim().isEmpty()
@@ -70,10 +95,8 @@ public class Frm_Factura extends javax.swing.JFrame {
             facturaController.getFactura().setTotal(total);
             facturaController.getFactura().setSubtotal(subtotal);
             facturaController.getFactura().setIva(iva);
-//            impresion();
             if (facturaController.Save()) {
                 JOptionPane.showMessageDialog(null, "Se guardo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
-//                generarPDF();
                 limpiar();
                 controlador.getGalpon().setNumPollo(cantidad);
                 if (controlador.Updategalpon()) {
@@ -86,6 +109,10 @@ public class Frm_Factura extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * metodo para calcular los valores de la venta de pollos mediante las
+     * libras y el precio unitario
+     */
     private void calcular() {
         cantidad = Integer.valueOf(jLCantidadP.getText());
         cantidad = cantidad - Integer.valueOf(jTCantidad.getText());
@@ -99,13 +126,18 @@ public class Frm_Factura extends javax.swing.JFrame {
         System.out.println(libras + " " + precioUnitario + " " + precioTotal + " " + subtotal + " " + iva + " " + total);
     }
 
+    /**
+     * metodo para cargar los datos de los galpones a la jTable
+     */
     private void cargartabla() {
         tabla.setLista(controlador.listar());
-        for (int i = 0; i < jTablaGalpon.getColumnCount(); i++) {
-            jTablaGalpon.setModel(tabla);
-        }
+        jTablaGalpon.setModel(tabla);
+        jTablaGalpon.updateUI();
     }
 
+    /**
+     * metodo para seleccionar el galpon de la venta de pollos
+     */
     private void seleccionar() {
         try {
             this.jLGalpon.setText(jTablaGalpon.getValueAt(jTablaGalpon.getSelectedRow(), 0).toString());
@@ -114,22 +146,6 @@ public class Frm_Factura extends javax.swing.JFrame {
         }
     }
 
-//    private void impresion() {
-//        this.jTNombreF.setText(jTNombreCliente.getText());
-//        this.jTDateF.setText(String.format("%1$tY-%1$tm-%1$td", jCalendar1.getDate()));
-//        this.jTDireccionF.setText(jTDireccion.getText());
-//        this.jTCIF.setText(jTCedula.getText());
-//        this.jTelefonoF.setText(jTelefono.getText());
-//        this.jTableFacturaImprimir.setValueAt(cantidad, 0, 0);
-//        this.jTableFacturaImprimir.setValueAt(jTDescripcion.getText(), 0, 1);
-//        this.jTableFacturaImprimir.setValueAt(jTPU.getText(), 0, 2);
-//        this.jTableFacturaImprimir.setValueAt(precioTotal, 0, 3);
-//        this.jTSubtotalF.setText(String.valueOf(subtotal));
-//        this.jTDescuentoF.setText("--");
-//        this.jTIva0F.setText("--");
-//        this.jTIVA12F.setText("--");
-//        this.jTtotalF.setText(String.valueOf(total));
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -145,8 +161,8 @@ public class Frm_Factura extends javax.swing.JFrame {
         jTablaGalpon = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jDImpresion = new javax.swing.JDialog();
-        frm_impresion_factura2 = new View.Frm_impresion_factura();
         jButton5 = new javax.swing.JButton();
+        frm_impresion_factura1 = new View.Frm_impresion_factura();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -194,7 +210,6 @@ public class Frm_Factura extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jLCantidadP = new javax.swing.JLabel();
 
-        jDSeleccionG.setPreferredSize(new java.awt.Dimension(701, 766));
         jDSeleccionG.getContentPane().setLayout(null);
 
         jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -250,19 +265,18 @@ public class Frm_Factura extends javax.swing.JFrame {
         jDSeleccionG.getContentPane().add(jPanel6);
         jPanel6.setBounds(0, 0, 690, 600);
 
-        jDImpresion.setPreferredSize(new java.awt.Dimension(701, 766));
         jDImpresion.getContentPane().setLayout(null);
-        jDImpresion.getContentPane().add(frm_impresion_factura2);
-        frm_impresion_factura2.setBounds(0, 0, 489, 641);
 
-        jButton5.setText("jButton5");
+        jButton5.setText("Imprimir");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
         jDImpresion.getContentPane().add(jButton5);
-        jButton5.setBounds(380, 640, 75, 23);
+        jButton5.setBounds(460, 760, 100, 30);
+        jDImpresion.getContentPane().add(frm_impresion_factura1);
+        frm_impresion_factura1.setBounds(0, 0, 620, 760);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -341,7 +355,7 @@ public class Frm_Factura extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jTPU, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,36 +376,38 @@ public class Frm_Factura extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addComponent(jLabel10)))
-                .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel11))
-                    .addComponent(jTDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(Guardar)))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addComponent(jLabel11))
+                            .addComponent(jTDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(Guardar)))
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel12))
+                            .addComponent(jTPU, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTLibras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel14))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel12))
-                    .addComponent(jTPU, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(60, 60, 60)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTLibras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel14))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(71, Short.MAX_VALUE))
         );
 
@@ -557,7 +573,9 @@ public class Frm_Factura extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(330, 330, 330)
+                                .addGap(210, 210, 210)
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
                                 .addComponent(jLGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -565,9 +583,6 @@ public class Frm_Factura extends javax.swing.JFrame {
                                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(jLCantidadP, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(210, 210, 210)
-                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLCodigoA, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -595,31 +610,33 @@ public class Frm_Factura extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addComponent(jLRuc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
-                                .addComponent(jLTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLCantidadP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(jLTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLCantidadP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLCodigoA, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jLDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLCodigoA, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -666,20 +683,15 @@ public class Frm_Factura extends javax.swing.JFrame {
 
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
         guardar();
-
-
     }//GEN-LAST:event_GuardarActionPerformed
 
     private void jTCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTCantidadActionPerformed
-        //        guardar();
     }//GEN-LAST:event_jTCantidadActionPerformed
 
     private void jTDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTDescripcionActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jTDescripcionActionPerformed
 
     private void jTablaGalponMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaGalponMouseClicked
-
     }//GEN-LAST:event_jTablaGalponMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -690,7 +702,7 @@ public class Frm_Factura extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         dispose();
         jDImpresion.setVisible(true);
-        jDImpresion.setBounds(0, 0, 701, 760);
+        jDImpresion.setBounds(0, 0, 687, 825);
         Frm_MenuFactura menu = new Frm_MenuFactura();
         menu.setVisible(true);
         menu.setBounds(800, 0, 701, 763);
@@ -698,7 +710,7 @@ public class Frm_Factura extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(frm_impresion_factura2);
+        job.setPrintable(frm_impresion_factura1);
         if (job.printDialog()) {
             try {
                 job.print();
@@ -746,7 +758,7 @@ public class Frm_Factura extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Guardar;
-    private View.Frm_impresion_factura frm_impresion_factura2;
+    private View.Frm_impresion_factura frm_impresion_factura1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;

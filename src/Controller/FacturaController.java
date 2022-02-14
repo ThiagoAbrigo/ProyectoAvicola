@@ -19,25 +19,58 @@ import modelo.Factura;
 
 /**
  *
- * @author Home
+ * @author John
  */
 public class FacturaController<T> implements CRUD {
 
+    /**
+     * Una lista de facturas
+     */
     private Lista<Factura> facturas = new Lista();
+    /**
+     * modelo de factura
+     */
     private Factura factura;
+    /**
+     * una lista tipo T
+     */
     private Lista<T> lista = new Lista();
+    /**
+     * variable para establecer la conexion a base de datos
+     */
     ConexionBaseDatos c = new ConexionBaseDatos();
+    /**
+     * variable para establecer la conexion a base de datos
+     */
     Statement st;
+    /**
+     * variable para establecer la conexion a base de datos
+     */
     ResultSet rs;
 
+    /**
+     * Permite obtener la lista tipo factura
+     *
+     * @return lista factura
+     */
     public Lista<Factura> getFacturas() {
         return facturas;
     }
 
+    /**
+     * Permite ingresar los datos de la lista de facturas
+     *
+     * @param facturas
+     */
     public void setFacturas(Lista<Factura> facturas) {
         this.facturas = facturas;
     }
 
+    /**
+     * Permite obtener la factura como objeto
+     *
+     * @return factura
+     */
     public Factura getFactura() {
         if (factura == null) {
             factura = new Factura();
@@ -45,13 +78,22 @@ public class FacturaController<T> implements CRUD {
         return factura;
     }
 
+    /**
+     * Permite ingresar los datos almacenados en el objeto factura
+     *
+     * @param factura
+     */
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
 
+    /**
+     * Permite guardar los datos de factura en la base de datos
+     *
+     * @return boolean (true si se hace correctamente/false si ocurre un error)
+     */
     @Override
     public boolean Save() {
-        //Factura factura = (Factura) dato;
         Connection con = c.conectar();
         String sql = "INSERT INTO factura(id_factura,cliente,cedula, direccion, telefono, fecha_emision, cantidad, descripcion, precio_unitario, total) VALUE(?,?,?,?,?,?,?,?,?,?)";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -68,7 +110,7 @@ public class FacturaController<T> implements CRUD {
             ps.setString(7, String.valueOf(factura.getCantidad()));
             ps.setString(8, factura.getDescripcionProducto());
             ps.setString(9, String.valueOf(factura.getPrecioUnitario()));
-            ps.setString (10, String.valueOf(factura.getTotal()));
+            ps.setString(10, String.valueOf(factura.getTotal()));
             ps.executeUpdate();
             ps.close();
             return true;
@@ -78,29 +120,31 @@ public class FacturaController<T> implements CRUD {
         }
     }
 
+    /**
+     * construtor por default
+     *
+     * @return false
+     */
     @Override
-    public boolean Update() {        
+    public boolean Update() {
         return false;
     }
 
+    /**
+     * construtor por default
+     *
+     * @return false
+     */
     @Override
     public boolean Delete() {
-        //p = (Paciente) obj;
-        PreparedStatement ps = null;
-        Connection con = c.conectar();
-        String sql = ("DELETE FROM factura WHERE id_factura = ?");
-        try {
-            ps = (PreparedStatement) con.prepareStatement(sql);
-            ps.setInt(1, Math.toIntExact(factura.getId()));
-            ps.executeUpdate();
-            con.close();
-            return true;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocurrido el siguiente erro: "+ e.getMessage());
-            return false;
-        }
+        return false;
     }
 
+    /**
+     * Permite obtener los datos de la base de datos y almacenarlos en una lista
+     *
+     * @return lista tipo T
+     */
     @Override
     public Lista<T> listar() {
         st = null;
@@ -129,15 +173,21 @@ public class FacturaController<T> implements CRUD {
         }
         return lista;
     }
-    
-    public Lista<Factura> buscarFactura(String dato){
+
+    /**
+     * Permite realizar una busqueda Secuencial en base a una cadena obtenida
+     * por el usuario
+     *
+     * @param dato
+     * @return lista tipo factura
+     */
+    public Lista<Factura> buscarFactura(String dato) {
         Lista<Factura> lista = new Lista();
         Lista<Factura> aux = (Lista<Factura>) listar();
         for (int i = 0; i < listar().tamanio(); i++) {
-            Factura g = aux.consultarDatoPosicion(i);
-            if (g.getCedula().contains(dato)) {
-                lista.insertarNodo(g);
-                System.out.println(lista);
+            Factura f = aux.consultarDatoPosicion(i);
+            if (f.getNombreCliente().toLowerCase().contains(dato.toLowerCase())) {
+                lista.insertarNodo(f);
             }
         }
         return lista;

@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import lista.Controller.Lista;
+import modelo.Factura;
 
 /**
  *
@@ -29,9 +31,18 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class Frm_MenuFactura extends javax.swing.JFrame {
 
+    /**
+     * variable para llamar al modelo de la tabla factura
+     */
     private TableFactura tabla = new TableFactura();
+    /**
+     * variable para llamar al controlador de factura
+     */
     private FacturaController controlador = new FacturaController();
-    private Frm_Factura factura = new Frm_Factura();
+    /**
+     * una lista de tipo factura
+     */
+    private Lista<Factura> lista = new Lista();
 
     /**
      * Creates new form Frm_MenuFactura
@@ -39,51 +50,36 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
     public Frm_MenuFactura() {
         initComponents();
         cargarTable();
-        jBuscar.setVisible(false);
     }
 
-    private void imprimir() {
-        int indice = jTFacturas.getSelectedColumn();
-        try {
-            File path = new File("carpeta/" + indice + ".pdf");
-            Desktop.getDesktop().open(path);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-//    private void eliminar() {
-//        int indice = jTFacturas.getSelectedColumn();
-//        File path = new File("carpeta/" + indice + ".pdf");
-//        path.delete();
-//        if (indice == -1) {
-//            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-//        } else {
-//            controlador.getFactura().setId((Integer.valueOf(JTcodigoFactura.getText())));
-//            if (controlador.Delete()) {
-//                JOptionPane.showMessageDialog(null, "galpon eliminado exitosamente");
-//                limpiar();
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Error al eliminar");
-//            }
-//            cargarTable();
-//        }
-//    }
-
-    private void limpiar() {
-        JTcodigoFactura.setText(" ");
-    }
-
+    /**
+     * este metodo carga los datos de las facturas a la jTable
+     */
     private void cargarTable() {
         tabla.setLista(controlador.listar());
-        for (int i = 0; i < jTFacturas.getColumnCount(); i++) {
-            jTFacturas.setModel(tabla);
-        }
+        jTFacturas.setModel(tabla);
+        jTFacturas.updateUI();
     }
 
-    private void buscar() {
-        String codigo = JTcodigoFactura.getText();
-        controlador.buscarFactura(codigo);
+    /**
+     * Este metodo se encarga de realizar la busqueda secuencial mediante la
+     * variable de tipo string obtenida por el usuario y mediante el controlador
+     * de factura
+     */
+    private void buscarSecuencial() {
+        int selec = jComboBox1.getSelectedIndex();
+        Lista aux = new Lista();
+        switch (selec) {
+            case 0:
+                aux = controlador.listar();
+                break;
+            case 1:
+                aux = controlador.buscarFactura(JTCedula.getText());
+                break;
+        }
+        tabla.setLista(aux);
+        jTFacturas.setModel(tabla);
+        jTFacturas.updateUI();
     }
 
     /**
@@ -98,11 +94,9 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTFacturas = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        JTcodigoFactura = new javax.swing.JTextField();
-        jBuscar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        JTCedula = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -119,26 +113,28 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTFacturas);
 
-        jButton1.setText("Crear Factura");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Nombre:");
 
-        jBuscar.setText("Buscar");
-        jBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBuscarActionPerformed(evt);
+        JTCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTCedulaKeyPressed(evt);
             }
         });
 
-        jButton3.setText("Imprimir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Nombre" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jComboBox1MouseClicked(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jComboBox1ActionPerformed(evt);
             }
         });
 
@@ -149,21 +145,15 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(JTcodigoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(JTCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(53, 53, 53)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -174,16 +164,12 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JTcodigoFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addComponent(jBuscar)
-                        .addGap(27, 27, 27)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(39, 39, 39)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(JTCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -206,17 +192,18 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBuscarActionPerformed
-        buscar();
-    }//GEN-LAST:event_jBuscarActionPerformed
+    private void JTCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTCedulaKeyPressed
+    }//GEN-LAST:event_JTCedulaKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        cambioVentana();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        imprimir();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
+    }//GEN-LAST:event_jComboBox1MouseClicked
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        buscarSecuencial();
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -253,29 +240,9 @@ public class Frm_MenuFactura extends javax.swing.JFrame {
         });
     }
 
-    private void cambioVentana() {
-        factura.setVisible(true);
-        new Frm_MenuFactura().setVisible(false);
-    }
-
-//    private void seleccionar() {
-//        try {
-//            this.txtid.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 0).toString());
-//            this.txtnumeropollo.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 1).toString());
-//            this.txtraza.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 2).toString());
-//            this.txtCtdBalanceadoSuministrada.setText(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 3).toString());
-//            this.cbTipoBalanceado.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 4).toString());
-//            this.cbFDAlimentacion.setSelectedItem(tablegalpones.getValueAt(tablegalpones.getSelectedRow(), 5).toString());
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField JTcodigoFactura;
-    private javax.swing.JButton jBuscar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField JTCedula;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
