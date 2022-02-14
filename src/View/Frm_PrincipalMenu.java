@@ -45,6 +45,7 @@ import lista.Controller.Lista;
 /**
  *
  * @author JavierSarango
+ * @author LJ
  */
 public class Frm_PrincipalMenu extends javax.swing.JDialog {
 
@@ -76,8 +77,8 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         cargarTableVacuna();
         cargarTableMortalidad();
         txtidvacuna.setVisible(false);
-        txtId.setVisible(false);
         cargarTableAdminitracion();
+        accesoPermitido();
     }
 
     /*
@@ -86,7 +87,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
  /*
         Carga la tabla de la administración
      */
-
     private void cargarTableAdminitracion() {
         modelo.setLista(pc.listar());
         tablaPersonas.setModel(modelo);
@@ -106,6 +106,25 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
 
         }
         tablegalpones.updateUI();
+
+    }
+
+    public void accesoPermitido() {
+        int max = pc.registroInicioSecion().tamanio();
+        if (pc.registroInicioSecion().consultarDatoPosicion(max - 1).toString().equals("Empleado")) {
+            administraciontxt.setVisible(false);
+            bttGestionEmpleado.setVisible(false);
+        } else {
+            if (pc.registroInicioSecion().consultarDatoPosicion(max - 1).toString().equals("Desarrollador")) {
+                administraciontxt.setVisible(true);
+                bttGestionEmpleado.setVisible(false);
+            } else {
+                if (pc.registroInicioSecion().consultarDatoPosicion(max - 1).toString().equals("Gerente")) {
+                    administraciontxt.setVisible(true);
+                    bttGestionEmpleado.setVisible(true);
+                }
+            }
+        }
 
     }
 
@@ -136,6 +155,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
         tblMortalidad.updateUI();
     }
+
     /**
      * Carga el detalle de ingresos
      */
@@ -179,15 +199,13 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         Guarda los datos de las personas
 <<<<<<< HEAD
      */
-    
     private void guardarPersona() {
         int valor = tablaPersonas.getRowCount();
-        txtId.setText(String.valueOf(valor + 1));
+
         if (buscarGuardarPersona()) {
 
         } else {
             if (verficarEspacios()) {
-                pc.getPersona().setId(pc.getLisPers().tamanio() + 1);
                 pc.getPersona().setNombre(txtNombre.getText());
                 pc.getPersona().setApellido(txtApellido.getText());
                 pc.getPersona().setCedula(txtCadula.getText());
@@ -232,9 +250,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "LLenar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
+        
     }
+
     
+
     public boolean buscarGuardarPersona() {
         boolean repetido = false;
         for (int i = 0; i < tablaPersonas.getRowCount(); i++) {
@@ -339,11 +359,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
 <<<<<<< HEAD
      */
     public void eliminarPersona() {
-         try {
-            if (txtId.getText() == "") {
+        try {
+            if (txtCadula.getText() == "") {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
-                pc.getPersona().setId(Integer.parseInt(txtId.getText().toString()));
+                pc.getPersona().setId(Integer.parseInt(txtCadula.getText().toString()));
                 ec.getEmpleado().setCedula(txtCadula.getText().toString());
                 if (pc.Delete()) {
                     if (ec.Delete()) {
@@ -389,7 +409,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private void limpiarAdministracion() {
         ///Persona
         pc.setPersona(null);
-        txtId.setText("");
         txtNombre.setText("");
         txtApellido.setText("");
         txtCadula.setText("");
@@ -498,13 +517,10 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     Rescata los datos de la tabla y los muestra en los campos designados.
 <<<<<<< HEAD
      */
-    
     public void seleccionarPersona() throws Exception {
         limpiarAdministracion();
         int seleccionar = tablaPersonas.getSelectedRow();
         if (seleccionar >= 0) {
-            //String.valueOf(tablaPersonas.getValueAt(seleccionar, 2))
-            txtId.setText(String.valueOf(pc.getLisPers().value(pc.getLisPers().consultarDatoPosicion(seleccionar), "id")));
             txtNombre.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 0)));
             txtApellido.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 1)));
             txtCadula.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 2)));
@@ -598,11 +614,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     Permite editar la información que ha sido ingresada por el administrador
 <<<<<<< HEAD
      */
- 
     private void editarPersona() {
         if (verficarEspacios()) {
 
-            pc.getPersona().setId(Integer.valueOf(txtId.getText()));
             pc.getPersona().setNombre(txtNombre.getText());
             pc.getPersona().setApellido(txtApellido.getText());
             pc.getPersona().setCedula(txtCadula.getText());
@@ -615,7 +629,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             pc.getPersona().getRol().setDescripcion(txtRolDescripcion.getText());
             if (pc.Update()) {
                 if (cbxTipoRol.getSelectedItem() == "Empleado") {
-                    ec.getEmpleado().setId(Integer.valueOf(txtId.getText()));
                     ec.getEmpleado().setNombre(txtNombre.getText());
                     ec.getEmpleado().setApellido(txtApellido.getText());
                     ec.getEmpleado().setCedula(txtCadula.getText());
@@ -721,6 +734,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         tablegalpones.setModel(modeloG);
         tablegalpones.updateUI();
     }
+
     /**
      * Ordena el numero de totales de pollos por quicksort
      */
@@ -728,7 +742,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         Lista aux = galponController.listarMortalidad();
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i = 0; i < tblMortalidad.getColumnCount(); i++) {
-            aux.ordenarQuicksort3(aux, 0, aux.tamanio()-1);
+            aux.ordenarQuicksort3(aux, 0, aux.tamanio() - 1);
             tblMortalidad.getColumnModel().getColumn(i).setHeaderRenderer(tcr);
             tblMortalidad.getColumnModel().getColumn(i).setCellRenderer(tcr);
             modeloM.setLista(aux);
@@ -746,6 +760,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
 //
 //    }
     int tipoOrden = 0;
+
     public void ordenarPersona() {
         int cbxOrden = cbxOrdenar.getSelectedIndex();
         try {
@@ -935,7 +950,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel40 = new javax.swing.JLabel();
         jSeparator16 = new javax.swing.JSeparator();
         txtPassword = new javax.swing.JPasswordField();
-        txtId = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
         jSeparator11 = new javax.swing.JSeparator();
@@ -950,6 +964,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         cbxOrdenar = new javax.swing.JComboBox<>();
         jScrollPane6 = new javax.swing.JScrollPane();
         tablaPersonas = new javax.swing.JTable();
+        bttGestionEmpleado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -1292,7 +1307,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel5.setText("Número de Pollos");
         jPanel4.add(jLabel5);
-        jLabel5.setBounds(20, 140, 110, 15);
+        jLabel5.setBounds(20, 140, 110, 16);
 
         jLabel6.setFont(new java.awt.Font("Lucida Bright", 1, 12)); // NOI18N
         jLabel6.setText("veces");
@@ -1395,7 +1410,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel8.setText("Tipo de Balanceado:");
         jPanel4.add(jLabel8);
-        jLabel8.setBounds(20, 20, 120, 15);
+        jLabel8.setBounds(20, 20, 120, 16);
 
         cbTipoBalanceado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Engorde", "Crecimiento" }));
         jPanel4.add(cbTipoBalanceado);
@@ -1410,7 +1425,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel9.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel9.setText("Cantidad Suministrada:");
         jPanel4.add(jLabel9);
-        jLabel9.setBounds(20, 70, 140, 15);
+        jLabel9.setBounds(20, 70, 140, 16);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel2.setText("Frecuencia Diaria de Alimentación:");
@@ -1424,7 +1439,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         cbFDAlimentacion.setBounds(660, 10, 40, 30);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Periodo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Periodo", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel7.setText("Fecha Inicio:");
@@ -1495,7 +1510,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             }
         });
         jPanel4.add(jButton2);
-        jButton2.setBounds(540, 250, 70, 24);
+        jButton2.setBounds(540, 250, 70, 23);
 
         JPRegistroGalpones.add(jPanel4);
         jPanel4.setBounds(10, 40, 840, 470);
@@ -1506,7 +1521,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         JPRegistroGalpones.add(jLabel3);
         jLabel3.setBounds(300, 0, 240, 30);
         JPRegistroGalpones.add(txtid);
-        txtid.setBounds(30, 10, 50, 24);
+        txtid.setBounds(30, 10, 50, 20);
 
         jPanelSlider1.add(JPRegistroGalpones, "card2");
 
@@ -1529,7 +1544,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel18.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel18.setText("Tipo de Producto:");
         jPanel2.add(jLabel18);
-        jLabel18.setBounds(10, 90, 100, 15);
+        jLabel18.setBounds(10, 90, 100, 16);
 
         btnGuardarVacuna.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarVacuna.setText("Guardar");
@@ -1558,12 +1573,12 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel19.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel19.setText("Galpón Seleccionado:");
         jPanel2.add(jLabel19);
-        jLabel19.setBounds(10, 10, 130, 15);
+        jLabel19.setBounds(10, 10, 130, 16);
 
         jLabel23.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel23.setText("Próxima:");
         jPanel2.add(jLabel23);
-        jLabel23.setBounds(490, 210, 80, 15);
+        jLabel23.setBounds(490, 210, 80, 16);
 
         cbTipoFarmaco.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fármaco", "Biológico" }));
         jPanel2.add(cbTipoFarmaco);
@@ -1578,7 +1593,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel24.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel24.setText("Nombre Producto:");
         jPanel2.add(jLabel24);
-        jLabel24.setBounds(10, 50, 120, 15);
+        jLabel24.setBounds(10, 50, 120, 16);
         jPanel2.add(jSeparator10);
         jSeparator10.setBounds(140, 70, 250, 10);
 
@@ -1598,7 +1613,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel26.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel26.setText("Dosis:");
         jPanel2.add(jLabel26);
-        jLabel26.setBounds(490, 40, 50, 15);
+        jLabel26.setBounds(490, 40, 50, 16);
 
         cbMedidaDosis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "g", "mg", "ml" }));
         jPanel2.add(cbMedidaDosis);
@@ -1607,22 +1622,22 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel25.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel25.setText("Justificación:");
         jPanel2.add(jLabel25);
-        jLabel25.setBounds(10, 130, 90, 15);
+        jLabel25.setBounds(10, 130, 90, 16);
 
         jLabel27.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel27.setText("Administra:");
         jPanel2.add(jLabel27);
-        jLabel27.setBounds(490, 90, 80, 15);
+        jLabel27.setBounds(490, 90, 80, 16);
 
         jLabel28.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel28.setText("Primera:");
         jPanel2.add(jLabel28);
-        jLabel28.setBounds(490, 170, 80, 15);
+        jLabel28.setBounds(490, 170, 80, 16);
 
         jLabel29.setFont(new java.awt.Font("Roboto Light", 1, 12)); // NOI18N
         jLabel29.setText("Fecha Vacunas");
         jPanel2.add(jLabel29);
-        jLabel29.setBounds(610, 130, 110, 15);
+        jLabel29.setBounds(610, 130, 110, 16);
 
         tablevacuna.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1870,7 +1885,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         jLabel37.setText("Contraseña:");
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel38.setText("Tipo");
@@ -1953,11 +1968,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
 
         txtPassword.setBorder(null);
 
-        txtId.setEditable(false);
-        txtId.setBackground(new java.awt.Color(255, 255, 255));
-        txtId.setBorder(null);
-        txtId.setEnabled(false);
-
         jButton1.setText("Limpiar Campos");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2022,6 +2032,14 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         });
         jScrollPane6.setViewportView(tablaPersonas);
 
+        bttGestionEmpleado.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        bttGestionEmpleado.setText("Gestionar Empleados");
+        bttGestionEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttGestionEmpleadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -2038,45 +2056,41 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(80, 80, 80)
                                 .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(16, 16, 16)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
+                                .addGap(36, 36, 36)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(jLabel37)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel5Layout.createSequentialGroup()
                                         .addComponent(jLabel15)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jLabel37)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(bttGestionEmpleado))))
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(99, 99, 99)
+                                .addGap(115, 115, 115)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel36)
-                                            .addComponent(jLabel12)))
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(jLabel4)))
-                                .addGap(27, 27, 27)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCadula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel36)
+                                    .addComponent(jLabel12)))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel4)))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCadula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(311, 311, 311)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -2104,7 +2118,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                                 .addComponent(cbxOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bttOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2112,8 +2126,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                 .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(35, 35, 35)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -2158,10 +2171,11 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                             .addComponent(bttOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbxOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
+                        .addGap(1, 1, 1)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel37)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bttGestionEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2174,7 +2188,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
                                 .addComponent(jButton1)
                                 .addGap(12, 12, 12)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2469,6 +2483,9 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tablaPersonasMouseClicked
 
+    private void bttGestionEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttGestionEmpleadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bttGestionEmpleadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2575,6 +2592,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private javax.swing.JButton btnRegistrarMortalidad;
     private javax.swing.JButton bttEditar;
     private javax.swing.JButton bttEliminar;
+    private javax.swing.JButton bttGestionEmpleado;
     private javax.swing.JButton bttGuardar;
     private javax.swing.JButton bttOrdenar;
     private javax.swing.JComboBox<String> cbFDAlimentacion;
@@ -2679,7 +2697,6 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
     private javax.swing.JTextField txtCtdBalanceadoSuministrada;
     private javax.swing.JTextField txtCtdPollosActual;
     private javax.swing.JTextArea txtDirecion;
-    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPollosFallecidos;
