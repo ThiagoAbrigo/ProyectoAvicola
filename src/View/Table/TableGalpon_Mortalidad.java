@@ -12,8 +12,8 @@ import lista.Controller.Lista;
 import modelo.Galpon;
 
 /**
- *
- * @author Home
+ * Modelo de tabla de mortalidad de pollos
+ * @author Santiago
  */
 public class TableGalpon_Mortalidad extends AbstractTableModel{
     private Lista<Galpon> lista = new Lista();
@@ -26,17 +26,28 @@ public class TableGalpon_Mortalidad extends AbstractTableModel{
     public void setLista(Lista lista) {
         this.lista = lista;
     }
-    
+    /**
+     * se va insertanto filas segun se vaya registrando
+     * @return int
+     */
     @Override
     public int getRowCount() {
         return lista.tamanio();
     }
-
+    /**
+     * Tamanio de columanas
+     * @return int
+     */
     @Override
     public int getColumnCount() {
         return 4;
     }
-
+    /**
+     * Guardar los resultados en cada fila
+     * @param i
+     * @param i1
+     * @return Object
+     */
     @Override
     public Object getValueAt(int i, int i1) {
         
@@ -49,7 +60,11 @@ public class TableGalpon_Mortalidad extends AbstractTableModel{
             default: return null;             
         }            
     }
-
+    /**
+     * Les da nombre a las columnas
+     * @param i recorre para ir asigando
+     * @return String
+     */
     @Override
     public String getColumnName(int i) {
         switch (i) {

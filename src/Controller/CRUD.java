@@ -12,8 +12,24 @@ import lista.Controller.Lista;
  * @author Home
  */
 public interface CRUD<T>{
+    /**
+     * Guardar BDD
+     * @return boolean
+     */
     public boolean Save();
+    /**
+     * Actualiza BDD
+     * @return boolean
+     */
     public boolean Update();
+    /**
+     * 
+     * @return 
+     */
     public boolean Delete();
+    /**
+     * Lista de las tablas
+     * @return Lista
+     */
     public Lista<T> listar();
 }

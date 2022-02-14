@@ -5,6 +5,8 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lista.Controller.Lista;
 import modelo.Empleado;
 
@@ -13,6 +15,9 @@ import modelo.Empleado;
  * @author LJ
  */
 public class EmpleadoController<T> implements CRUD {
+    
+    SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
+    private Date fechamod = new Date();
 
     /**
      *Declaracion de lista detipo Empleado
@@ -99,8 +104,8 @@ public class EmpleadoController<T> implements CRUD {
             ps.setDouble(6, empleado.getSeguroSocialEmpleado());
             ps.setDouble(7, empleado.getSeguroSocialEmpleador());
             ps.setDouble(8, empleado.getHrsLaborada());
-            ps.setString(9, empleado.getFechaContratacion());
-            ps.setString(10, empleado.getFechaSalida());
+            ps.setString(9, std.format(empleado.getFechaContratacion()));
+            ps.setString(10, std.format(empleado.getFechaSalida()));
 
             ps.setString(11, empleado.getRol().getCargo());
             ps.setString(12, empleado.getRol().getDescripcion());
@@ -131,8 +136,8 @@ public class EmpleadoController<T> implements CRUD {
             pst.setDouble(2, empleado.getSeguroSocialEmpleado());
             pst.setDouble(3, empleado.getSeguroSocialEmpleador());
             pst.setDouble(4, empleado.getHrsLaborada());
-            pst.setString(5, empleado.getFechaContratacion());
-            pst.setString(6, empleado.getFechaSalida());
+            pst.setString(5, std.format(empleado.getFechaContratacion()));
+            pst.setString(6, std.format(empleado.getFechaSalida()));
             pst.setString(7, empleado.getRol().getCargo());
             pst.setString(8, empleado.getRol().getDescripcion());
             pst.setString(9, empleado.getCedula());
@@ -189,15 +194,15 @@ public class EmpleadoController<T> implements CRUD {
                 user.setSeguroSocialEmpleado(rs.getDouble("seguro_social_empleado"));
                 user.setSeguroSocialEmpleador(rs.getDouble("seguro_social_empleador"));
                 user.setHrsLaborada(rs.getDouble("hora_laborada"));
-                user.setFechaContratacion(rs.getString("fecha_contratacion"));
-                user.setFechaSalida(rs.getString("fecha_salida"));
+                user.setFechaContratacion(rs.getDate("fecha_contratacion"));
+                user.setFechaSalida(rs.getDate("fecha_salida"));
                 user.getRol().setCargo(rs.getString("rol"));
                 user.getRol().setDescripcion(rs.getString("descripcion"));
                 lisEmpleado.insertarNodo(user);
                 lista.insertarNodo((T) user);
             }
         } catch (Exception e) {
-            System.out.println("Error en listar Usuario " + e);
+            e.printStackTrace();
         }
         setLisEmpleado(lisEmpleado);
         return lista;

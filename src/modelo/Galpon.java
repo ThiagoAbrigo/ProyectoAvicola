@@ -24,7 +24,11 @@ public class Galpon implements Serializable{
     private String tbalanceado;
     private int fDiarioAlimentacion;
     private Date fIncio;
-
+    private Date fFin;
+    /**
+     * Numero de pollos existentes
+     * @return 
+     */
     public Integer getExistencias() {
         return existencias;
     }
@@ -32,7 +36,10 @@ public class Galpon implements Serializable{
     public void setExistencias(Integer existencias) {
         this.existencias = existencias;
     }
-
+    /**
+     * Numero de pollos muertos
+     * @return Integer
+     */
     public Integer getPollosMuertos() {
         return pollosMuertos;
     }
@@ -40,8 +47,10 @@ public class Galpon implements Serializable{
     public void setPollosMuertos(Integer pollosMuertos) {
         this.pollosMuertos = pollosMuertos;
     }
-    
-
+    /**
+     * Fecha en que fue ingresado el galpon
+     * @return Date
+     */
     public Date getfIncio() {
         return fIncio;
     }
@@ -49,7 +58,10 @@ public class Galpon implements Serializable{
     public void setfIncio(Date fIncio) {
         this.fIncio = fIncio;
     }
-
+    /**
+     * Fecha en que se finalice el galpon
+     * @return Date
+     */
     public Date getfFin() {
         return fFin;
     }
@@ -57,8 +69,10 @@ public class Galpon implements Serializable{
     public void setfFin(Date fFin) {
         this.fFin = fFin;
     }
-    private Date fFin;
-
+    /**
+     * id de los galpones
+     * @return int
+     */
     public int getId() {
         return id;
     }
@@ -66,7 +80,10 @@ public class Galpon implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
-
+    /**
+     * cantidad de pollos ingresados
+     * @return Integer
+     */
     public Integer getNumPollo() {
         return numPollo;
     }
@@ -74,7 +91,10 @@ public class Galpon implements Serializable{
     public void setNumPollo(Integer numPollo) {
         this.numPollo = numPollo;
     }
-
+    /**
+     * Raza del pollo
+     * @return String
+     */
     public String getRaza() {
         return raza;
     }
@@ -82,7 +102,7 @@ public class Galpon implements Serializable{
     public void setRaza(String raza) {
         this.raza = raza;
     }
-
+    
     public String getPeso() {
         return peso;
     }
@@ -98,7 +118,10 @@ public class Galpon implements Serializable{
     public void setMuestra(String muestra) {
         this.muestra = muestra;
     }
-
+    /**
+     * Cantidad alimeto
+     * @return int
+     */
     public int getCtdSuministrada() {
         return ctdSuministrada;
     }
@@ -106,7 +129,10 @@ public class Galpon implements Serializable{
     public void setCtdSuministrada(int ctdSuministrada) {
         this.ctdSuministrada = ctdSuministrada;
     }
-
+    /**
+     * tipo de balanceado
+     * @return String
+     */
     public String getTbalanceado() {
         return tbalanceado;
     }
@@ -114,7 +140,10 @@ public class Galpon implements Serializable{
     public void setTbalanceado(String tbalanceado) {
         this.tbalanceado = tbalanceado;
     }
-
+    /**
+     * indica cuantas veces se lo alimenta al galpon
+     * @return 
+     */
     public int getfDiarioAlimentacion() {
         return fDiarioAlimentacion;
     }

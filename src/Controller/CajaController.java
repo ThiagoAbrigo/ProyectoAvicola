@@ -5,21 +5,17 @@
  */
 package Controller;
 
-import com.itextpdf.text.log.Logger;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
-import java.lang.System.Logger.Level;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import lista.Controller.Lista;
 import modelo.Caja;
-import modelo.DetalleFactura;
 
 /**
- *
- * @author Home
+ * Metodos implementados de CRUD 
+ * @author Santiago Abrigo
  */
 public class CajaController<T> implements CRUD{
     private Caja caja;
@@ -47,12 +43,14 @@ public class CajaController<T> implements CRUD{
     public void setCajas(Lista<Caja> cajas) {
         this.cajas = cajas;
     }
-    
-
+    /**
+     * Guarda el registro de cajas
+     * @return boolean
+     */
     @Override
     public boolean Save() {
         Connection con = c.conectar();
-        String sql = "INSERT INTO caja(id_caja,ingresos,egresos, ganancia) VALUE(?,?,?,?,?)";
+        String sql = "INSERT INTO caja(id_caja,ingresos,egresos, Ganancia) VALUE(?,?,?,?)";
         try {
             PreparedStatement ps = (PreparedStatement) con.prepareStatement(sql);
 
@@ -68,33 +66,19 @@ public class CajaController<T> implements CRUD{
             return false;
         }
     }
-
-    @Override
+    
     public boolean Update() {
-        PreparedStatement pst;
-        java.sql.Connection con = c.conectar();
-        String sql = ("UPDATE caja SET ingresos =?, egresos =?, ganancia =? WHERE id_caja =?");
-        try {
-            pst = (PreparedStatement) con.prepareStatement(sql);
-            pst.setDouble(1, caja.getIngresos());
-            pst.setDouble(2, caja.getEgresos());
-            pst.setDouble(3, caja.getGanancia());
-            pst.setInt(4, caja.getId_caja());
-            pst.executeUpdate();
-            pst.close();
-            return true;
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Ocurrido el siguiente error: " + e.getMessage());
-            return false;
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean Delete() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    /**
+     * Lista los ingresos, egresos y ganancia de ventas
+     * @return lista de la caja
+     */
     @Override
     public Lista<T> listar() {
         st = null;
@@ -106,10 +90,12 @@ public class CajaController<T> implements CRUD{
             rs = st.executeQuery("SELECT * FROM caja");
             while (rs.next()) {
                 Caja caja = new Caja();
+                //cajas.setClazz(caja.getClass());
                 caja.setId_caja(rs.getInt("id_caja"));
                 caja.setIngresos(rs.getDouble("ingresos"));
                 caja.setEgresos(rs.getDouble("egresos"));
                 caja.setGanancia(rs.getDouble("ganancia"));
+                //cajas.insertarNodo(caja);
                 lista.insertarNodo((T)caja);
             }
 
@@ -117,5 +103,32 @@ public class CajaController<T> implements CRUD{
             System.out.println(e);
         }
         return lista;
+    }
+    /**
+     * busca las ganancias por busqueda binaria
+     * @param dato es el valor que recibe de la vista que se busca
+     * @param caja le envia la lista
+     * @return Lista de la caja
+     */
+    public Lista<Caja> buscarPorGanacias(Double dato, Lista caja) {
+        Lista<Caja> a = new Lista();
+        int central, izquierda, derecha;
+        izquierda = 0;
+        derecha = caja.tamanio() - 1;
+        while (izquierda <= derecha) {
+            central = (izquierda + derecha) / 2;
+            Caja valorcentral = (Caja) caja.consultarDatoPosicion(central);
+            if (valorcentral.getGanancia() == dato.doubleValue()) {
+                a.insertarNodo(valorcentral);
+                return a;
+            }
+            if (valorcentral.getGanancia().compareTo(dato) > 0) {
+                derecha = central - 1;
+            } else {
+                izquierda = central + 1;
+            }
+
+        }
+        return a;
     }
 }

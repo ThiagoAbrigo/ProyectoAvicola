@@ -8,11 +8,10 @@ package View.Table;
 import javax.swing.table.AbstractTableModel;
 import lista.Controller.Lista;
 import modelo.Caja;
-import modelo.DetalleFactura;
 
 /**
- *
- * @author Home
+ * Modelo de tabla de la caja
+ * @author Santiago
  */
 public class TableCaja extends AbstractTableModel{
     private Lista<Caja> lista = new Lista();
@@ -24,21 +23,31 @@ public class TableCaja extends AbstractTableModel{
     public void setLista(Lista lista) {
         this.lista = lista;
     }
-    
+    /**
+     * se va insertanto filas segun se vaya registrando
+     * @return int
+     */
     @Override
     public int getRowCount() {
         return lista.tamanio();
     }
-
+    /**
+     * Tamanio de columanas
+     * @return int
+     */
     @Override
     public int getColumnCount() {
         return 4;
     }
-
+    /**
+     * Guardar los resultados en cada fila
+     * @param i
+     * @param i1
+     * @return Object
+     */
     @Override
     public Object getValueAt(int i, int i1) {
         Caja dato = lista.consultarDatoPosicion(i);
-        //DetalleFactura d = li.consultarDatoPosicion(i);
         switch (i1) {
             case 0: return (dato.getId_caja());
             case 1: return dato.getIngresos();
@@ -47,7 +56,11 @@ public class TableCaja extends AbstractTableModel{
             default: return null;             
         }            
     }
-
+    /**
+     * Les da nombre a las columnas
+     * @param i recorre para ir asigando
+     * @return String
+     */
     @Override
     public String getColumnName(int i) {
         switch (i) {

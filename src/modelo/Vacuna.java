@@ -14,7 +14,6 @@ import java.util.Date;
  */
 public class Vacuna implements Serializable{
     private int id_vacuna;
-    private int id_galpon;
     private String nombre;
     private String farmaco;
     private String justificacion;
@@ -29,15 +28,6 @@ public class Vacuna implements Serializable{
     public void setId_vacuna(int id_vacuna) {
         this.id_vacuna = id_vacuna;
     }
-
-    public int getId_galpon() {
-        return id_galpon;
-    }
-
-    public void setId_galpon(int id_galpon) {
-        this.id_galpon = id_galpon;
-    }
-    
     
     public String getNombre() {
         return nombre;

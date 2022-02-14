@@ -8,6 +8,7 @@ package lista.Controller;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import lista.Model.Nodo;
+import modelo.Caja;
 import modelo.Galpon;
 
 /**
@@ -202,15 +203,6 @@ public class Lista<T> implements Serializable {
         return null;
     }
 
-//    public void testReflect(T dato, String atributo) {
-//        try {
-//            System.out.println(getField(atributo).get(dato).toString());
-//        } catch (Exception e) {
-//            System.out.println("Error " + e);
-//        }
-//        for(Field field:clazz.getFields()){
-//            System.out.println(field.getName()+" "+field.getType());
-//    }
     public Object value(T dato, String atributo) throws Exception {
         return getField(atributo).get(dato);
     }
@@ -256,7 +248,7 @@ public class Lista<T> implements Serializable {
 
     }
 
-    public Lista<T> Ordenar_Shell(String atributo, Lista mortalidad) {
+    public Lista<T> Ordenar_Shell(String atributo, Lista ganancias) {
         //Lista<T> auto = this;
         try {
             int i, salto;
@@ -284,7 +276,13 @@ public class Lista<T> implements Serializable {
         }
         return this;
     }
-    
+    /**
+     * Ordena a los numero de pollos muertos
+     * @param galpon es el modelo para acceder a sus atributos
+     * @param primero tomar el valor inicial para ordenar
+     * @param ultimo
+     * @return lista de galpones
+     */
     public Lista<Galpon> ordenarQuicksort3(Lista<Galpon> galpon, int primero, int ultimo) {
         int i, j, central;
         Galpon pivote = null;
@@ -315,5 +313,43 @@ public class Lista<T> implements Serializable {
             ordenarQuicksort3(galpon, i, ultimo);
         }
         return galpon;
+    }
+    /**
+     * Ordena las ganancias por quiksort
+     * @param caja recibe la lista caja
+     * @param primero inicia ordenar tomanto el valor primero
+     * @param ultimo termina en el ultimo valor
+     * @return Lista caja
+     */
+    public Lista<Caja> ordenarQuicksort(Lista<Caja> caja, int primero, int ultimo) {
+        int i, j, central;
+        Caja pivote = null;
+        central = (primero + ultimo) / 2;
+        pivote = (Caja) caja.consultarDatoPosicion(central);
+        i = primero;
+        j = ultimo;
+        do {
+
+            while (caja.consultarDatoPosicion(i).getGanancia().compareTo(pivote.getGanancia()) <0) {
+                i++;
+            }
+            while (pivote.getGanancia().compareTo(caja.consultarDatoPosicion(j).getGanancia())<0) {
+                j--;
+            }
+            if (i <= j) {
+                Caja aux = caja.consultarDatoPosicion(i);
+                caja.modificarPorPos(caja.consultarDatoPosicion(j), i);
+                caja.modificarPorPos(aux, j);
+                i++;
+                j--;
+            }
+        } while (i <= j);
+        if (primero < j) {
+            ordenarQuicksort(caja, primero, j);
+        }
+        if (i < ultimo) {
+            ordenarQuicksort(caja, i, ultimo);
+        }
+        return caja;
     }
 }

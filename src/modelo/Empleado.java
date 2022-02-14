@@ -33,12 +33,12 @@ public class Empleado extends Persona {
      * Dato de tipo String (aaaa-mm-dd)
      */
 
-    private String fechaContratacion;
+    private Date fechaContratacion;
     /**
      *Fecha que el usuario dejo la empresa
      * Dato de tipo String (aaaa-mm-dd)
      */
-    private String fechaSalida;
+    private Date fechaSalida;
 
     /**
      *Contructor empleado
@@ -59,7 +59,7 @@ public class Empleado extends Persona {
      * @param password
      */
 
-    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, double hrsLaborada, String fechaContratacion, String fechaSalida, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
+    public Empleado(double pagoHora, double seguroSocialEmpleado, double seguroSocialEmpleador, double hrsLaborada, Date fechaContratacion, Date fechaSalida, Rol rol, int id, String nombre, String apellido, String cedula, String celular, String correo, String direccion, String password) {
         super(rol, id, nombre, apellido, cedula, celular, correo, direccion, password);
         this.pagoHora = pagoHora;
         this.seguroSocialEmpleado = seguroSocialEmpleado;
@@ -145,7 +145,7 @@ public class Empleado extends Persona {
      *Obtener la fecha en la que elempleado inicio a laborar
      * @return fechaContratacion tipo String
      */
-    public String getFechaContratacion() {
+    public Date getFechaContratacion() {
         return fechaContratacion;
     }
 
@@ -153,7 +153,7 @@ public class Empleado extends Persona {
      *Asignar una fecha en la que el empleado va a empezar a trabajar o inicio a trabajar
      * @param fechaContratacion tipo String
      */
-    public void setFechaContratacion(String fechaContratacion) {
+    public void setFechaContratacion(Date fechaContratacion) {
         this.fechaContratacion = fechaContratacion;
     }
 
@@ -161,7 +161,7 @@ public class Empleado extends Persona {
      *Obtener la fecha en la que el empleado salio de labarar
      * @return fechaSalida tipo String
      */
-    public String getFechaSalida() {
+    public Date getFechaSalida() {
         return fechaSalida;
     }
 
@@ -169,7 +169,7 @@ public class Empleado extends Persona {
      *Asigna la fecha en la que el empleado ya no lavora
      * @param fechaSalida fechaSalida tipo String
      */
-    public void setFechaSalida(String fechaSalida) {
+    public void setFechaSalida(Date fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 }

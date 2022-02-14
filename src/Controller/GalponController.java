@@ -19,8 +19,8 @@ import lista.Controller.Lista;
 import modelo.Galpon;
 
 /**
- *
- * @author Home
+ * Metodos implementado del Crud y busqueda por fecha
+ * @author Santiago Abrigo y Javier Sarango
  */
 public class GalponController<T> implements CRUD {
 

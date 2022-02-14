@@ -100,11 +100,11 @@ public class Frm_Empleado extends javax.swing.JDialog {
                 ec.getEmpleado().setSeguroSocialEmpleado(Double.parseDouble(txtEmpleado.getText()));
                 ec.getEmpleado().setSeguroSocialEmpleador(Double.parseDouble(txtEmpleador.getText()));
                 ec.getEmpleado().setHrsLaborada(Double.parseDouble(txtHoraLaborada.getText()));
-                ec.getEmpleado().setFechaContratacion(sf.format(fechaInicio));
+                ec.getEmpleado().setFechaContratacion(dateContratacion.getDate());
                 if (fechaFin != null) {
-                    ec.getEmpleado().setFechaSalida(sf.format(fechaFin));
+                    ec.getEmpleado().setFechaSalida(dateSalida.getDate());
                 } else {
-                    ec.getEmpleado().setFechaSalida("");
+                    ec.getEmpleado().setFechaSalida(null);
                 }
                 ec.getEmpleado().getRol().setCargo(String.valueOf(dato));
 
@@ -129,12 +129,15 @@ public class Frm_Empleado extends javax.swing.JDialog {
      * @throws Exception 
      */
     public void leer() throws Exception {
-        limpiar();
-        Date fechaIn = null;
-        Date fechaF = null;
         int seleccionar = tablaPersonas.getSelectedRow();
+        limpiar();
+        String fechacontratacion = tablaPersonas.getValueAt(seleccionar, 7).toString();
+        Date fechaIn = null;
+        String fechaFinalizacion = tablaPersonas.getValueAt(seleccionar, 8).toString();
+        Date fechaF = null;
         if (seleccionar >= 0) {
-
+            fechaIn = sf.parse(fechacontratacion);
+            fechaF = sf.parse(fechaFinalizacion);
             labelNombre.setText((String) tablaPersonas.getValueAt(seleccionar, 0));
             labelApellido.setText((String) tablaPersonas.getValueAt(seleccionar, 1));
             labelCedula.setText((String) tablaPersonas.getValueAt(seleccionar, 2));
@@ -142,18 +145,10 @@ public class Frm_Empleado extends javax.swing.JDialog {
             txtEmpleado.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 4)));
             txtEmpleador.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 5)));
             txtHoraLaborada.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 6)));
-            String fechaIni = tablaPersonas.getValueAt(tablaPersonas.getSelectedRow(), 7).toString();
-            String fechaFin = tablaPersonas.getValueAt(tablaPersonas.getSelectedRow(), 8).toString();
-            cbxTipoRol.setSelectedItem(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
-            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 10)));
-            fechaIn = sf.parse(fechaIni);
-            fechaF = sf.parse(fechaFin);
             dateContratacion.setDate(fechaIn);
-            if (fechaFin != null) {
-                dateSalida.setDate(fechaF);
-            } else {
-                ec.getEmpleado().setFechaSalida("");
-            }  
+            dateSalida.setDate(fechaF);
+            cbxTipoRol.setSelectedItem(String.valueOf(tablaPersonas.getValueAt(seleccionar, 9)));
+            txtRolDescripcion.setText(String.valueOf(tablaPersonas.getValueAt(seleccionar, 10))); 
         } else {
             JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -199,6 +194,8 @@ public class Frm_Empleado extends javax.swing.JDialog {
         txtPagoHora = new javax.swing.JTextField();
         dateSalida = new com.toedter.calendar.JDateChooser();
         dateContratacion = new com.toedter.calendar.JDateChooser();
+        Menu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -236,7 +233,7 @@ public class Frm_Empleado extends javax.swing.JDialog {
         jLabel7.setBounds(10, 70, 60, 20);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "Rol", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         jPanel3.setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -270,7 +267,7 @@ public class Frm_Empleado extends javax.swing.JDialog {
             }
         });
         jPanel2.add(bttEditar);
-        bttEditar.setBounds(310, 230, 100, 30);
+        bttEditar.setBounds(160, 240, 100, 30);
 
         tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -364,6 +361,24 @@ public class Frm_Empleado extends javax.swing.JDialog {
         jPanel2.add(dateContratacion);
         dateContratacion.setBounds(150, 180, 150, 30);
 
+        Menu.setText("Menu");
+        Menu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Menu);
+        Menu.setBounds(430, 240, 80, 30);
+
+        jButton1.setText("Atras");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1);
+        jButton1.setBounds(297, 240, 90, 30);
+
         jPanel1.add(jPanel2);
         jPanel2.setBounds(10, 10, 800, 620);
 
@@ -411,6 +426,18 @@ public class Frm_Empleado extends javax.swing.JDialog {
             Logger.getLogger(Frm_Empleado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tablaPersonasMouseClicked
+
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+        dispose();
+        Frm_PrincipalMenu fpm = new Frm_PrincipalMenu(null, true);
+        fpm.setVisible(true);
+    }//GEN-LAST:event_MenuActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+        Frm_PrincipalMenu fpm = new Frm_PrincipalMenu(null, true);
+        fpm.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -462,10 +489,12 @@ public class Frm_Empleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Menu;
     private javax.swing.JButton bttEditar;
     private javax.swing.JComboBox<String> cbxTipoRol;
     private com.toedter.calendar.JDateChooser dateContratacion;
     private com.toedter.calendar.JDateChooser dateSalida;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

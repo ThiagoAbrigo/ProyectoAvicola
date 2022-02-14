@@ -8,18 +8,18 @@ package modelo;
 import java.io.Serializable;
 
 /**
- *
- * @author Home
+ * Atributos de la clase caja 
+ * @author Santiago Abrigo
  */
 public class Caja implements Serializable{
     private int id_caja;
-    private Double presupuesto_Actual;
-    private Double pago_sueldo;
-    private Double alimento;
     private Double ganancia;
     private Double ingresos;
     private Double egresos;
-
+    /**
+     * dato de las ventas totales
+     * @return double
+     */
     public Double getIngresos() {
         return ingresos;
     }
@@ -27,7 +27,10 @@ public class Caja implements Serializable{
     public void setIngresos(Double ingresos) {
         this.ingresos = ingresos;
     }
-
+    /**
+     * El numero de egresos 
+     * @return Double
+     */
     public Double getEgresos() {
         return egresos;
     }
@@ -35,8 +38,10 @@ public class Caja implements Serializable{
     public void setEgresos(Double egresos) {
         this.egresos = egresos;
     }
-    
-
+    /**
+     * El numero total de ganancias
+     * @return 
+     */
     public Double getGanancia() {
         return ganancia;
     }
@@ -44,7 +49,10 @@ public class Caja implements Serializable{
     public void setGanancia(Double ganancia) {
         this.ganancia = ganancia;
     }
-
+    /**
+     * id de la tabla caja
+     * @return 
+     */
     public int getId_caja() {
         return id_caja;
     }
@@ -52,29 +60,4 @@ public class Caja implements Serializable{
     public void setId_caja(int id_caja) {
         this.id_caja = id_caja;
     }
-
-    public Double getPresupuesto_Actual() {
-        return presupuesto_Actual;
-    }
-
-    public void setPresupuesto_Actual(Double presupuesto_Actual) {
-        this.presupuesto_Actual = presupuesto_Actual;
-    }
-
-    public Double getPago_sueldo() {
-        return pago_sueldo;
-    }
-
-    public void setPago_sueldo(Double pago_sueldo) {
-        this.pago_sueldo = pago_sueldo;
-    }
-
-    public Double getAlimento() {
-        return alimento;
-    }
-
-    public void setAlimento(Double alimento) {
-        this.alimento = alimento;
-    }
-    
 }
