@@ -110,7 +110,8 @@ public class Frm_Empleado extends javax.swing.JDialog {
         Date fechaIn = null;
         Date fechaF = null;
         int seleccionar = tablaPersonas.getSelectedRow();
-        if (seleccionar >= 0) {
+        try {
+                    if (seleccionar >= 0) {
 
             labelNombre.setText((String) tablaPersonas.getValueAt(seleccionar, 0));
             labelApellido.setText((String) tablaPersonas.getValueAt(seleccionar, 1));
@@ -133,6 +134,8 @@ public class Frm_Empleado extends javax.swing.JDialog {
             }  
         } else {
             JOptionPane.showMessageDialog(null, "Seleccionar fila que desee cambiar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (Exception e) {
         }
 
     }
