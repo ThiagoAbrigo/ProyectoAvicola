@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ConexionBaseDatos;
+import Controller.PersonaContoller;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -8,6 +9,8 @@ import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -15,8 +18,13 @@ import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
+    PersonaContoller pc = new PersonaContoller();
+    
     private ImageIcon fondo;
     private Icon icono;
+
+
+
 
     int xMouse, yMouse;
 
@@ -25,30 +33,16 @@ public class Login extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    private void validacion() {
-        ConexionBaseDatos conexion = new ConexionBaseDatos();
-        Connection con = conexion.conectar();
-        int resultado = 0;
-        try {
-            String usuario = userTxt.getText();
-            String pass = String.valueOf(passTxt.getPassword());
-            String sql = "select * from usuario where correo='" + usuario + "' and password='" + pass + "' ";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            if (rs.next()) {
-                resultado = 1;
-                if (resultado == 1) {
-                    JOptionPane.showMessageDialog(null, "Bienvenido " + userTxt.getText());
-                    this.dispose();
-                    Frm_PrincipalMenu farm = new Frm_PrincipalMenu(null, true);
-                    farm.setVisible(true);
-
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "No esta Registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+    public void validacionVersion2() throws Exception {
+        pc.user(userTxt.getText());
+        pc.Password(passTxt.getText());
+        pc.comparaDatos();
+        pc.comparaDatos().imprimir();
+        if (pc.ingresoPermitidao()) {
+            Frm_PrincipalMenu farm = new Frm_PrincipalMenu(null, true);
+            farm.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "No esta Registrado", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -371,11 +365,15 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passTxtMousePressed
 
     private void loginregistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginregistrarseMouseClicked
-       
+
     }//GEN-LAST:event_loginregistrarseMouseClicked
 
     private void loginentrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginentrarMouseClicked
-        validacion();
+        try {
+            validacionVersion2();
+        } catch (Exception ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_loginentrarMouseClicked
 
     private void loginentrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginentrarMouseEntered
@@ -389,7 +387,11 @@ public class Login extends javax.swing.JFrame {
     private void passTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passTxtKeyReleased
         // TODO add your handling code here:
         if (evt.getKeyChar() == '\n') {
-            validacion();
+            try {
+                validacionVersion2();
+            } catch (Exception ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_passTxtKeyReleased
     private void FondoJlabel(JLabel lbl, String ruta) {
