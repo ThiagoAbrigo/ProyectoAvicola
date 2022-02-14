@@ -364,7 +364,7 @@ public class Frm_PrincipalMenu extends javax.swing.JDialog {
             if (txtCadula.getText() == "") {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar una fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
-                pc.getPersona().setId(Integer.parseInt(txtCadula.getText().toString()));
+                pc.getPersona().setCedula(txtCadula.getText().toString());
                 ec.getEmpleado().setCedula(txtCadula.getText().toString());
                 if (pc.Delete()) {
                     if (ec.Delete()) {
