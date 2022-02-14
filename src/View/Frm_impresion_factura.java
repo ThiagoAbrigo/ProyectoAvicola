@@ -15,7 +15,7 @@ import java.awt.print.PrinterException;
  *
  * @author John
  */
-public class Frm_impresion_factura extends javax.swing.JPanel implements Printable{
+public class Frm_impresion_factura extends javax.swing.JPanel implements Printable {
 
     /**
      * Creates new form Frm_impresion_factura
@@ -50,17 +50,17 @@ public class Frm_impresion_factura extends javax.swing.JPanel implements Printab
         jLabel23 = new javax.swing.JLabel();
         jTDateF = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
-        jTNombreF = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
+        jTNombreF = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jTDireccionF = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         jTCIF = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
-        jTelefonoF = new javax.swing.JTextField();
-        jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        jTelefonoF = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableFacturaImprimir = new javax.swing.JTable();
         jLabel33 = new javax.swing.JLabel();
@@ -79,111 +79,125 @@ public class Frm_impresion_factura extends javax.swing.JPanel implements Printab
         jTIva0F = new javax.swing.JTextField();
         jTIVA12F = new javax.swing.JTextField();
 
+        setPreferredSize(new java.awt.Dimension(489, 631));
+
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setLayout(null);
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel20.setText("AVICOLA SAN ANTONIO");
         jPanel7.add(jLabel20);
-        jLabel20.setBounds(100, 10, 300, 30);
+        jLabel20.setBounds(170, 10, 300, 30);
 
         jLabel21.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel21.setText("SALINAS CUEVA LENIN RENE");
         jPanel7.add(jLabel21);
-        jLabel21.setBounds(140, 40, 210, 20);
+        jLabel21.setBounds(210, 40, 210, 20);
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel22.setText("VENTA AL POR MENOR Y MAYOR DE ANIMALES DE CORRAL");
         jPanel7.add(jLabel22);
-        jLabel22.setBounds(100, 60, 280, 10);
+        jLabel22.setBounds(170, 60, 280, 10);
 
         jLabel24.setText("RUC:");
         jPanel7.add(jLabel24);
-        jLabel24.setBounds(10, 90, 90, 14);
+        jLabel24.setBounds(30, 90, 90, 20);
 
         jLRuc1.setText("1716579451001");
         jPanel7.add(jLRuc1);
-        jLRuc1.setBounds(50, 90, 130, 10);
+        jLRuc1.setBounds(80, 90, 130, 20);
 
-        jLabel25.setText("Codigo Autorizacion:");
+        jLabel25.setText("Codigo  Autorizacion:");
         jPanel7.add(jLabel25);
-        jLabel25.setBounds(10, 110, 110, 10);
+        jLabel25.setBounds(30, 110, 110, 20);
 
         jLCodigoA1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLCodigoA1.setText("1122233877");
         jPanel7.add(jLCodigoA1);
-        jLCodigoA1.setBounds(120, 110, 110, 10);
+        jLCodigoA1.setBounds(140, 110, 110, 20);
 
         jLabel26.setText("Direccion:");
         jPanel7.add(jLabel26);
-        jLabel26.setBounds(10, 140, 80, 10);
+        jLabel26.setBounds(30, 140, 80, 10);
 
         jLDireccion1.setText("San Jose/ San Antonio de las Aradas");
         jPanel7.add(jLDireccion1);
-        jLDireccion1.setBounds(70, 140, 230, 10);
+        jLDireccion1.setBounds(90, 140, 230, 10);
 
         jLabel27.setText("Telefono:");
         jPanel7.add(jLabel27);
-        jLabel27.setBounds(10, 160, 60, 10);
+        jLabel27.setBounds(30, 160, 60, 10);
 
         jLTelefono1.setText("0997793377");
         jPanel7.add(jLTelefono1);
-        jLTelefono1.setBounds(70, 160, 100, 10);
+        jLTelefono1.setBounds(90, 160, 100, 14);
 
-        jLabel28.setText("Correo Electronico:");
+        jLabel28.setText("Correo  Electronico:");
         jPanel7.add(jLabel28);
-        jLabel28.setBounds(10, 180, 120, 20);
+        jLabel28.setBounds(30, 180, 120, 14);
 
         jLCorreoElectronico1.setText("leninsa_18@hotmail.com");
         jPanel7.add(jLCorreoElectronico1);
-        jLCorreoElectronico1.setBounds(110, 180, 140, 20);
+        jLCorreoElectronico1.setBounds(160, 180, 140, 20);
 
-        jLabel23.setText("FECHA DE EMISION");
+        jLabel23.setText("FECHA  DE  EMISION");
         jPanel7.add(jLabel23);
-        jLabel23.setBounds(360, 80, 100, 14);
+        jLabel23.setBounds(410, 90, 130, 20);
         jPanel7.add(jTDateF);
-        jTDateF.setBounds(360, 110, 100, 30);
+        jTDateF.setBounds(410, 120, 100, 30);
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel29.setText("CLIENTE:");
         jPanel7.add(jLabel29);
-        jLabel29.setBounds(10, 220, 60, 14);
-        jPanel7.add(jTNombreF);
-        jTNombreF.setBounds(70, 220, 370, 20);
+        jLabel29.setBounds(30, 220, 60, 14);
         jPanel7.add(jSeparator1);
-        jSeparator1.setBounds(70, 248, 370, 2);
+        jSeparator1.setBounds(110, 240, 470, 10);
+
+        jTNombreF.setBorder(null);
+        jPanel7.add(jTNombreF);
+        jTNombreF.setBounds(110, 210, 470, 30);
 
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel30.setText("DIRECCION:");
         jPanel7.add(jLabel30);
-        jLabel30.setBounds(10, 260, 80, 14);
+        jLabel30.setBounds(30, 260, 80, 14);
         jPanel7.add(jSeparator2);
-        jSeparator2.setBounds(90, 290, 370, 10);
+        jSeparator2.setBounds(110, 280, 470, 10);
+
+        jTDireccionF.setBorder(null);
         jPanel7.add(jTDireccionF);
-        jTDireccionF.setBounds(90, 260, 360, 20);
+        jTDireccionF.setBounds(110, 250, 470, 40);
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel31.setText("R.U.C./C.I.:");
         jPanel7.add(jLabel31);
-        jLabel31.setBounds(10, 310, 70, 20);
+        jLabel31.setBounds(30, 310, 70, 20);
+        jPanel7.add(jSeparator3);
+        jSeparator3.setBounds(110, 330, 280, 10);
+
+        jTCIF.setBorder(null);
         jPanel7.add(jTCIF);
-        jTCIF.setBounds(80, 310, 200, 20);
+        jTCIF.setBounds(110, 300, 290, 40);
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel32.setText("TELEFONO:");
         jPanel7.add(jLabel32);
-        jLabel32.setBounds(290, 310, 70, 20);
-        jPanel7.add(jTelefonoF);
-        jTelefonoF.setBounds(360, 310, 110, 20);
-        jPanel7.add(jSeparator3);
-        jSeparator3.setBounds(80, 340, 200, 10);
+        jLabel32.setBounds(400, 310, 70, 20);
         jPanel7.add(jSeparator4);
-        jSeparator4.setBounds(360, 340, 110, 10);
+        jSeparator4.setBounds(470, 330, 110, 10);
+
+        jTelefonoF.setBorder(null);
+        jTelefonoF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTelefonoFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(jTelefonoF);
+        jTelefonoF.setBounds(470, 300, 110, 40);
 
         jTableFacturaImprimir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jTableFacturaImprimir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
@@ -200,79 +214,80 @@ public class Frm_impresion_factura extends javax.swing.JPanel implements Printab
         jScrollPane2.setViewportView(jTableFacturaImprimir);
 
         jPanel7.add(jScrollPane2);
-        jScrollPane2.setBounds(10, 350, 452, 180);
+        jScrollPane2.setBounds(30, 350, 550, 160);
 
-        jLabel33.setText("FIRMA AUTORIZADA");
+        jLabel33.setText("FIRMA    AUTORIZADA");
         jPanel7.add(jLabel33);
-        jLabel33.setBounds(10, 580, 100, 20);
+        jLabel33.setBounds(80, 730, 130, 20);
         jPanel7.add(jSeparator5);
-        jSeparator5.setBounds(10, 580, 110, 10);
+        jSeparator5.setBounds(60, 730, 140, 10);
 
-        jLabel34.setText("FIRMA CLIENTE");
+        jLabel34.setText("FIRMA   CLIENTE");
         jPanel7.add(jLabel34);
-        jLabel34.setBounds(140, 580, 80, 20);
+        jLabel34.setBounds(410, 730, 110, 20);
         jPanel7.add(jSeparator6);
-        jSeparator6.setBounds(140, 580, 80, 10);
+        jSeparator6.setBounds(390, 730, 110, 10);
 
         jLabel35.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel35.setText("SUBTOTAL");
         jLabel35.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.add(jLabel35);
-        jLabel35.setBounds(240, 530, 110, 20);
+        jLabel35.setBounds(310, 510, 130, 30);
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel36.setText("Descuento");
         jLabel36.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.add(jLabel36);
-        jLabel36.setBounds(240, 550, 110, 20);
+        jLabel36.setBounds(310, 540, 130, 30);
 
         jLabel37.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel37.setText("TOTAL");
         jLabel37.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.add(jLabel37);
-        jLabel37.setBounds(240, 610, 110, 20);
+        jLabel37.setBounds(310, 630, 130, 30);
         jPanel7.add(jTSubtotalF);
-        jTSubtotalF.setBounds(350, 530, 110, 20);
+        jTSubtotalF.setBounds(440, 510, 140, 30);
         jPanel7.add(jTDescuentoF);
-        jTDescuentoF.setBounds(350, 550, 110, 20);
+        jTDescuentoF.setBounds(440, 540, 140, 30);
         jPanel7.add(jTtotalF);
-        jTtotalF.setBounds(350, 610, 110, 20);
+        jTtotalF.setBounds(440, 630, 140, 30);
         jPanel7.add(jSeparator7);
-        jSeparator7.setBounds(360, 100, 100, 10);
+        jSeparator7.setBounds(410, 110, 100, 10);
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel38.setText("IVA 0%");
         jLabel38.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.add(jLabel38);
-        jLabel38.setBounds(240, 570, 110, 20);
+        jLabel38.setBounds(310, 570, 130, 30);
 
         jLabel39.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel39.setText("IVA 12%");
         jLabel39.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.add(jLabel39);
-        jLabel39.setBounds(240, 590, 110, 20);
+        jLabel39.setBounds(310, 600, 130, 30);
         jPanel7.add(jTIva0F);
-        jTIva0F.setBounds(350, 570, 110, 20);
+        jTIva0F.setBounds(440, 570, 140, 30);
         jPanel7.add(jTIVA12F);
-        jTIVA12F.setBounds(350, 590, 110, 20);
+        jTIVA12F.setBounds(440, 600, 140, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 489, Short.MAX_VALUE)
+            .addGap(0, 679, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 641, Short.MAX_VALUE)
+            .addGap(0, 762, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTelefonoFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTelefonoFActionPerformed
+    }//GEN-LAST:event_jTelefonoFActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -322,7 +337,16 @@ public class Frm_impresion_factura extends javax.swing.JPanel implements Printab
     private javax.swing.JTextField jTelefonoF;
     private javax.swing.JTextField jTtotalF;
     // End of variables declaration//GEN-END:variables
-
+    /**
+     * Este metodo se encarga de transformar al formulario de JPanel a un tipo
+     * graphics para su uso en los metodos de impresion
+     *
+     * @param graphics
+     * @param pageFormat
+     * @param pageIndex
+     * @return existencia de page (graphics2d)
+     * @throws PrinterException
+     */
     @Override
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
         if (pageIndex == 0) {
