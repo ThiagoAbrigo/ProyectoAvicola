@@ -99,6 +99,8 @@ public class Frm_Factura extends javax.swing.JFrame {
             if (facturaController.Save()) {
                 JOptionPane.showMessageDialog(null, "Se guardo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 limpiar();
+                int id = Integer.parseInt(jLGalpon.getText());
+                controlador.getGalpon().setId(id);
                 controlador.getGalpon().setNumPollo(cantidad);
                 if (controlador.Updategalpon()) {
                     JOptionPane.showMessageDialog(null, "Se actualizo` correctamente", "Ok", JOptionPane.INFORMATION_MESSAGE);
